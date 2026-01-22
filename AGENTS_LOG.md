@@ -4,6 +4,17 @@ Most recent event comes first
 
 ## Intervention History
 
+### Feature: Remove Metadata Tool
+**Date:** 2026-01-22
+**AI Assistant:** Antigravity
+**Summary:** Created `remove_meta.py` to reverse `migrate.py` effects and clean incomplete content.
+- **Goal:** Allow removing metadata from markdowns and strip incomplete sections/content.
+- **Implementation:**
+    - Created `language/remove_meta.py` with strict metadata detection logic.
+    - Added flags `--remove-incomplete-content` and `--remove-incomplete-sections`.
+    - Created symlink `bin/language/remove_meta` -> `../../util/sh2py3.sh`.
+- **Files Modified:** `language/remove_meta.py` [NEW], `bin/language/remove_meta` [NEW].
+
 ### Feature: CLI Improvements
 **Date:** 2026-01-22
 **AI Assistant:** Antigravity
