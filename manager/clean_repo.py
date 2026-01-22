@@ -95,6 +95,9 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Clone repo and migrate markdown files to manager/temprepo_cleaning/")
     parser.add_argument("repo", help="GitHub Repository URL")
     
+    # Note: clean_repo does not support -i/-o as it is a specific repo cleaner.
+    # It just needs -h (which argparse provides by default).
+    
     args = parser.parse_args()
     
     clean_repo(args.repo)

@@ -1,5 +1,6 @@
 import sys
 import os
+import argparse
 # Add the current directory to sys.path to allow importing md_parser if run from scripts/
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
@@ -7,6 +8,8 @@ sys.path.append(current_dir)
 sys.path.append(parent_dir)
 
 from md_parser import MarkdownParser
+import cli_utils
+from cli_utils import add_standard_arguments, validate_and_get_pairs
 
 class TreeVisualizer:
     def __init__(self):
@@ -64,19 +67,41 @@ class TreeVisualizer:
             self.visualize(child, child_prefix, is_last_child, is_root=False)
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python visualization.py <file.md>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Visualize Markdown-METADATA tree.")
+    add_standard_arguments(parser, multi_file=False)
+    parser.add_argument('args', nargs='*', help='Input file (and optional output file)')
 
-    file_path = sys.argv[1]
-    parser = MarkdownParser()
+    args = parser.parse_args()
     
     try:
-        root = parser.parse_file(file_path)
+        pairs = validate_and_get_pairs(args, args.args, tool_name="visualization.py", allow_single_file_stdio=True)
+        
+        md_parser = MarkdownParser()
         visualizer = TreeVisualizer()
-        print(f"\nTree for: {os.path.basename(file_path)}\n")
-        visualizer.visualize(root)
-        print("\n")
+        
+        for input_path, output_path in pairs:
+            root = md_parser.parse_file(input_path)
+            
+            # Visualization usually prints to stdout. Capturing it for file output requires redirecting stdout 
+            # or modifying visualize method. modifying visualize method is better or using context manager.
+            # Visualizer.visualize prints directly. I should probably redirect stdout if output_path is set.
+            
+            if output_path:
+                with open(output_path, 'w') as f:
+                    # Redirect stdout
+                    original_stdout = sys.stdout
+                    sys.stdout = f
+                    try:
+                        print(f"\nTree for: {os.path.basename(input_path)}\n")
+                        visualizer.visualize(root)
+                        print("\n")
+                    finally:
+                        sys.stdout = original_stdout
+            else:
+                print(f"\nTree for: {os.path.basename(input_path)}\n")
+                visualizer.visualize(root)
+                print("\n")
+
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)

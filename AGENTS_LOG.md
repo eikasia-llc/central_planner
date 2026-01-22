@@ -4,6 +4,18 @@ Most recent event comes first
 
 ## Intervention History
 
+### Feature: CLI Improvements
+**Date:** 2026-01-22
+**AI Assistant:** Antigravity
+**Summary:** Improved Python CLIs in `manager` and `language` to be POSIX-friendly and support flexible I/O modes.
+- **Goal:** Standardize CLI usage and support single/multi-file processing with checks.
+- **Implementation:**
+    - Created `language/cli_utils.py` for shared arg parsing.
+    - Updated `migrate.py`, `importer.py` to support `-I` (in-line) and repeated `-i/-o`.
+    - Updated `md_parser.py`, `visualization.py` to support file output.
+    - Added `-h` to all tools.
+- **Files Modified:** `language/*.py`, `manager/*.py`.
+
 ### Feature: Shell Wrapper for Python Scripts
 **Date:** 2026-01-22
 **AI Assistant:** Antigravity
