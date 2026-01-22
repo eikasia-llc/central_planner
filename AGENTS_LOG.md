@@ -4,6 +4,18 @@ Most recent event comes first
 
 ## Intervention History
 
+### Feature: Shell Wrapper for Python Scripts
+**Date:** 2026-01-22
+**AI Assistant:** Antigravity
+**Summary:** Created a generic shell wrapper `sh2py3.sh` and symlinks for python scripts.
+- **Goal:** Allow execution of python scripts in `manager/` and `language/` from a central `bin/` directory.
+- **Implementation:**
+    - Created `util/sh2py3.sh` to determine script path from symlink invocation and execute with python/python3.
+    - Created `bin/manager` and `bin/language` directories.
+    - Created symlinks in `bin/` mapping to `util/sh2py3.sh` for all `.py` files in `manager/` and `language/`.
+- **Files Modified:** `util/sh2py3.sh` [NEW], `bin/` directories [NEW].
+
+
 
 ### Housekeeping Report (Initial)
 
