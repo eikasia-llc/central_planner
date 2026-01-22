@@ -29,6 +29,7 @@ A suite of Python scripts in the `language/` directory allows agents and humans 
 - **Parsing**: `md_parser.py` converts raw Markdown into structured Python objects, validating schema compliance.
 - **Visualization**: `visualization.py` renders the task tree in the terminal, showing structure and status at a glance.
 - **Standardization**: `migrate.py` automatically converts standard Markdown files into the Protocol format by injecting default metadata.
+- **Import**: `importer.py` converts legacy documents (`.docx`, `.pdf`) into Protocol-compliant Markdown.
 - **Operations**: `operations.py` allows for complex tree manipulations, such as merging subtrees or extending plans.
 
 ## Directory Structure

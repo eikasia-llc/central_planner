@@ -129,7 +129,14 @@ The following Python scripts are available in `language/` to interact with this 
 - **Purpose**: Heuristically adds default metadata to standard Markdown headers to make them schema-compliant.
 - **Usage**: `python3 language/migrate.py <file.md> [file2.md ...]`
 - **Effect**: Modifies files in-place by injecting `- status: active` after headers that lack metadata.
-
+### 5. `language/importer.py`
+- status: active
+- **Purpose**: Converts legacy documents (`.docx`, `.pdf`, `.doc`) into Markdown and auto-applies the Protocol.
+- **Usage**: `python3 language/importer.py <file.docx> [file.pdf ...]`
+- **Capabilities**:
+    - **DOCX**: Preserves headers (Heading 1-3) if `python-docx` is installed. Fallbacks to text extraction.
+    - **PDF**: Extracts text if `pypdf` or `pdftotext` is available.
+    - **DOC**: Uses MacOS `textutil` for text extraction.
 ## Migration Guidelines
 - status: active
 
