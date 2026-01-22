@@ -32,10 +32,18 @@ The project uses a strict **Markdown-YAML Hybrid Schema** to treat documentation
 A suite of Python scripts in the `language/` directory allows agents and humans to interact with this protocol programmatically:
 
 - **Parsing**: `md_parser.py` converts raw Markdown into structured Python objects, validating schema compliance.
-- **Visualization**: `visualization.py` renders the task tree in the terminal, showing structure and status at a glance.
+- **Visualization**: 
+    - `visualization.py`: Renders the hierarchical task tree in the terminal.
+    - `visualize_dag.py`: Visualizes task dependencies (DAG) either as a **text report** (`--format text`) or **Mermaid syntax** (`--format mermaid`).
 - **Standardization**: `migrate.py` automatically converts standard Markdown files into the Protocol format by injecting default metadata.
 - **Import**: `importer.py` converts legacy documents (`.docx`, `.pdf`) into Protocol-compliant Markdown.
 - **Operations**: `operations.py` allows for complex tree manipulations, such as merging subtrees or extending plans.
+
+## Repository Manager
+The `manager/` directory contains tools for coordinating multiple external repositories:
+
+- **Cleaning**: `clean_repo.py` clones an external repository, extracts relevant Markdown files, and standardizes them using `migrate.py`. It supports standard Git URLs and branch URLs (e.g., `/tree/branch-name`).
+- **Integration**: `update_master_plan.py` integrates these external plans into the central `MASTER_PLAN.md`.
 
 ## Directory Structure
 
@@ -46,9 +54,14 @@ central_planner/
 ├── AI_AGENTS/                    # Agent Instructions
 │   ├── specialists/              # Specialized Agent Protocols (e.g., React, RecSys)
 │   └── generalists/              # General Project Protocols (Setup, Housekeeping)
+├── manager/                      # Repository Management Tools
+│   ├── clean_repo.py             # Harvests and cleans external repos
+│   ├── update_master_plan.py     # Integrates external plans
+│   └── repolist.txt              # List of target repositories
 ├── language/                     # Tooling for the Communication System
 │   ├── md_parser.py              # Parses & Validates MD/YAML files
 │   ├── visualization.py          # Visualizes task trees
+│   ├── visualize_dag.py          # Visualizes task DAGs (Text/Mermaid)
 │   ├── operations.py             # Merges and Extends task trees
 │   ├── migrate.py                # Heuristic migration tool
 │   └── test.py                   # Test suite for the language tools
