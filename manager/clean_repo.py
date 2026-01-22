@@ -75,17 +75,19 @@ def clean_repo(url):
                     source_path = os.path.join(root, file)
                     target_path = os.path.join(destination_dir, file)
                     
-                    if os.path.exists(target_path):
-                        print(f"Warning: Overwriting existing file {file} in cleaning directory.")
-
-                    shutil.copy2(source_path, target_path)
-                    
-                    # Run migration
+                    # Run migration IN PLACE on the temp file first
+                    # If it needed changes, migrate_file returns True
                     try:
-                        migrate.migrate_file(target_path)
-                        md_count += 1
+                        was_changed = migrate.migrate_file(source_path)
+                        
+                        if was_changed:
+                            if os.path.exists(target_path):
+                                print(f"Warning: Overwriting existing file {file} in cleaning directory.")
+
+                            shutil.copy2(source_path, target_path)
+                            md_count += 1
                     except Exception as e:
-                        print(f"Error migrating {file}: {e}")
+                        print(f"Error checking/migrating {file}: {e}")
 
         print(f"Successfully cleaned and migrated {md_count} markdown files to {destination_dir}")
 

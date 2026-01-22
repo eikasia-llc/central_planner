@@ -60,11 +60,15 @@ def migrate_file(file_path):
         
         i += 1
     
-    # Write back
-    with open(file_path, 'w', encoding='utf-8') as f:
-        f.writelines(new_lines)
-    
-    print(f"Migrated {file_path}")
+    # Write back only if changed
+    if new_lines != lines:
+        with open(file_path, 'w', encoding='utf-8') as f:
+            f.writelines(new_lines)
+        print(f"Migrated {file_path}")
+        return True
+    else:
+        # print(f"No changes needed for {file_path}")
+        return False
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
