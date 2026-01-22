@@ -6,12 +6,12 @@ import re
 # Logic:
 # 1. Read file
 # 2. Identify headers
-# 3. Check if header has YAML block immediately after
-# 4. If not, insert default YAML block
+# 3. Check if header has METADATA block immediately after
+# 4. If not, insert default METADATA block
 # 5. Write back
 
 def has_yaml_block(lines, header_index):
-    # check next few lines for YAML-like content
+    # check next few lines for METADATA-like content
     if header_index + 1 >= len(lines):
         return False
     
@@ -41,19 +41,19 @@ def migrate_file(file_path):
         new_lines.append(line)
         
         if header_match:
-            # Check if existing YAML
+            # Check if existing METADATA
             if not has_yaml_block(lines, i):
-                # Insert default YAML
+                # Insert default METADATA
                 # Infer status if possible, otherwise default to "active" or "documented"
                 # For AGENTS files, "active" seems appropriate.
                 default_yaml = "- status: active\n"
                 
                 # If there's a newline after header, we can insert before it or after it?
-                # Usually we want Header\nYAML.
+                # Usually we want Header\nMETADATA.
                 # If the line ends with \n, we just append to new_lines.
                 
                 # But wait, we just appended 'line' (the header) to new_lines.
-                # Now we append the YAML.
+                # Now we append the METADATA.
                 new_lines.append(default_yaml)
                 
                 # Also, we might want to add 'owner' or 'updated' if we could guess, but let's keep it simple.
