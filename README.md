@@ -55,6 +55,8 @@ central_planner/
 │   ├── specialists/              # Specialized Agent Protocols (e.g., React, RecSys)
 │   └── generalists/              # General Project Protocols (Setup, Housekeeping)
 ├── manager/                      # Repository Management Tools
+│   ├── MANAGER_PROTOCOL.md       # Manager Agent Protocol & Responsibilities
+│   ├── MASTER_PLAN.md            # Aggregated plan from all repositories
 │   ├── clean_repo.py             # Harvests and cleans external repos
 │   ├── update_master_plan.py     # Integrates external plans
 │   └── repolist.txt              # List of target repositories
@@ -64,6 +66,7 @@ central_planner/
 │   ├── visualize_dag.py          # Visualizes task DAGs (Text/Mermaid)
 │   ├── operations.py             # Merges and Extends task trees
 │   ├── migrate.py                # Heuristic migration tool
+│   ├── importer.py               # Imports legacy docs (.docx, .pdf)
 │   └── test.py                   # Test suite for the language tools
 └── MD_REPRESENTATION_CONVENTIONS.md # Specification of the Schema
 ```
