@@ -1,6 +1,8 @@
 # AGENTS.md
+- status: active
 
 ## SHORT ADVICE
+- status: active
 - The whole trick is providing the AI Assistants with context, and this is done using the *.md files (AGENTS.md, AGENTS_LOG.md, and the AI_AGENTS folder)
 - Learn how to work the Github, explained below.
 - Keep logs of changes in AGENTS_LOG.md
@@ -9,6 +11,7 @@
 - Impose restrictions and constraints explicitly in the context.
 
 ## HUMAN-ASSISTANT WORKFLOW
+- status: active
 1. Open the assistant and load the ai-agents-branch into their local repositories. Do this by commanding them to first of all read the AGENTS.md file.
 2. Work on the ASSISTANT, making requests, modifying code, etc.
 3. IMPORTANT: GIT MECHANISM
@@ -22,18 +25,21 @@
 5. Enjoy!
 
 ## WORKFLOW & TOOLING
+- status: active
 
 *   **Documentation Logs (`AGENTS_LOG.md`):**
     *   **Rule:** Every agent that performs a significant intervention or modifies the codebase **MUST** update the `AGENTS_LOG.md` file.
     *   **Action:** Append a new entry under the "Intervention History" section summarizing the task, the changes made, and the date.
 
 ## DEVELOPMENT RULES & CONSTRAINTS
+- status: active
 1.  **Immutable Core Files:** Do not modify 
     *   If you need to change the logic of an agent or the model, you must create a **new version** (e.g., a subclass or a new file) rather than modifying the existing classes in place.
 2.  **Consistency:** Ensure any modifications or new additions remain as consistent as possible with the logic and structure of the `main` branch.
 3.  **Coding Conventions:** Always keep the coding conventions pristine.
 
 ## CONTEXT FINE-TUNING
+- status: active
 You cannot "fine-tune" an AI agent (change its underlying neural network weights) with files in this repository. **However**, you **CAN** achieve a similar result using **Context**.
 
 **How it works (The "Context" Approach):**
@@ -52,26 +58,33 @@ If you want to teach an agent a new language (like JAX) or technique:
 3.  Ask the agent to "Refactor the code using the techniques in [File X]".
 
 ## LOCAL PROJECT DESCRIPTION
+- status: active
 
 ### Project Overview
+- status: active
 
 ### Setup & Testing
+- status: active
 *   **Install Dependencies:**
 *   **Run Backend:** 
 *   **Run Frontend:** 
 *   **Run Tests:** 
 
 ### Key Architecture & Logic
+- status: active
 
 #### 1. Architecture (Monorepo)
+- status: active
 *   **Backend (`backend/`)**: Python/FastAPI application handling all simulation logic, agent training, and state management.
 *   **Frontend (`frontend/`)**: React/Vite application for the user interface, communicating with backend via REST API.
 
 #### 2. Agents
+- status: active
 *   **`backend/environment.py`**: The environment logic (p generation, reward calculation).
 *   **`backend/agents.py`**: The Deep Q-Learning (DQN) agent implementation using PyTorch.
 
 #### 3. Simulation Loop (`backend/simulation.py`)
+- status: active
 *   **Step:**
     1.  Environment generates p.
     2.  Agents observe p and output actions (Recommend/Not Recommend).
@@ -80,8 +93,10 @@ If you want to teach an agent a new language (like JAX) or technique:
     5.  Agents update their replay buffers and perform a training step.
 
 ### Key Files and Directories
+- status: active
 
 #### Directory Structure
+- status: active
 *   `backend/`: Contains the core Python logic (formerly `src/`).
     *   `api/`: FastAPI routes and session management.
     *   `engine/`: Pydantic models and simulation engine.
@@ -96,6 +111,7 @@ If you want to teach an agent a new language (like JAX) or technique:
     *   `experiment_interface.ipynb`: Interactive game (notebook version).
 
 #### File Dependencies & Logic
+- status: active
 `backend/simulation.py` depends on `backend/agents.py` and `backend/environment.py`.
 The React frontend depends on the FastAPI backend running on port 8000.
 

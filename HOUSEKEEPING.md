@@ -1,4 +1,5 @@
 # Housekeeping Protocol
+- status: active
 
 1. Read the AGENTS.md file.
 2. Look at the dependency network of the project, namely which script refers to which one.
@@ -7,8 +8,10 @@
 5. Add that report to the AGENTS_LOG.md.
 
 # Current Project Housekeeping
+- status: active
 
 ## Dependency Network
+- status: active
 
 Based on post-React integration analysis:
 - **Core Modules:**
@@ -19,6 +22,7 @@ Based on post-React integration analysis:
 - **Notebooks:**
 
 ## Latest Report
+- status: active
 
 **Execution Date:** 2026-01-19
 

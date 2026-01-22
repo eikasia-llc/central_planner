@@ -1,8 +1,11 @@
 # Agents Log
+- status: active
 
 ## Intervention History
+- status: active
 
 ### Housekeeping Report (Initial)
+- status: active
 **Date:** 
 **Summary:** Executed initial housekeeping protocol.
 **AI Assitant:**
@@ -10,6 +13,7 @@
 - **Tests:** 
 
 ### Bug Fix: Advanced Analysis (Shape Mismatch)
+- status: active
 **Date:** 2024-05-22
 **Summary:** Fixed RuntimeError in `advanced_experiment_interface.ipynb`.
 - **Issue:** `compute_policy_metrics` in `src/analysis.py` passed 1D inputs `(100, 1)` to agents expecting 2D inputs `(100, 2)`.
@@ -18,6 +22,7 @@
 - **Files Modified:** `src/advanced_simulation.py` updated to use the new analysis function.
 
 ### Bug Fix: Notebook NameError
+- status: active
 **Date:** 2024-05-22
 **Summary:** Fixed NameError in `advanced_experiment_interface.ipynb`.
 - **Issue:** The variable `ep_id` was used in a print statement but was undefined in the new JSON saving block.
