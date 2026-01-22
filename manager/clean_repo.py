@@ -18,14 +18,31 @@ except ImportError as e:
     sys.exit(1)
 
 def transform_github_url_to_folder_name(url):
-    name = url.rstrip('/').split('/')[-1]
+    # Handle branch URLs: https://github.com/user/repo/tree/branch
+    if '/tree/' in url:
+        base_url = url.split('/tree/')[0]
+        name = base_url.rstrip('/').split('/')[-1]
+    else:
+        name = url.rstrip('/').split('/')[-1]
+    
     if name.endswith('.git'):
         name = name[:-4]
     return name
 
-def clean_repo(repo_url):
-    repo_name = transform_github_url_to_folder_name(repo_url)
+def clean_repo(url):
+    # Determine if it's a branch URL
+    branch = None
+    if '/tree/' in url:
+        parts = url.split('/tree/')
+        repo_url = parts[0]
+        branch = parts[1]
+    else:
+        repo_url = url
+    
+    repo_name = transform_github_url_to_folder_name(url)
     print(f"Processing Repository: {repo_name} ({repo_url})")
+    if branch:
+        print(f"Target Branch: {branch}")
 
     destination_dir = os.path.join(current_dir, "temprepo_cleaning")
     
@@ -39,9 +56,13 @@ def clean_repo(repo_url):
     with tempfile.TemporaryDirectory() as temp_dir:
         print(f"Cloning to temporary directory: {temp_dir}")
         try:
-            subprocess.run(['git', 'clone', repo_url, temp_dir], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+            cmd = ['git', 'clone', repo_url, temp_dir]
+            if branch:
+                cmd.extend(['-b', branch])
+                
+            subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         except subprocess.CalledProcessError:
-            print(f"Error: Failed to clone {repo_url}")
+            print(f"Error: Failed to clone {repo_url} (branch: {branch if branch else 'default'})")
             return
 
         md_count = 0
