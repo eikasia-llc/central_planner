@@ -1,0 +1,77 @@
+import sys
+import os
+import shutil
+import subprocess
+import tempfile
+import argparse
+
+# Add language directory to sys.path to allow imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+parent_dir = os.path.dirname(current_dir)
+language_dir = os.path.join(parent_dir, 'language')
+sys.path.append(language_dir)
+
+try:
+    import migrate
+except ImportError as e:
+    print(f"Error importing language tools: {e}")
+    sys.exit(1)
+
+def transform_github_url_to_folder_name(url):
+    name = url.rstrip('/').split('/')[-1]
+    if name.endswith('.git'):
+        name = name[:-4]
+    return name
+
+def clean_repo(repo_url):
+    repo_name = transform_github_url_to_folder_name(repo_url)
+    print(f"Processing Repository: {repo_name} ({repo_url})")
+
+    destination_dir = os.path.join(current_dir, "temprepo_cleaning")
+    
+    if os.path.exists(destination_dir):
+        print(f"Cleaning existing directory: {destination_dir}")
+        shutil.rmtree(destination_dir)
+        
+    os.makedirs(destination_dir)
+    print(f"Created directory: {destination_dir}")
+
+    with tempfile.TemporaryDirectory() as temp_dir:
+        print(f"Cloning to temporary directory: {temp_dir}")
+        try:
+            subprocess.run(['git', 'clone', repo_url, temp_dir], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        except subprocess.CalledProcessError:
+            print(f"Error: Failed to clone {repo_url}")
+            return
+
+        md_count = 0
+        for root, dirs, files in os.walk(temp_dir):
+            if '.git' in dirs:
+                dirs.remove('.git') # Don't traverse .git
+            
+            for file in files:
+                if file.endswith('.md'):
+                    source_path = os.path.join(root, file)
+                    target_path = os.path.join(destination_dir, file)
+                    
+                    if os.path.exists(target_path):
+                        print(f"Warning: Overwriting existing file {file} in cleaning directory.")
+
+                    shutil.copy2(source_path, target_path)
+                    
+                    # Run migration
+                    try:
+                        migrate.migrate_file(target_path)
+                        md_count += 1
+                    except Exception as e:
+                        print(f"Error migrating {file}: {e}")
+
+        print(f"Successfully cleaned and migrated {md_count} markdown files to {destination_dir}")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Clone repo and migrate markdown files to manager/temprepo_cleaning/")
+    parser.add_argument("repo", help="GitHub Repository URL")
+    
+    args = parser.parse_args()
+    
+    clean_repo(args.repo)
