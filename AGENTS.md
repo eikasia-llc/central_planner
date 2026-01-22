@@ -4,6 +4,7 @@
 ## SHORT ADVICE
 - status: active
 - The whole trick is providing the AI Assistants with context, and this is done using the *.md files (AGENTS.md, AGENTS_LOG.md, and the AI_AGENTS folder)
+- Make sure that when writing *.md files, you use the proper syntax protocol as defined in MD_REPRESENTATION_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
 - Learn how to work the Github, explained below.
 - Keep logs of changes in AGENTS_LOG.md
 - Make sure to execute the HOUSEKEEPING.md protocol often.
@@ -15,7 +16,7 @@
 1. Open the assistant and load the ai-agents-branch into their local repositories. Do this by commanding them to first of all read the AGENTS.md file.
 2. Work on the ASSISTANT, making requests, modifying code, etc.
 3. IMPORTANT: GIT MECHANISM
-    3.1. This is basically solved in Antigravity, but Jules (and maybe Claude) push the changes into a newly generated branch. In my case, this is `jules-sync-main-v1-15491954756027628005`. **This is different from the `ai-agents-branch`!!**
+    3.1. This is basically solved in Antigravity and VSCode, but Jules (and maybe Claude) push the changes into a newly generated branch. In my case, this is `jules-sync-main-v1-15491954756027628005`. **This is different from the `ai-agents-branch`!!**
     3.2. So what you need to do is merge the newly generated branch and the `ai-agents-branch` often. Usually in the direction from `jules-sync-main-v1-15491954756027628005` to `ai-agents-branch`. I do this by:
         3.2.1. Going to pull requests.
         3.2.2. New Pull request
