@@ -22,6 +22,7 @@ class TreeVisualizer:
             if node.metadata:
                 # Prioritize specific fields for display
                 status = node.metadata.get('status')
+                type_ = node.metadata.get('type')
                 estimate = node.metadata.get('estimate')
                 owner = node.metadata.get('owner')
                 
@@ -29,6 +30,8 @@ class TreeVisualizer:
                 if status:
                     # ANSI colors could be added here if desired
                     parts.append(f"status: {status}")
+                if type_:
+                    parts.append(f"type: {type_}")
                 if estimate:
                     parts.append(f"est: {estimate}")
                 if owner:

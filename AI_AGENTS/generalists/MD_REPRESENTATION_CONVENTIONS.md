@@ -32,6 +32,7 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 ```markdown
 ## Implement User Auth
 - status: in-progress
+- type: episodic
 - owner: dev-1
 - estimate: 3d
 - blocked_by: []
@@ -45,6 +46,7 @@ The following fields are standard, but the schema allows extensibility.
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | `status` | `enum` | `todo`, `in-progress`, `done`, `blocked` |
+| `type` | `enum` | `recurring`, `episodic`, `binary` |
 | `owner` | `string` | The agent or user assigned to this (e.g., `dev-1`, `claude`) |
 | `estimate` | `string` | Time estimate (e.g., `1d`, `4h`) |
 | `blocked_by`| `list` | List of explicit dependencies (IDs or relative paths) |

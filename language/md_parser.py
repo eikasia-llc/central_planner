@@ -126,10 +126,15 @@ class MarkdownParser:
         errors = []
         # Example validation: check if status is valid enum if present
         if 'status' in node.metadata:
-            valid_statuses = ['todo', 'in-progress', 'done', 'blocked']
+            valid_statuses = ['todo', 'in-progress', 'done', 'blocked', 'proposed', 'active', 'draft', 'pending'] # Expanded list based on usage
             if node.metadata['status'] not in valid_statuses:
                 errors.append(f"Invalid status '{node.metadata['status']}' in node '{node.title}' (Allowed: {valid_statuses})")
         
+        if 'type' in node.metadata:
+            valid_types = ['recurring', 'episodic', 'binary']
+            if node.metadata['type'] not in valid_types:
+                errors.append(f"Invalid type '{node.metadata['type']}' in node '{node.title}' (Allowed: {valid_types})")
+
         for child in node.children:
             errors.extend(self.validate(child))
         return errors

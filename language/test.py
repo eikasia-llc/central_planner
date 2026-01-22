@@ -20,12 +20,12 @@ class TestLanguageTools(unittest.TestCase):
         # Create a valid source file
         self.valid_file = os.path.join(self.test_dir, "valid.md")
         with open(self.valid_file, "w") as f:
-            f.write("# Root\n- status: active\n\n## Child\n- status: todo\n")
+            f.write("# Root\n- status: active\n- type: recurring\n\n## Child\n- status: todo\n- type: binary\n")
 
         # Create an invalid file
         self.invalid_file = os.path.join(self.test_dir, "invalid.md")
         with open(self.invalid_file, "w") as f:
-            f.write("# Root\n(no status)\n\n## Child\n")
+            f.write("# Root\n(no status)\n\n## Child\n- status: todo\n- type: invalid_type\n")
 
         # Create files for operations
         self.target_file = os.path.join(self.test_dir, "target.md")
@@ -46,12 +46,19 @@ class TestLanguageTools(unittest.TestCase):
         self.assertEqual(len(root.children), 1)
         self.assertEqual(root.children[0].title, "Child")
         self.assertEqual(root.children[0].metadata['status'], 'todo')
+        self.assertEqual(root.children[0].metadata['type'], 'binary')
         
     def test_parser_validation(self):
         parser = MarkdownParser()
         root = parser.parse_file(self.valid_file)
         errors = parser.validate(root)
         self.assertEqual(len(errors), 0)
+        
+        # Check invalid file
+        root_invalid = parser.parse_file(self.invalid_file)
+        errors_invalid = parser.validate(root_invalid)
+        # Should have error for invalid type
+        self.assertTrue(any("Invalid type" in e for e in errors_invalid))
 
     def test_operations_extend(self):
         output_file = os.path.join(self.test_dir, "extended.md")
