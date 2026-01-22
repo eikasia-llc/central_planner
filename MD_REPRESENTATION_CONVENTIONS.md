@@ -57,6 +57,11 @@ The following fields are standard, but the schema allows extensibility.
 | `priority` | `enum` | `low`, `medium`, `high`, `critical` (Optional) |
 | `id` | `string` | Unique identifier for the node (e.g., `project.component.task`). Used for robust merging and dependency tracking. |
 
+For extended fields consider:
+ - The key is entirely lowercase
+ - The key has no spaces (words are separated with dash or underscore)
+ - The value is single line
+
 ### 4. Context & Description
 - status: active
 - Any text following the metadata block is considered "Context" or "Description".
