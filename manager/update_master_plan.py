@@ -141,11 +141,35 @@ def build_master_plan(repo_url, master_plan_path):
         
         print(f"Successfully built Master Plan at {master_plan_path}")
 
+def update_all(repolist_path, master_plan_path):
+    if not os.path.exists(repolist_path):
+        print(f"Error: Repository list not found at {repolist_path}")
+        return
+
+    with open(repolist_path, 'r') as f:
+        repos = [line.strip() for line in f if line.strip() and not line.startswith('#')]
+
+    if not repos:
+        print("No repositories found in list.")
+        return
+
+    print(f"Found {len(repos)} repositories to process.")
+    for repo_url in repos:
+        print(f"\n--- Syncing {repo_url} ---")
+        build_master_plan(repo_url, master_plan_path)
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Audit and Merge remote repository markdown files into Master Plan.")
-    parser.add_argument("--repo", required=True, help="GitHub Repository URL")
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument("--repo", help="GitHub Repository URL")
+    group.add_argument("--all", action="store_true", help="Update all repositories listed in manager/repolist.txt")
+    
     parser.add_argument("--master-plan", default="MASTER_PLAN.md", help="Path to Master Plan file")
     
     args = parser.parse_args()
     
-    build_master_plan(args.repo, args.master_plan)
+    if args.all:
+        repolist = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'repolist.txt')
+        update_all(repolist, args.master_plan)
+    else:
+        build_master_plan(args.repo, args.master_plan)

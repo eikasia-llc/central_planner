@@ -1,0 +1,8 @@
+# Central Company Master Plan
+- status: active
+- version: 1.0
+
+## Overview
+- status: active
+
+This is the central planning document aggregating all company initiatives. Run `python3 manager/update_master_plan.py --all` to populate this file with content from the registered repositories.
