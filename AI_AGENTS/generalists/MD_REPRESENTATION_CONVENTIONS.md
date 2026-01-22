@@ -55,6 +55,7 @@ The following fields are standard, but the schema allows extensibility.
 | `estimate` | `string` | Time estimate (e.g., `1d`, `4h`) |
 | `blocked_by`| `list` | List of explicit dependencies (IDs or relative paths) |
 | `priority` | `enum` | `low`, `medium`, `high`, `critical` (Optional) |
+| `id` | `string` | Unique identifier for the node (e.g., `project.component.task`). Used for robust merging and dependency tracking. |
 
 ### 4. Context & Description
 - status: active

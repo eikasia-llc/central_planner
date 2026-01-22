@@ -10,24 +10,35 @@ sys.path.append(parent_dir)
 
 from md_parser import MarkdownParser, Node
 
-def find_node(node, title):
-    if node.title == title:
-        return node
+def find_node(node, identifier, by_id=False):
+    if by_id:
+        if node.metadata.get('id') == identifier:
+            return node
+    else:
+        if node.title == identifier:
+            return node
+            
     for child in node.children:
-        found = find_node(child, title)
+        found = find_node(child, identifier, by_id)
         if found:
             return found
     return None
 
-def merge_trees(target_file, source_file, target_node_title, output_file=None):
+def merge_trees(target_file, source_file, target_identifier, output_file=None):
     parser = MarkdownParser()
     target_root = parser.parse_file(target_file)
     source_root = parser.parse_file(source_file)
 
     # Find insertion point
-    target_node = find_node(target_root, target_node_title)
+    # First try to find by ID (assuming target_identifier might be an ID)
+    target_node = find_node(target_root, target_identifier, by_id=True)
+    
+    # If not found, try by Title
     if not target_node:
-        print(f"Error: Target node '{target_node_title}' not found in {target_file}")
+        target_node = find_node(target_root, target_identifier, by_id=False)
+
+    if not target_node:
+        print(f"Error: Target node '{target_identifier}' (ID or Title) not found in {target_file}")
         sys.exit(1)
 
     # In a merge, we typically append the children of the source root (since source root is usually documented title)
@@ -67,7 +78,7 @@ def merge_trees(target_file, source_file, target_node_title, output_file=None):
     with open(dest, 'w') as f:
         f.write(output_content)
     
-    print(f"Successfully merged {source_file} into {target_node_title} of {target_file}. Saved to {dest}.")
+    print(f"Successfully merged {source_file} into {target_identifier} of {target_file}. Saved to {dest}.")
 
 def extend_tree(target_file, source_file, output_file=None):
     # Extend basically means append source file children to target file root children
@@ -94,7 +105,7 @@ if __name__ == "__main__":
     merge_parser = subparsers.add_parser("merge", help="Insert source tree into target node")
     merge_parser.add_argument("target_file", help="Target Markdown file")
     merge_parser.add_argument("source_file", help="Source Markdown file to insert")
-    merge_parser.add_argument("target_node", help="Title of the node in target file to insert under")
+    merge_parser.add_argument("target_node", help="ID or Title of the node in target file to insert under")
     merge_parser.add_argument("--output", "-o", help="Output file (default: overwrite target)")
 
     # Extend command

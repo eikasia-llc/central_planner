@@ -26,8 +26,11 @@ class TreeVisualizer:
                 estimate = node.metadata.get('estimate')
                 owner = node.metadata.get('owner')
                 blocked_by = node.metadata.get('blocked_by')
+                node_id = node.metadata.get('id')
                 
                 parts = []
+                if node_id:
+                    parts.append(f"id: {node_id}")
                 if status:
                     parts.append(f"status: {status}")
                 if type_:
