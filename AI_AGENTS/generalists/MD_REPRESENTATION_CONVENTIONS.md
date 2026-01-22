@@ -1,14 +1,18 @@
 # Markdown-YAML Hybrid Schema Conventions
+- status: active
 
 This document defines the strict conventions for the Markdown-YAML Hybrid Schema used in this project for hierarchical task coordination and agentic planning.
 
 ## Core Principle
+- status: active
 
 The system uses a **Markdown headers** to define the structural hierarchy (the nodes) and **YAML Frontmatter-style blocks** (immediately following the header) to define structured metadata.
 
 ## Schema Rules
+- status: active
 
 ### 1. Hierarchy & Nodes
+- status: active
 - **Headers**: Use standard Markdown headers (`#`, `##`, `###`) to define the hierarchy.
 - **Nesting**: 
     - `#` is the Root/Document Title (usually only one per file).
@@ -18,6 +22,7 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 - **Implicit Dependency**: A header is implicitly dependent on its parent header.
 
 ### 2. Metadata Blocks
+- status: active
 - **Location**: Metadata MUST be placed **immediately** after the header, before any free-form text.
 - **Format**: A YAML block. It works best as a bulleted list of key-value pairs, which most parsers can interpret as YAML (or we can use strict YAML blocks if preferred, but the spec suggests "YAML Key-Value Pairs (immediately following header)"). 
 - **Preferred Format**: A strict list of key-value pairs.
@@ -33,6 +38,7 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 ```
 
 ### 3. Allowed Fields
+- status: active
 
 The following fields are standard, but the schema allows extensibility.
 
@@ -45,12 +51,15 @@ The following fields are standard, but the schema allows extensibility.
 | `priority` | `enum` | `low`, `medium`, `high`, `critical` (Optional) |
 
 ### 4. Context & Description
+- status: active
 - Any text following the metadata block is considered "Context" or "Description".
 - It can contain free-form Markdown, code blocks, images, etc.
 
 ## Examples
+- status: active
 
 ### Valid Node
+- status: active
 ```markdown
 ### Database Schema
 - status: done
@@ -61,8 +70,10 @@ Set up PostgreSQL schema for users and sessions.
 ```
 
 ### Invalid Node (Metadata not immediate)
+- status: active
 ```markdown
 ### Database Schema
+- status: active
 
 Some text here first.
 
@@ -71,6 +82,7 @@ Some text here first.
 *Error: Metadata block must immediately follow the header.*
 
 ### Invalid Node (Bad indentation/YAML)
+- status: active
 ```markdown
 ### Database Schema
 status: done
@@ -79,6 +91,7 @@ owner: dev-2
 *Warning: While some parsers might handle this, prefer bullet points `- key: value` for readability and stricter parsing.*
 
 ## Parsing Logic (for Developers)
+- status: active
 
 1. **Scan for Headers**.
 2. **Look ahead** at the lines immediately following the header.
@@ -86,36 +99,42 @@ owner: dev-2
 6. **Everything else** until the next header of equal or higher level is "Content".
 
 ## Tooling Reference
+- status: active
 
-The following Python scripts are available in `scripts/` to interact with this schema:
+The following Python scripts are available in `language/` to interact with this schema:
 
-### 1. `scripts/md_parser.py`
+### 1. `language/md_parser.py`
+- status: active
 - **Purpose**: Parses `.md` files into a Python object tree and validates schema compliance.
-- **Usage**: `python3 scripts/md_parser.py <file.md>`
+- **Usage**: `python3 language/md_parser.py <file.md>`
 - **Output**: JSON representation of the tree or validation errors.
 
-### 2. `scripts/visualization.py`
+### 2. `language/visualization.py`
+- status: active
 - **Purpose**: Visualizes the task tree in the terminal with metadata.
-- **Usage**: `python3 scripts/visualization.py <file.md>`
+- **Usage**: `python3 language/visualization.py <file.md>`
 - **Output**: Unicode tree visualization.
 
-### 3. `scripts/operations.py`
+### 3. `language/operations.py`
+- status: active
 - **Purpose**: Manipulate task trees (merge, extend).
 - **Usage**:
-    - **Merge**: `python3 scripts/operations.py merge <target.md> <source.md> "<Target Node Title>" [--output <out.md>]`
+    - **Merge**: `python3 language/operations.py merge <target.md> <source.md> "<Target Node Title>" [--output <out.md>]`
         - Inserts the source tree as children of the specified target node.
-    - **Extend**: `python3 scripts/operations.py extend <target.md> <source.md> [--output <out.md>]`
+    - **Extend**: `python3 language/operations.py extend <target.md> <source.md> [--output <out.md>]`
         - Appends the source tree's top-level items to the target tree's top level.
 
-### 4. `scripts/migrate.py`
+### 4. `language/migrate.py`
+- status: active
 - **Purpose**: Heuristically adds default metadata to standard Markdown headers to make them schema-compliant.
-- **Usage**: `python3 scripts/migrate.py <file.md> [file2.md ...]`
+- **Usage**: `python3 language/migrate.py <file.md> [file2.md ...]`
 - **Effect**: Modifies files in-place by injecting `- status: active` after headers that lack metadata.
 
 ## Migration Guidelines
+- status: active
 
 When migrating existing documentation to this schema:
-1. **Run the Migration Script**: Use `scripts/migrate.py` to add baseline metadata.
+1. **Run the Migration Script**: Use `language/migrate.py` to add baseline metadata.
 2. **Review and Refine**: Manually update the `status` fields (e.g., change `active` to `draft` or `deprecated` where appropriate) and add `owner` information.
 3. **Structure Check**: Ensure the hierarchy makes sense as a task/node tree.
 
