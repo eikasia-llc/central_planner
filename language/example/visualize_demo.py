@@ -8,7 +8,7 @@ sys.path.append(parent_dir)
 
 from md_parser import MarkdownParser
 from visualization import TreeVisualizer
-from visualize_dag import MermaidVisualizer
+from visualize_dag import MermaidVisualizer, DependencyReportVisualizer
 
 def run_tree_demo():
     print("\n" + "="*20 + " TREE VISUALIZATION DEMO " + "="*20)
@@ -26,8 +26,8 @@ def run_tree_demo():
     visualizer.visualize(root)
 
 def run_dag_demo():
-    print("\n" + "="*20 + " DAG VISUALIZATION DEMO " + "="*20)
-    print("Visualizing dependencies (DAG) of 'DAG_Example.md' using Mermaid syntax...\n")
+    print("\n" + "="*20 + " DAG VISUALIZATION DEMO (Text Report) " + "="*20)
+    print("Visualizing dependencies (DAG) of 'DAG_Example.md' in human-readable format...\n")
     
     file_path = os.path.join(current_dir, "DAG_Example.md")
     if not os.path.exists(file_path):
@@ -37,9 +37,8 @@ def run_dag_demo():
     parser = MarkdownParser()
     root = parser.parse_file(file_path)
     
-    visualizer = MermaidVisualizer()
+    visualizer = DependencyReportVisualizer()
     visualizer.generate(root)
-    print("\n(Copy the above output into a Mermaid viewer/editor)")
 
 if __name__ == "__main__":
     run_tree_demo()

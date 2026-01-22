@@ -62,7 +62,9 @@ class MermaidVisualizer:
             return block
         else:
             # It's a leaf node
-            return f'  {node_id}["{node.title}"]\n'
+            status = node.metadata.get('status', '')
+            label = f"{node.title}\\n[{status}]" if status else node.title
+            return f'  {node_id}["{label}"]\n'
 
     def extract_dependency_edges(self, node):
         edges = []
@@ -114,18 +116,102 @@ class MermaidVisualizer:
             for edge in edges:
                 print(f"  {edge}")
 
-if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python visualize_dag.py <file.md>")
-        sys.exit(1)
+import argparse
 
-    file_path = sys.argv[1]
-    parser = MarkdownParser()
+class DependencyReportVisualizer:
+    def __init__(self):
+        self.node_map = {} # id -> node
+        self.reverse_deps = {} # id -> list of ids that rely on this id (successors)
+
+    def collect_nodes(self, node):
+        node_id = self.get_node_id(node)
+        self.node_map[node_id] = node
+        
+        # Determine dependencies (predecessors)
+        blocked_by = node.metadata.get('blocked_by')
+        if blocked_by:
+            if not isinstance(blocked_by, list):
+                blocked_by = [blocked_by]
+            
+            for dep in blocked_by:
+                dep_id = sanitize_id(dep)
+                # Register successor (dep blocks node, so node is successor of dep)
+                if dep_id not in self.reverse_deps:
+                    self.reverse_deps[dep_id] = []
+                self.reverse_deps[dep_id].append(node_id)
+
+        for child in node.children:
+            self.collect_nodes(child)
+
+    def get_node_id(self, node):
+        raw_id = node.metadata.get('id')
+        if raw_id:
+            return sanitize_id(raw_id)
+        return sanitize_id(node.title)
+
+    def generate(self, root_node):
+        self.collect_nodes(root_node)
+        
+        print("Dependency Report")
+        print("=================")
+        
+        # Sort nodes by title for consistent output, or traversing?
+        # Let's verify all nodes that have edges
+        
+        for node_id, node in self.node_map.items():
+            predecessors = node.metadata.get('blocked_by', [])
+            if not isinstance(predecessors, list) and predecessors:
+                 predecessors = [predecessors]
+            
+            successors = self.reverse_deps.get(node_id, [])
+            
+            # Sanitize predecessors for matching
+            sanitized_preds = [sanitize_id(p) for p in predecessors] if predecessors else []
+
+            if not predecessors and not successors:
+                continue # Skip isolated nodes in this view? Or show all?
+                # User asked for DAG visualization, usually implies showing connections.
+                # Let's skip strictly isolated nodes to reduce noise, or maybe show them as "Independent"
+                # Let's show only nodes with connections for clarity.
+                pass
+
+            if predecessors or successors:
+                status = node.metadata.get('status', 'n/a')
+                print(f"\n[{node.title}] (ID: {node_id}) [Status: {status}]")
+                
+                if predecessors:
+                    print(f"  Wait for:")
+                    for pred_id in sanitized_preds:
+                        pred_node = self.node_map.get(pred_id)
+                        title = pred_node.title if pred_node else "Unknown"
+                        print(f"    - {title} (ID: {pred_id})")
+                
+                if successors:
+                    print(f"  Blocks:")
+                    for succ_id in successors:
+                        succ_node = self.node_map.get(succ_id)
+                        title = succ_node.title if succ_node else "Unknown"
+                        print(f"    - {title} (ID: {succ_id})")
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Visualize DAG from Markdown file.")
+    parser.add_argument("file", help="Path to .md file")
+    parser.add_argument("--format", choices=["mermaid", "text"], default="mermaid", help="Output format")
+    
+    args = parser.parse_args()
+
+    file_path = args.file
+    md_parser = MarkdownParser()
     
     try:
-        root = parser.parse_file(file_path)
-        visualizer = MermaidVisualizer()
-        visualizer.generate(root)
+        root = md_parser.parse_file(file_path)
+        
+        if args.format == "text":
+            visualizer = DependencyReportVisualizer()
+            visualizer.generate(root)
+        else:
+            visualizer = MermaidVisualizer()
+            visualizer.generate(root)
         
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
