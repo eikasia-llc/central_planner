@@ -24,7 +24,11 @@ class Node:
         if self.level > 0:
             md_lines.append(f"{'#' * self.level} {self.title}")
             for key, value in self.metadata.items():
-                md_lines.append(f"- {key}: {value}")
+                if isinstance(value, list):
+                    val_str = f"[{', '.join(str(v) for v in value)}]"
+                    md_lines.append(f"- {key}: {val_str}")
+                else:
+                    md_lines.append(f"- {key}: {value}")
             if self.metadata:
                 md_lines.append("") # Empty line after metadata
         
@@ -82,7 +86,18 @@ class MarkdownParser:
                     
                     if meta_match:
                         key = meta_match.group(1).strip()
-                        value = meta_match.group(2).strip()
+                        value_str = meta_match.group(2).strip()
+                        
+                        # Basic list parsing: [a, b, c]
+                        if value_str.startswith('[') and value_str.endswith(']'):
+                            inner = value_str[1:-1]
+                            if inner.strip():
+                                value = [x.strip() for x in inner.split(',')]
+                            else:
+                                value = []
+                        else:
+                            value = value_str
+                            
                         new_node.metadata[key] = value
                         i += 1
                     elif meta_line.strip() == "":

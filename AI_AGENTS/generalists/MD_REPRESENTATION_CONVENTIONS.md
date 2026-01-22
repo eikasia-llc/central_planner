@@ -20,6 +20,10 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
     - `###` are Subtasks.
     - And so on.
 - **Implicit Dependency**: A header is implicitly dependent on its parent header.
+- **Explicit Dependency (DAG)**: 
+    - Use the `blocked_by` metadata field to define dependencies on other nodes (siblings, cousins, etc.).
+    - Pass a list of IDs or relative paths to allow a single node to depend on multiple prior nodes.
+    - **Example**: `blocked_by: [task-a, task-b]` implies this node cannot start until both 'task-a' and 'task-b' are done.
 
 ### 2. Metadata Blocks
 - status: active

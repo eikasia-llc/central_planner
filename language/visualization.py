@@ -25,10 +25,10 @@ class TreeVisualizer:
                 type_ = node.metadata.get('type')
                 estimate = node.metadata.get('estimate')
                 owner = node.metadata.get('owner')
+                blocked_by = node.metadata.get('blocked_by')
                 
                 parts = []
                 if status:
-                    # ANSI colors could be added here if desired
                     parts.append(f"status: {status}")
                 if type_:
                     parts.append(f"type: {type_}")
@@ -36,6 +36,12 @@ class TreeVisualizer:
                     parts.append(f"est: {estimate}")
                 if owner:
                     parts.append(f"@{owner}")
+                if blocked_by:
+                    if isinstance(blocked_by, list):
+                        blocked_str = ",".join(blocked_by)
+                    else:
+                        blocked_str = str(blocked_by)
+                    parts.append(f"blocked: [{blocked_str}]")
                 
                 if parts:
                     meta_str = f"  [{', '.join(parts)}]"
