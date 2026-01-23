@@ -132,6 +132,42 @@ Protocol for end-users. Restricted to natural language via the Chatbot App. No d
 <!-- content -->
 Protocols for how AI agents utilize external software and APIs. Adheres to the **Model Context Protocol (MCP)** to standardize tool definition, discovery, and execution.
 
+
+### Knowledge Bases
+- status: active
+- type: context
+- id: product.saas.arch.knowledge
+- last_checked: 2026-01-23T20:00:00+01:00
+<!-- content -->
+Repository resources categorized by their function.
+
+#### Agentic
+- status: active
+- type: context
+- id: product.saas.arch.knowledge.agentic
+- last_checked: 2026-01-23T20:00:00+01:00
+<!-- content -->
+- [MANAGER_AGENT](MANAGER_AGENT.md)
+- [CLEANER_AGENT](../cleaner/CLEANER_AGENT.md)
+- [REACT_ASSISTANT](../../AI_AGENTS/specialists/REACT_ASSISTANT.md)
+- [RECSYS_AGENT](../../AI_AGENTS/specialists/RECSYS_AGENT.md)
+- [CONTROL_AGENT](../../AI_AGENTS/specialists/CONTROL_AGENT.md)
+- [UI_DESIG_ASSISTANT](../../AI_AGENTS/specialists/UI_DESIG_ASSISTANT.md)
+- [LINEARIZE_AGENT](../../AI_AGENTS/specialists/LINEARIZE_AGENT.md)
+- [MC_AGENT](../../AI_AGENTS/specialists/MC_AGENT.md)
+
+#### Knowledge
+- status: active
+- type: context
+- id: product.saas.arch.knowledge.general
+- last_checked: 2026-01-23T20:00:00+01:00
+<!-- content -->
+- [README](../../README.md)
+- [MD_REPRESENTATION_CONVENTIONS](../../MD_REPRESENTATION_CONVENTIONS.md)
+- [AGENTS](../../AGENTS.md)
+- [AGENTS_LOG](../../AGENTS_LOG.md)
+- [DAG_Example](../../language/example/DAG_Example.md)
+
 ## Implementation Roadmap
 - status: active
 - type: plan
