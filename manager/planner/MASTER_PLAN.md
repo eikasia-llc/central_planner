@@ -1,23 +1,14 @@
-# Central Company Master Plan
+# Master Plan: Intelligent Control SaaS
 - status: active
 - type: plan
-- id: master_plan
-- owner: central-planner
-- last_checked: 2026-01-23T13:47:07+01:00
-<!-- content -->
-This document serves as the central aggregation point for the company's strategic initiatives. It currently focuses on the flagship **Intelligent Control & Analysis Platform**.
-
-## Intelligent Control & Analysis Platform (SaaS)
-- status: active
-- type: plan
-- id: product.saas
+- id: master_plan.saas
 - owner: product-manager
 - priority: critical
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-01-23T15:14:25+01:00
 <!-- content -->
-A dual-engine AI system functioning as both a **Business Analyst** and an **Autonomous Operator** for SMBs and industrial clients. It combines LLM reasoning (Analysis) with RL control (Optimization).
+This document serves as the central strategic plan for the **Intelligent Control & Analysis Platform**. It is a dual-engine AI system functioning as both a **Business Analyst** and an **Autonomous Operator** for SMBs and industrial clients. It combines LLM reasoning (Analysis) with RL control (Optimization).
 
-### Executive Summary
+## Executive Summary
 - status: done
 - type: context
 - id: product.saas.summary
@@ -27,16 +18,11 @@ A dual-engine AI system functioning as both a **Business Analyst** and an **Auto
 -   **Analyst**: "Why is this happening?" -> Code Interpreter analysis.
 -   **Controller**: "Optimize for efficiency." -> RL Agent execution.
 
-### Value Propositions
-- status: active
-- type: context
-- id: product.saas.value_prop
-- last_checked: 2026-01-23T13:47:07+01:00
-<!-- content -->
+**Value Propositions**
 1.  **Retail/SMBs (The Agentic Analyst)**: Democratized Data Science. Instant answers to colloquial questions without a data team.
 2.  **Logistics (Inventory Auto-Pilot)**: Cash flow optimization. Automated reordering using RL agents to solve the Newsvendor problem (minimize holding costs vs. prevent stockouts).
 
-### Technical Architecture
+## Technical Architecture
 - status: active
 - type: plan
 - id: product.saas.arch
@@ -44,35 +30,58 @@ A dual-engine AI system functioning as both a **Business Analyst** and an **Auto
 <!-- content -->
 The system separates Analytical Queries (Code Execution) from Control Tasks (Model Inference).
 
-#### Core Components
+### Core Components
 - status: active
 - type: context
 - id: product.saas.arch.components
 - last_checked: 2026-01-23T13:47:07+01:00
 <!-- content -->
--   **Orchestrator (The Brain)**: Vertex AI (Gemini Pro). Routes requests to Analysis or Control.
--   **Analysis Sandbox**: Ephemeral Docker Containers (E2B / Vertex Extensions) for safe code execution. Internal access only.
--   **Control Factory**: Vertex AI Custom Training + Ray/Stable Baselines3 for training RL policies.
+-   **Chatbot Assistant App**: Interface with the user, operating also as a data warehouse.
+-   **Internal Ecosystem of AI-Assistants**: Background agents performing different tasks, well orchestrated (internal access only).
+-   **BigQuery Database**: Google BigQuery (or alternative) for data storage.
+-   **Cloud Compute**: Google Cloud or other platform for computation.
+-   **Internal Algorithms Repository**: Data processing and control algorithms, leveraging Vertex AI for data science and optimization.
 
-#### Information Flow (Control Loop)
+### Information Flow
 - status: active
 - type: context
 - id: product.saas.arch.flow
 - last_checked: 2026-01-23T13:47:07+01:00
 <!-- content -->
-1.  **Input**: Client streams telemetry ($s_t$) to `/v1/telemetry`.
-2.  **Inference**: Policy network $\pi(s_t)$ or World Model $\hat{f}(s, a)$ selects action.
-3.  **Action**: API returns action $a_t$.
-4.  **Feedback**: Client sends reward/new state during offline retraining.
 
-### Implementation Roadmap
+#### AI Assistant Orchestration
+- status: active
+- type: context
+- id: product.saas.arch.flow.orchestration
+- last_checked: 2026-01-23T15:28:59+01:00
+<!-- content -->
+User interaction begins with the Chatbot App, which forwards requests to the Orchestrator (Vertex AI).
+1.  **Intent Recognition**: The Orchestrator determines if the request is **Analysis** (informational) or **Control** (actionable).
+2.  **Routing**:
+    *   **Analysis**: Routed to Code Interpreter / Analyst Agent for data querying and visualization.
+    *   **Control**: Routed to Planner / RL Agent for optimization and decision making.
+3.  **Response**: Results are aggregated and returned to the Chatbot as natural language or UI components.
+
+#### Control Loop
+- status: active
+- type: context
+- id: product.saas.arch.flow.control
+- last_checked: 2026-01-23T15:28:59+01:00
+<!-- content -->
+This high-frequency loop handles the autonomous optimization system:
+1.  **Telemetry Ingest**: Raw data streams from the Client App/Warehouse are ingested into BigQuery.
+2.  **State Estimation**: Processing algorithms convert raw telemetry into state vectors ($s_t$) suitable for model input.
+3.  **Decision**: The Policy network ($\pi$) or Planer selects the optimal action ($a_t$) based on the current state.
+4.  **Execution & Feedback**: The action is sent to the Controller for execution, and the outcome is recorded for offline re-training and refinement.
+
+## Implementation Roadmap
 - status: active
 - type: plan
 - id: product.saas.roadmap
 - last_checked: 2026-01-23T13:47:07+01:00
 <!-- content -->
 
-#### Phase 1: Unified Data API
+### Phase 1: Unified Data API
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase1
@@ -85,7 +94,7 @@ The system separates Analytical Queries (Code Execution) from Control Tasks (Mod
 -   Schema validation via Pydantic.
 -   Endpoints: `/v1/events` (to BigQuery) and `/v1/telemetry` (to BigQuery/BigTable).
 
-##### Basic Chatbot Interface
+#### Basic Chatbot Interface
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase1.chatbot
@@ -94,7 +103,7 @@ The system separates Analytical Queries (Code Execution) from Control Tasks (Mod
 <!-- content -->
 Create a basic chat interface to interact with the LLMs. This involves setting up a simple React UI, establishing the API connection to Vertex AI / OpenAI, and implementing basic cost tracking per session.
 
-##### Client Data Warehouse App
+#### Client Data Warehouse App
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase1.warehouse_app
@@ -104,7 +113,7 @@ Create a basic chat interface to interact with the LLMs. This involves setting u
 <!-- content -->
 Develop a downloadable application for clients to install, enabling streamlined data streaming to our central warehouse.
 
-##### Data Stream Controllers & Planners
+#### Data Stream Controllers & Planners
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase1.controllers
@@ -114,7 +123,7 @@ Develop a downloadable application for clients to install, enabling streamlined 
 <!-- content -->
 Set up initial controllers and planners to process the incoming data stream from the client app.
 
-#### Phase 2: The Agentic Analyst (Generative UI)
+### Phase 2: The Agentic Analyst (Generative UI)
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase2
@@ -128,7 +137,7 @@ Set up initial controllers and planners to process the incoming data stream from
 -   **Backend**: Implement tool_call logic in Vertex AI to map requests to UI JSON payloads.
 -   **Prompting**: Train model to prefer returning UI components over dense text.
 
-#### Phase 3: The Control Loop (MVP)
+### Phase 3: The Control Loop (MVP)
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase3
@@ -141,7 +150,7 @@ Set up initial controllers and planners to process the incoming data stream from
 -   Implement standard algorithm (e.g., PPO) on Vertex Custom Jobs.
 -   Train on a simple inventory management problem (Environment).
 
-### Security & Safety Checks
+## Security & Safety Checks
 - status: active
 - type: guideline
 - id: product.saas.security
@@ -152,7 +161,7 @@ Set up initial controllers and planners to process the incoming data stream from
 -   **Simulation Isolation**: User-provided logic runs in `gVisor` sandboxes.
 -   **Action Bounding**: Deterministic logic layer validates actions against safety constraints (e.g., `MAX_ORDER_LIMIT`) before execution.
 
-### Research Directions
+## Research Directions
 - status: active
 - type: plan
 - id: product.saas.research
@@ -161,12 +170,3 @@ Set up initial controllers and planners to process the incoming data stream from
 -   **MBRL (DreamerV3)**: Learning World Models from telemetry to simulate environments.
 -   **Safe RL**: Constrained MDPs (Lagrangian Relaxation) to ensure safety during exploration.
 -   **Reflexion**: Agents that analyze their own tracebacks to iteratively fix code.
-
-## Repository Maintenance
-- status: active
-- type: recurring
-- id: meta.maintenance
-- last_checked: 2026-01-23T13:47:07+01:00
-<!-- content -->
-To sync this plan with other repositories, run:
-`python3 manager/update_master_plan.py --all`
