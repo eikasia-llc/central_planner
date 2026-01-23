@@ -46,7 +46,7 @@ The system uses **Markdown headers** to define the structural hierarchy (the nod
 
 ## Implement User Auth
 - status: in-progress
-- type: episodic
+- type: plan
 - owner: dev-1
 - estimate: 3d
 - blocked_by: []
@@ -62,13 +62,23 @@ The following fields are standard, but the schema allows extensibility.
 | Field | Type | Description |
 | :--- | :--- | :--- |
 | `status` | `enum` | `todo`, `in-progress`, `done`, `blocked` |
-| `type` | `enum` | `recurring`, `episodic`, `binary` |
+| `type` | `enum` | **Core**: `plan`, `task`, `recurring`<br>**Agentic**: `agent_skill`, `protocol`<br>**Knowledge**: `guideline`, `log`, `context` |
 | `owner` | `string` | The agent or user assigned to this (e.g., `dev-1`, `claude`) |
 | `estimate` | `string` | Time estimate (e.g., `1d`, `4h`) |
 | `blocked_by`| `list` | List of explicit dependencies (IDs or relative paths) |
 | `priority` | `enum` | `low`, `medium`, `high`, `critical` (Optional) |
 | `id` | `string` | Unique identifier for the node (e.g., `project.component.task`). Used for robust merging and dependency tracking. |
 | `last_checked` | `string` | This is the date of the last time this node was modified, including change of status. |
+
+### Type Definitions
+- **`plan`**: (Finite) A high-level objective with a clear beginning and end. Usually the root node.
+- **`task`**: (Finite) A specific, actionable unit of work. Usually a sub-node of a plan.
+- **`recurring`**: (Infinite) A maintenance loop or checklist that resets periodically (e.g. housekeeping).
+- **`agent_skill`**: (Capability) Defines a persona, specialized toolset, or prompting strategy.
+- **`protocol`**: (Interaction) Strict rules for inter-agent communication or system behavior.
+- **`guideline`**: (Normative) Static rules, conventions, and high-level documentation (read-only reference).
+- **`log`**: (Historical) Append-only records of actions, decisions, or outputs.
+- **`context`**: (Informational) Passive knowledge, textbooks, or reference material.
 
 For extended fields consider:
  - The key is entirely lowercase

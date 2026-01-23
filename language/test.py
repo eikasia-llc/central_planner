@@ -20,7 +20,7 @@ class TestLanguageTools(unittest.TestCase):
         # Create a valid source file
         self.valid_file = os.path.join(self.test_dir, "valid.md")
         with open(self.valid_file, "w") as f:
-            f.write("# Root\n- status: active\n- type: recurring\n\n## Child\n- status: todo\n- type: binary\n")
+            f.write("# Root\n- status: active\n- type: plan\n\n## Child\n- status: todo\n- type: task\n")
 
         # Create an invalid file
         self.invalid_file = os.path.join(self.test_dir, "invalid.md")
@@ -53,7 +53,7 @@ class TestLanguageTools(unittest.TestCase):
         child = root_header.children[0]
         self.assertEqual(child.title, "Child")
         self.assertEqual(child.metadata['status'], 'todo')
-        self.assertEqual(child.metadata['type'], 'binary')
+        self.assertEqual(child.metadata['type'], 'task')
         
     def test_parser_validation(self):
         parser = MarkdownParser()

@@ -177,7 +177,7 @@ class MarkdownParser:
                 errors.append(f"Invalid status '{node.metadata['status']}' in node '{node.title}' (Allowed: {valid_statuses})")
         
         if 'type' in node.metadata:
-            valid_types = ['recurring', 'episodic', 'binary']
+            valid_types = ['plan', 'task', 'recurring', 'agent_skill', 'protocol', 'guideline', 'log', 'context']
             if node.metadata['type'] not in valid_types:
                 errors.append(f"Invalid type '{node.metadata['type']}' in node '{node.title}' (Allowed: {valid_types})")
 
