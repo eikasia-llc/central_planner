@@ -8,7 +8,8 @@ import subprocess
 # Add language directory to sys.path to allow imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
-language_dir = os.path.join(parent_dir, 'language')
+grandparent_dir = os.path.dirname(parent_dir)
+language_dir = os.path.join(grandparent_dir, 'language')
 sys.path.append(language_dir)
 
 try:

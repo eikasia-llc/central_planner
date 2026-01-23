@@ -8,7 +8,8 @@ import argparse
 # Add language directory to sys.path to allow imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 parent_dir = os.path.dirname(current_dir)
-language_dir = os.path.join(parent_dir, 'language')
+grandparent_dir = os.path.dirname(parent_dir)
+language_dir = os.path.join(grandparent_dir, 'language')
 sys.path.append(language_dir)
 
 try:
@@ -81,11 +82,15 @@ def clean_repo(url):
                         was_changed = migrate.migrate_file(source_path)
                         
                         if was_changed:
-                            if os.path.exists(target_path):
-                                print(f"Warning: Overwriting existing file {file} in cleaning directory.")
+                            print(f"Migrated {file} (updated in place)")
+                        else:
+                            print(f"Migrated {file} (no changes needed)")
+                            
+                        if os.path.exists(target_path):
+                            print(f"Warning: Overwriting existing file {file} in cleaning directory.")
 
-                            shutil.copy2(source_path, target_path)
-                            md_count += 1
+                        shutil.copy2(source_path, target_path)
+                        md_count += 1
                     except Exception as e:
                         print(f"Error checking/migrating {file}: {e}")
 
