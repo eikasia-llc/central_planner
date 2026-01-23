@@ -172,77 +172,130 @@ Repository resources categorized by their function.
 - status: active
 - type: plan
 - id: product.saas.roadmap
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-01-23T21:44:23+01:00
 <!-- content -->
+This roadmap strips away enterprise complexity to focus on the core value proposition: a local app that acts as a data hub and a chat interface, connected to powerful cloud agents for execution.
 
-### Phase 1: Unified Data API
+### Phase 1: The Local Nexus (Client App)
 - status: todo
-- type: task
+- type: plan
 - id: product.saas.roadmap.phase1
+- estimate: 4w
+- last_checked: 2026-01-23T21:44:23+01:00
+<!-- content -->
+**Objective**: Build the interface that serves as both the chatbot and the local data warehouse.
+
+#### Local Chat Interface
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase1.chat_ui
 - estimate: 2w
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-01-23T21:44:23+01:00
 <!-- content -->
-**Goal**: Single API surface for uploading both Event data (Recs) and Telemetry (Control).
-**Deliverables**:
--   Robust Ingestion Layer.
--   Schema validation via Pydantic.
--   Endpoints: `/v1/events` (to BigQuery) and `/v1/telemetry` (to BigQuery/BigTable).
+- **Tech**: Electron (React) or Streamlit for a unified desktop feel.
+- **Features**:
+  - Chat window for natural language query.
+  - "Upload Data" button (CSV/Excel).
+  - Rendering engine for Tables and Charts returned by the cloud.
 
-#### Basic Chatbot Interface
+#### Local Data Warehouse Engine
 - status: todo
 - type: task
-- id: product.saas.roadmap.phase1.chatbot
-- estimate: 1w
-- last_checked: 2026-01-23T15:11:55+01:00
+- id: product.saas.roadmap.phase1.local_db
+- blocked_by: [product.saas.roadmap.phase1.chat_ui]
+- estimate: 2w
+- last_checked: 2026-01-23T21:44:23+01:00
 <!-- content -->
-Create a basic chat interface to interact with the LLMs. This involves setting up a simple React UI, establishing the API connection to Vertex AI / OpenAI, and implementing basic cost tracking per session.
+- **Tech**: SQLite or DuckDB (embedded OLAP).
+- **Function**:
+  - Ingest user files into a structured SQL format locally.
+  - Allow the app to query itself for basic stats without hitting the cloud.
+  - **Change Tracking**: Automatically flag new or modified records to trigger the autonomous cloud sync.
 
-#### Client Data Warehouse App
+### Phase 2: The Cloud Bridge (Connectivity)
 - status: todo
-- type: task
-- id: product.saas.roadmap.phase1.warehouse_app
-- blocked_by: [product.saas.roadmap.phase1.chatbot]
-- estimate: 1w
-- last_checked: 2026-01-23T14:48:58+01:00
-<!-- content -->
-Develop a downloadable application for clients to install, enabling streamlined data streaming to our central warehouse.
-
-#### Data Stream Controllers & Planners
-- status: todo
-- type: task
-- id: product.saas.roadmap.phase1.controllers
-- blocked_by: [product.saas.roadmap.phase1.warehouse_app]
-- estimate: 1w
-- last_checked: 2026-01-23T14:48:58+01:00
-<!-- content -->
-Set up initial controllers and planners to process the incoming data stream from the client app.
-
-### Phase 2: The Agentic Analyst (Generative UI)
-- status: todo
-- type: task
+- type: plan
 - id: product.saas.roadmap.phase2
 - blocked_by: [product.saas.roadmap.phase1]
-- estimate: 4w
-- last_checked: 2026-01-23T13:47:07+01:00
+- estimate: 2w
+- last_checked: 2026-01-23T21:44:23+01:00
 <!-- content -->
-**Goal**: Enable "Chat with Data" with interactive components (React).
-**Actions**:
--   **Frontend**: Build Component Registry (Charts, Tables, Sliders).
--   **Backend**: Implement tool_call logic in Vertex AI to map requests to UI JSON payloads.
--   **Prompting**: Train model to prefer returning UI components over dense text.
+**Objective**: Establish a secure, simple pipe between the Local Node and the Cloud Agents.
 
-### Phase 3: The Control Loop (MVP)
+#### API Gateway & Auth
 - status: todo
 - type: task
+- id: product.saas.roadmap.phase2.api
+- estimate: 1w
+- last_checked: 2026-01-23T21:44:23+01:00
+<!-- content -->
+- **Tech**: Google Cloud Run (Serverless) + FastAPI.
+- **Auth**: Simple API Key or Firebase Auth to link a specific Local Node to its Cloud resources.
+- **Endpoints**:
+  - `/agent/analyze`: Sends user query + relevant data snippets.
+  - `/agent/optimize`: Sends telemetry for RL processing.
+
+#### Autonomous Data Sync Pipeline
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase2.sync
+- blocked_by: [product.saas.roadmap.phase2.api]
+- estimate: 1w
+- last_checked: 2026-01-23T21:44:23+01:00
+<!-- content -->
+- **Mechanism**: A background service in the Local App autonomously synchronizes the local warehouse with the Cloud Database.
+- **Efficiency**: Pushes delta updates (only changes) to Cloud Storage/BigQuery to minimize bandwidth.
+- **Policy**: Real-time sync for active telemetry; scheduled sync for large historical datasets.
+
+### Phase 3: The Cloud Agents (Execution)
+- status: todo
+- type: plan
 - id: product.saas.roadmap.phase3
 - blocked_by: [product.saas.roadmap.phase2]
 - estimate: 6w
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-01-23T21:44:23+01:00
 <!-- content -->
-**Goal**: End-to-end RL pipeline.
-**Actions**:
--   Implement standard algorithm (e.g., PPO) on Vertex Custom Jobs.
--   Train on a simple inventory management problem (Environment).
+**Objective**: The "Brain" that runs code and retrieves information.
+
+#### Agent Orchestrator
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase3.orchestrator
+- estimate: 2w
+- last_checked: 2026-01-23T21:44:23+01:00
+<!-- content -->
+- **Tech**: LangChain or Vertex AI Agent Builder.
+- **Role**:
+  - Receive user text.
+  - Decide: "Do I need to write code?" (Analyst) or "Do I need to run an optimization?" (Controller).
+  - Route the request.
+
+#### The Analyst Agent (Code Interpreter)
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase3.analyst
+- blocked_by: [product.saas.roadmap.phase3.orchestrator]
+- estimate: 2w
+- last_checked: 2026-01-23T21:44:23+01:00
+<!-- content -->
+- **Sandbox**: Secure Python environment (e.g., E2B or restricted Docker container).
+- **Workflow**:
+  1. Agent writes Python code to analyze the uploaded data.
+  2. Executes code.
+  3. Captures output (Text + Image/JSON for charts).
+  4. Returns structured response to Local App.
+
+#### The Controller Agent (Optimization)
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase3.controller
+- blocked_by: [product.saas.roadmap.phase3.analyst]
+- estimate: 2w
+- last_checked: 2026-01-23T21:44:23+01:00
+<!-- content -->
+- **Role**: Run the Recommender/Inventory logic (using Vertex AI Recommendations or custom RL).
+- **Input**: State vector from the Local App.
+- **Output**: Action (e.g., "Reorder 50 units") sent back to the Local App for user approval.
 
 ## Security & Safety Checks
 - status: active
