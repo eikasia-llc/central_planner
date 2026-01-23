@@ -18,6 +18,9 @@ ALLOWED_FIELDS = {
     'priority', 'id', 'last_checked'
 }
 
+# Content separator constant
+CONTENT_SEPARATOR = "<!-- content -->"
+
 def has_meta_block(lines, header_index):
     # check next few lines for METADATA-like content
     if header_index + 1 >= len(lines):
@@ -90,7 +93,7 @@ def migrate_file(file_path):
                 full_id = ".".join([item[1] for item in header_stack])
                 current_date = date.today().isoformat()
                 
-                default_meta = f"- id: {full_id}\n- status: active\n- last_checked: {current_date}\n\n"
+                default_meta = f"- id: {full_id}\n- status: active\n- last_checked: {current_date}\n{CONTENT_SEPARATOR}\n"
                 
                 # If there's a newline after header, we can insert before it or after it?
                 # Usually we want Header\nMETADATA.
@@ -119,15 +122,15 @@ def migrate_file(file_path):
                     if is_valid_meta:
                         found_meta = True
                         j += 1
-                    elif found_meta and lines[j].strip() == "":
-                         # Already has blank line
+                    elif found_meta and (lines[j].strip() == "" or re.match(r'^\s*<!--\s*content\s*-->\s*$', lines[j])):
+                         # Already has blank line or separator
                          break
                     else:
                          # Found end of metadata, and lines[j] is NOT blank
                          # Insert blank line
                          if found_meta: # Only if we actually traversed some metadata
                              new_lines.extend(lines[i+1:j])
-                             new_lines.append("\n")
+                             new_lines.append(f"{CONTENT_SEPARATOR}\n")
                              # We want to continue outer loop from j.
                              # Outer loop does i+=1 at end.
                              # So set i = j - 1

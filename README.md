@@ -21,6 +21,7 @@ The project uses a strict **Markdown-METADATA Hybrid Schema** to treat documenta
 - **Identification**: 
     - **Title**: Default identification method.
     - **Global ID**: An optional `id` metadata field (e.g., `id: component.backend`). This is the **preferred** method for robust cross-file operations (merging/linking), as it persists even if the human-readable title changes.
+- **Separator**: A `<!-- content -->` line separates metadata from content, ensuring unambiguous parsing.
 - **Metadata**: Every node (header) must be immediately followed by a METADATA block defining its attributes.
 
 **Example Node:**
@@ -31,7 +32,8 @@ The project uses a strict **Markdown-METADATA Hybrid Schema** to treat documenta
 - owner: @frontend-agent
 - priority: high
 - blocked_by: [feature.auth.backend, infra.db.setup]
-
+<!-- content -->
+Description of the login feature implementation...
 ```
 
 ### The Language System (Tooling)

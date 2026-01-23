@@ -39,7 +39,7 @@ class Node:
                 else:
                     md_lines.append(f"- {key}: {value}")
             if self.metadata:
-                md_lines.append("") # Empty line after metadata
+                md_lines.append("<!-- content -->")  # Separator after metadata
         
         if self.content:
             md_lines.append(self.content)
@@ -55,12 +55,18 @@ class Node:
             
         return "\n".join(md_lines)
 
+# Separator constant - used to distinguish metadata from content
+CONTENT_SEPARATOR = "<!-- content -->"
+CONTENT_SEPARATOR_PATTERN = re.compile(r'^\s*<!--\s*content\s*-->\s*$')
+
 class MarkdownParser:
     def __init__(self):
         # Regex for headers: # Title
         self.header_pattern = re.compile(r'^(#+)\s+(.*)')
         # Regex for metadata lines: - key: value
         self.metadata_pattern = re.compile(r'^\s*-\s*([a-zA-Z0-9_]+):\s*(.*)')
+        # Regex for content separator: <!-- content -->
+        self.separator_pattern = CONTENT_SEPARATOR_PATTERN
 
     def parse_file(self, file_path):
         with open(file_path, 'r', encoding='utf-8') as f:
@@ -86,12 +92,13 @@ class MarkdownParser:
                 i += 1
                 while i < len(lines):
                     meta_line = lines[i]
+                    # Check for content separator - this definitively ends metadata block
+                    if self.separator_pattern.match(meta_line):
+                        i += 1  # Skip the separator line
+                        break
+                    
                     # Check for metadata line
                     meta_match = self.metadata_pattern.match(meta_line)
-                    # Also check if it's just a blank line, we might allow blank lines before metadata? 
-                    # Spec says "immediately following", so let's be strict but allow skipping ONE blank line if we want.
-                    # Actually spec says "Metadata MUST be placed immediately after the header".
-                    # But usually there is a newline after header.
                     
                     if meta_match:
                         key = meta_match.group(1).strip()
@@ -110,14 +117,15 @@ class MarkdownParser:
                         new_node.metadata[key] = value
                         i += 1
                     elif meta_line.strip() == "":
-                        # If we haven't found any metadata yet, a blank line is okay? 
-                        # Or if we are inside metadata block, a blank line ends it?
-                        # Let's assume blank line ends metadata block or starts content.
-                        # If we have finding metadata, blank line ends it.
-                        # If we are strictly looking for metadata immediately, blank line might be allowed between header and list?
-                        # Let's assume standard markdown: Header\n\n- key: val
-                        i += 1
-                        continue 
+                        # Blank line handling for backward compatibility:
+                        # If we've found metadata, blank line ends the block (old separator)
+                        # If no metadata yet, skip blank line and continue looking
+                        if new_node.metadata:
+                            i += 1  # Skip the blank line
+                            break   # End metadata block
+                        else:
+                            i += 1
+                            continue
                     else:
                         # Non-metadata line, stop looking for metadata
                         break

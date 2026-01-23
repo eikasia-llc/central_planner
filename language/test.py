@@ -42,11 +42,18 @@ class TestLanguageTools(unittest.TestCase):
     def test_parser_valid(self):
         parser = MarkdownParser()
         root = parser.parse_file(self.valid_file)
+        # root is synthetic (level 0), its children are level-1 headers
         self.assertEqual(root.title, "Root")
         self.assertEqual(len(root.children), 1)
-        self.assertEqual(root.children[0].title, "Child")
-        self.assertEqual(root.children[0].metadata['status'], 'todo')
-        self.assertEqual(root.children[0].metadata['type'], 'binary')
+        root_header = root.children[0]
+        self.assertEqual(root_header.title, "Root")
+        self.assertEqual(root_header.metadata['status'], 'active')
+        # root_header.children contains level-2 headers
+        self.assertEqual(len(root_header.children), 1)
+        child = root_header.children[0]
+        self.assertEqual(child.title, "Child")
+        self.assertEqual(child.metadata['status'], 'todo')
+        self.assertEqual(child.metadata['type'], 'binary')
         
     def test_parser_validation(self):
         parser = MarkdownParser()
@@ -67,11 +74,16 @@ class TestLanguageTools(unittest.TestCase):
         parser = MarkdownParser()
         root = parser.parse_file(output_file)
         
-        # Target Root should now have Feature A AND SubTask (appended from source)
-        # Note: extend_tree appends source's CHILDREN to target's children
-        child_titles = [c.title for c in root.children]
-        self.assertIn("Feature A", child_titles)
-        self.assertIn("SubTask", child_titles)
+        # Extended: Target Root and Source Root are both level-1 children of synthetic root
+        root_titles = [c.title for c in root.children]
+        self.assertIn("Target Root", root_titles)
+        self.assertIn("Source Root", root_titles)
+        
+        # Feature A is under Target Root, SubTask is under Source Root
+        target_root = next(c for c in root.children if c.title == "Target Root")
+        source_root = next(c for c in root.children if c.title == "Source Root")
+        self.assertIn("Feature A", [c.title for c in target_root.children])
+        self.assertIn("SubTask", [c.title for c in source_root.children])
 
     def test_operations_merge(self):
         output_file = os.path.join(self.test_dir, "merged.md")
@@ -81,11 +93,14 @@ class TestLanguageTools(unittest.TestCase):
         parser = MarkdownParser()
         root = parser.parse_file(output_file)
         
-        # Find feature A
-        feature_a = next(c for c in root.children if c.title == "Feature A")
-        # It should have SubTask as child
-        self.assertEqual(len(feature_a.children), 1)
-        self.assertEqual(feature_a.children[0].title, "SubTask")
+        # Find Target Root first, then Feature A within it
+        target_root = next(c for c in root.children if c.title == "Target Root")
+        feature_a = next(c for c in target_root.children if c.title == "Feature A")
+        # Feature A should have Source Root as child (merged from source)
+        self.assertIn("Source Root", [c.title for c in feature_a.children])
+        # Source Root should have SubTask as child
+        source_root = next(c for c in feature_a.children if c.title == "Source Root")
+        self.assertIn("SubTask", [c.title for c in source_root.children])
 
 if __name__ == "__main__":
     unittest.main()

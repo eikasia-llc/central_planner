@@ -28,9 +28,9 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 
 ### 2. Metadata Blocks
 - status: active
-
+<!-- content -->
 - **Location**: Metadata MUST be placed **immediately** after the header.
-- **Separator**: There MUST be a blank line between the metadata block and the content.
+- **Separator**: There MUST be a `<!-- content -->` line between the metadata block and the content. This HTML comment acts as an unambiguous separator that is invisible when rendered but easy for parsers to detect.
 - **Format**: A METADATA block. It works best as a bulleted list of key-value pairs.
 - **Preferred Format**: A strict list of key-value pairs.
 
@@ -43,7 +43,8 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 - owner: dev-1
 - estimate: 3d
 - blocked_by: []
-
+<!-- content -->
+This section describes the implementation details...
 ```
 
 ### 3. Allowed Fields
@@ -78,13 +79,13 @@ For extended fields consider:
 
 ### Valid Node
 - status: active
-
+<!-- content -->
 ```markdown
 ### Database Schema
 - status: done
 - owner: dev-2
 - estimate: 1d
-
+<!-- content -->
 Set up PostgreSQL schema for users and sessions.
 ```
 
@@ -115,11 +116,14 @@ owner: dev-2
 
 ## Parsing Logic (for Developers)
 - status: active
-
+<!-- content -->
 1. **Scan for Headers**.
 2. **Look ahead** at the lines immediately following the header.
-3. **Parse lines** that match the METADATA key-value pattern (`- key: value` or `key: value`) until a blank line or non-matching line is found.
+3. **Parse lines** that match the METADATA key-value pattern (`- key: value` or `key: value`) until the `<!-- content -->` separator or a non-matching line is found.
 4. **Everything else** until the next header of equal or higher level is "Content".
+
+> [!NOTE]
+> The parser maintains backward compatibility with files using a blank line as separator, but all new files and migrations should use `<!-- content -->`.
 
 ## Tooling Reference
 - status: active
@@ -180,12 +184,12 @@ When generating or modifying files in this repository, AI agents MUST adhere to 
 
 1.  **Always Generate IDs**: When creating new nodes (tasks, features, sections), always generate a unique `id` in the metadata (e.g., `id: component.subcomponent.task`). This ensures that references remain stable even if titles change.
 2.  **Update Timestamps**: When modifying a node, update the `last_checked` field to the current date (ISO-8601).
-3.  **Strict Spacing**: You **MUST** ensure there is exactly one blank line between the metadata block and the content. This is critical for the parser to distinguish between metadata and content lists.
+3.  **Strict Spacing**: You **MUST** add a `<!-- content -->` separator line between the metadata block and the content. This is critical for the parser to distinguish between metadata and content lists.
     *   *Correct*:
         ```markdown
         ## Title
         - status: active
-        
+        <!-- content -->
         Content starts here...
         ```
     *   *Incorrect*:

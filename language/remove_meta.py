@@ -34,10 +34,14 @@ def is_valid_metadata_line(line):
         
     return True
 
+def is_content_separator(line):
+    """Checks if a line is the content separator <!-- content -->."""
+    return bool(re.match(r'^\s*<!--\s*content\s*-->\s*$', line))
+
 def get_metadata_block(lines, start_index):
     """
     Returns the metadata lines and the parsed dict from a block starting at start_index.
-    Stops at the first non-metadata line.
+    Stops at the first non-metadata line. Also captures trailing separator.
     """
     meta_lines = []
     parsed_data = {}
@@ -54,6 +58,11 @@ def get_metadata_block(lines, start_index):
             parsed_data[key] = value.strip()
             
             current_index += 1
+        elif is_content_separator(line):
+            # Include separator in meta_lines so it gets removed too
+            meta_lines.append(line)
+            current_index += 1
+            break
         else:
             break
             
