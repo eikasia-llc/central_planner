@@ -1,9 +1,10 @@
 # Left Eigenvector Centrality Hypothesis
 - status: active
+<!-- content -->
 
 ## Overview
 - status: active
-
+<!-- content -->
 This document formalizes the hypothesis that the long-run outcomes of the network epistemology simulation can be analytically predicted using:
 1. **Stochastic matrices** derived from the sampling and update mechanism (Binomial experiments, Bayesian updating)
 2. **Left eigenvector centrality** derived from the network structure (DeGroot influence)
@@ -11,10 +12,11 @@ This document formalizes the hypothesis that the long-run outcomes of the networ
 
 ## The Simulation as a Stochastic Process
 - status: active
+<!-- content -->
 
 ### State Space
 - status: active
-
+<!-- content -->
 For **Beta Agents**, the full state at time $t$ is:
 $$S_t = \{(\alpha_i^{(0)}, \beta_i^{(0)}, \alpha_i^{(1)}, \beta_i^{(1)})\}_{i=1}^N \subset \mathbb{R}^{4N}$$
 
@@ -23,12 +25,12 @@ $$c_i^{(k)} = \frac{\alpha_i^{(k)}}{\alpha_i^{(k)} + \beta_i^{(k)}} \quad \text{
 
 ### Sources of Stochasticity
 - status: active
-
+<!-- content -->
 The simulation has **four sources of randomness**:
 
 #### 1. Initial State (Random Priors)
 - status: active
-
+<!-- content -->
 ```
 α_i^(k), β_i^(k) ~ Uniform(0, 4)  independently for each agent i, theory k
 ```
@@ -36,7 +38,7 @@ This determines the initial credences and the "confidence" (sum α+β) each agen
 
 #### 2. Theory Choice (ε-greedy)
 - status: active
-
+<!-- content -->
 ```
 With probability ε: choose randomly
 With probability 1-ε: choose argmax_k c_i^(k)
@@ -45,7 +47,7 @@ Default is ε=0 (pure greedy), making this deterministic given credences.
 
 #### 3. Experimental Outcomes (Binomial Sampling) — PRIMARY SOURCE
 - status: active
-
+<!-- content -->
 ```
 S_i^(t) ~ Binomial(n_experiments, p_theory)
 where p_theory = 0.5 + uncertainty  if theory=1 (truth)
@@ -55,7 +57,7 @@ This is the main ongoing stochasticity driving belief updates.
 
 #### 4. Optional Sampling Update
 - status: active
-
+<!-- content -->
 ```
 If sampling_update=True:
     c_i^(k) ~ Beta(α_i^(k), β_i^(k))  (sample from posterior)
@@ -65,7 +67,7 @@ If sampling_update=False:
 
 ### Update Dynamics
 - status: active
-
+<!-- content -->
 At each time step, the update rule is:
 
 $$\alpha_i^{(k)}(t+1) = \alpha_i^{(k)}(t) + \sum_{j \in \mathcal{N}(i) \cup \{i\}} S_j^{(k)}(t)$$
@@ -80,10 +82,11 @@ where:
 
 ## The Row-Stochastic Listening Matrix
 - status: active
+<!-- content -->
 
 ### Definition
 - status: active
-
+<!-- content -->
 Construct the **listening matrix** $W \in \mathbb{R}^{N \times N}$ where:
 
 $$W_{ij} = \begin{cases}
@@ -96,17 +99,18 @@ Note: This assumes equal weighting of predecessors. The matrix is **row-stochast
 
 ### Relationship to Adjacency Matrix
 - status: active
-
+<!-- content -->
 If $A$ is the adjacency matrix where $A_{ij} = 1$ means $i \to j$ (i.e., $j$ listens to $i$), then:
 - $A^T$ has $A^T_{ij} = 1$ if $j$ influences $i$
 - $W$ is the row-normalized version of $A^T$ with self-loops for roots
 
 ## Left Eigenvector Centrality (DeGroot Influence)
 - status: active
+<!-- content -->
 
 ### Definition
 - status: active
-
+<!-- content -->
 The **left eigenvector** $\pi$ satisfies:
 $$\pi W = \pi, \quad \sum_i \pi_i = 1, \quad \pi_i \geq 0$$
 
@@ -114,7 +118,7 @@ This is equivalent to finding the right eigenvector of $W^T$ for eigenvalue 1.
 
 ### Interpretation
 - status: active
-
+<!-- content -->
 $\pi_i$ represents the **long-run influence** of agent $i$:
 - In a DeGroot opinion dynamics model, consensus converges to $\sum_i \pi_i \cdot b_i^{(0)}$
 - For DAGs: $\pi$ concentrates entirely on root nodes
@@ -122,10 +126,11 @@ $\pi_i$ represents the **long-run influence** of agent $i$:
 
 ## The Hypothesis
 - status: active
+<!-- content -->
 
 ### Main Claim
 - status: active
-
+<!-- content -->
 The **proportion of agents believing truth** at convergence can be predicted by:
 
 $$\hat{P}(\text{truth}) = \sum_{i=1}^{N} \pi_i \cdot \mathbb{1}[\text{agent } i \text{ converges to truth}]$$
@@ -134,26 +139,26 @@ where convergence to truth means $c_i^{(1)} > c_i^{(0)}$ at the final time step.
 
 ### Decomposition of Outcomes
 - status: active
-
+<!-- content -->
 The final outcome depends on three separable components:
 
 #### Component 1: Network Structure → Left Eigenvector $\pi$
 - status: active
-
+<!-- content -->
 - Determined entirely by the directed graph topology
 - Captures "who influences whom" in the long run
 - For DAGs, equivalent to root-based reachability analysis
 
 #### Component 2: Initial Conditions → Prior Advantage
 - status: active
-
+<!-- content -->
 - Random priors create initial bias toward one theory
 - Agents with higher initial $c_i^{(1)}$ are more likely to test theory 1
 - This interacts with the uncertainty parameter
 
 #### Component 3: Stochastic Evidence Accumulation
 - status: active
-
+<!-- content -->
 - Binomial sampling creates variance in belief trajectories
 - Theory 1 (truth) has higher expected successes: $E[S] = n \cdot (0.5 + u)$
 - Over time, truth-testing agents accumulate evidence favoring truth
@@ -161,7 +166,7 @@ The final outcome depends on three separable components:
 
 ### Expected Dynamics
 - status: active
-
+<!-- content -->
 In expectation (averaging over binomial randomness):
 
 $$E[\alpha_i^{(1)}(t+1) | S_t] = \alpha_i^{(1)}(t) + n \cdot (0.5 + u) \cdot |\{j \in \mathcal{N}(i) \cup \{i\} : \text{choice}_j = 1\}|$$
@@ -170,36 +175,38 @@ The **expected evidence flow** follows the network structure, with the left eige
 
 ## Testable Predictions
 - status: active
+<!-- content -->
 
 ### Prediction 1: Left Eigenvector Accuracy
 - status: active
-
+<!-- content -->
 For networks with roots, left eigenvector prediction should match root-based prediction.
 For cyclic networks, left eigenvector provides unique predictive value.
 
 ### Prediction 2: Variance Decomposition
 - status: active
-
+<!-- content -->
 Total variance in outcomes = f(initial priors) + g(binomial sampling) + h(network structure)
 The network structure component should be captured by spectral properties of $W$.
 
 ### Prediction 3: Convergence Time
 - status: active
-
+<!-- content -->
 Mixing time should relate to the **spectral gap** $(1 - \lambda_2)$ where $\lambda_2$ is the second-largest eigenvalue of $W$.
 
 ### Prediction 4: Initial Condition Sensitivity
 - status: active
-
+<!-- content -->
 Agents with high $\pi_i$ should have disproportionate influence on final outcomes.
 Perturbing their initial beliefs should have larger effects than perturbing low-$\pi$ agents.
 
 ## Connection to Markov Chain Theory
 - status: active
+<!-- content -->
 
 ### The Process as a Markov Chain
 - status: active
-
+<!-- content -->
 The simulation satisfies the Markov property: $P(S_{t+1} | S_t, S_{t-1}, ...) = P(S_{t+1} | S_t)$
 
 However, it is:
@@ -209,7 +216,7 @@ However, it is:
 
 ### Relevant Markov Concepts
 - status: active
-
+<!-- content -->
 1. **Absorption probabilities**: $P(\text{converge to truth} | S_0)$
 2. **Hitting times**: Expected steps to reach consensus
 3. **Coupling time**: When chains from different initial states merge
@@ -217,7 +224,7 @@ However, it is:
 
 ## Open Questions
 - status: active
-
+<!-- content -->
 1. Can we derive a closed-form expression for $P(\text{agent } i \text{ converges to truth})$ as a function of $\pi_i$, initial priors, and $u$?
 
 2. How does the variance of binomial sampling affect the relationship between $\pi$ and outcomes?
@@ -228,7 +235,7 @@ However, it is:
 
 ## References
 - status: active
-
+<!-- content -->
 - DeGroot, M. H. (1974). Reaching a consensus. Journal of the American Statistical Association.
 - Golub, B., & Jackson, M. O. (2010). Naive learning in social networks and the wisdom of crowds.
 - Zollman, K. J. (2007). The communication structure of epistemic communities.

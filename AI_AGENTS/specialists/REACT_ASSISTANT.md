@@ -1,13 +1,13 @@
 # React Assistant Guide
 - status: active
-
+<!-- content -->
 > **Purpose:** This document provides AI assistants with guidelines for setting up simulation games as React + FastAPI monorepo projects. Follow this structure to create consistent, maintainable web-based simulations.
 
 ---
 
 ## Architecture Overview
 - status: active
-
+<!-- content -->
 This template uses a **display-only frontend** pattern where:
 
 - **Backend (Python/FastAPI):** Contains ALL simulation logic, game state, and behavioral logging
@@ -30,7 +30,7 @@ This template uses a **display-only frontend** pattern where:
 
 ## Project Structure Template
 - status: active
-
+<!-- content -->
 ```
 project_name/
 ├── backend/                             # Python simulation backend
@@ -94,10 +94,11 @@ project_name/
 
 ## Step 1: Backend Setup (Python/FastAPI)
 - status: active
+<!-- content -->
 
 ### 1.1 Create requirements.txt
 - status: active
-
+<!-- content -->
 ```txt
 fastapi
 uvicorn[standard]
@@ -107,7 +108,7 @@ Add any simulation-specific dependencies (numpy, etc.) as needed.
 
 ### 1.2 Create FastAPI Server (main.py)
 - status: active
-
+<!-- content -->
 ```python
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -117,14 +118,14 @@ import uuid
 
 # Import your simulation package
 - status: active
-
+<!-- content -->
 from simulation_name import Simulation
 
 app = FastAPI()
 
 # CRITICAL: Configure CORS for React dev server
 - status: active
-
+<!-- content -->
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Vite default port
@@ -135,13 +136,13 @@ app.add_middleware(
 
 # Store active simulation sessions
 - status: active
-
+<!-- content -->
 simulations: dict[str, Simulation] = {}
 ```
 
 ### 1.3 Define Pydantic Models
 - status: active
-
+<!-- content -->
 Use Pydantic `BaseModel` for request/response validation:
 
 ```python
@@ -159,7 +160,7 @@ class StepRequest(BaseModel):
 
 ### 1.4 Required API Endpoints
 - status: active
-
+<!-- content -->
 | Endpoint | Method | Purpose |
 |----------|--------|---------|
 | `/health` | GET | Health check - frontend uses this to verify backend is running |
@@ -171,7 +172,7 @@ class StepRequest(BaseModel):
 
 ### 1.5 Health Check Endpoint
 - status: active
-
+<!-- content -->
 ```python
 @app.get("/health")
 def health_check():
@@ -180,7 +181,7 @@ def health_check():
 
 ### 1.6 Simulation Init Endpoint
 - status: active
-
+<!-- content -->
 ```python
 @app.post("/simulation/init")
 def init_simulation(config: SimulationConfig):
@@ -203,7 +204,7 @@ def init_simulation(config: SimulationConfig):
 
 ### 1.7 Step Endpoint
 - status: active
-
+<!-- content -->
 ```python
 @app.post("/simulation/step")
 def simulation_step(request: StepRequest):
@@ -218,13 +219,14 @@ def simulation_step(request: StepRequest):
 
 ### 1.8 Simulation Class Structure
 - status: active
-
+<!-- content -->
 Create a simulation package with this pattern:
 
 ```python
+
 # simulation_name/simulation.py
 - status: active
-
+<!-- content -->
 class Simulation:
     def __init__(self, session_id: str, agent, environment):
         self.session_id = session_id
@@ -280,10 +282,11 @@ class Simulation:
 
 ## Step 2: Frontend Setup (Vite + React + TypeScript)
 - status: active
+<!-- content -->
 
 ### 2.1 Initialize Vite Project
 - status: active
-
+<!-- content -->
 ```bash
 cd project_name
 npm create vite@latest frontend -- --template react-ts
@@ -293,7 +296,7 @@ npm install
 
 ### 2.2 package.json Dependencies
 - status: active
-
+<!-- content -->
 Ensure these are present:
 
 ```json
@@ -312,7 +315,7 @@ Ensure these are present:
 
 ### 2.3 App.tsx Pattern
 - status: active
-
+<!-- content -->
 The root component should:
 1. Check backend health on mount
 2. Display connection status
@@ -356,7 +359,7 @@ export default App
 
 ### 2.4 Controls.tsx Pattern
 - status: active
-
+<!-- content -->
 The main game component should:
 
 1. **Define TypeScript interfaces** for state and config
@@ -534,7 +537,7 @@ export default Controls
 
 ### 2.5 CSS Grid Rendering
 - status: active
-
+<!-- content -->
 ```css
 .grid {
     display: grid;
@@ -573,10 +576,11 @@ export default Controls
 
 ## Step 3: Running the Application
 - status: active
+<!-- content -->
 
 ### 3.1 Start Backend (Terminal 1)
 - status: active
-
+<!-- content -->
 ```bash
 cd backend
 pip install -r requirements.txt
@@ -587,7 +591,7 @@ Backend runs at: `http://localhost:8000`
 
 ### 3.2 Start Frontend (Terminal 2)
 - status: active
-
+<!-- content -->
 ```bash
 cd frontend
 npm install
@@ -598,7 +602,7 @@ Frontend runs at: `http://localhost:5173`
 
 ### 3.3 Verify Connection
 - status: active
-
+<!-- content -->
 1. Open `http://localhost:5173` in browser
 2. Health status should display "ok" in green
 3. Game controls should appear
@@ -607,10 +611,11 @@ Frontend runs at: `http://localhost:5173`
 
 ## Key Concepts for AI Assistants
 - status: active
+<!-- content -->
 
 ### CORS Configuration
 - status: active
-
+<!-- content -->
 **Problem:** Browser blocks requests from `localhost:5173` to `localhost:8000` (different ports).
 
 **Solution:** FastAPI must explicitly allow the frontend origin:
@@ -626,7 +631,7 @@ app.add_middleware(
 
 ### Session Management
 - status: active
-
+<!-- content -->
 - Each game is identified by a unique `session_id` (UUID)
 - Backend stores active sessions in a dictionary
 - Frontend stores `session_id` in React state
@@ -634,7 +639,7 @@ app.add_middleware(
 
 ### State Pattern
 - status: active
-
+<!-- content -->
 The backend `get_state()` method returns a **JSON-serializable dictionary** with:
 - All entity positions (agents, obstacles, goals)
 - Grid dimensions
@@ -648,7 +653,7 @@ Frontend **never computes game logic** — it only:
 
 ### Continuous vs Step Mode
 - status: active
-
+<!-- content -->
 | Mode | User Experience | Implementation |
 |------|-----------------|----------------|
 | **Step** | Turn-based, user controls pace | Only call `/simulation/step` on user input |
@@ -658,7 +663,7 @@ Frontend **never computes game logic** — it only:
 
 ## Checklist for New Simulations
 - status: active
-
+<!-- content -->
 When setting up a new simulation project, ensure:
 
 - [ ] `requirements.txt` includes `fastapi` and `uvicorn[standard]`
@@ -677,7 +682,7 @@ When setting up a new simulation project, ensure:
 
 ## Common Issues & Solutions
 - status: active
-
+<!-- content -->
 | Issue | Cause | Solution |
 |-------|-------|----------|
 | CORS error in browser | Missing or wrong CORS config | Add correct `allow_origins` in FastAPI |
@@ -691,13 +696,14 @@ When setting up a new simulation project, ensure:
 
 ## Behavioral Data Logging
 - status: active
-
+<!-- content -->
 For ML training, log all user actions:
 
 ```python
+
 # In Simulation class
 - status: active
-
+<!-- content -->
 self.history.append({
     "step": len(self.history),
     "action": action,
@@ -717,7 +723,7 @@ def export_behavioral_data(self, filepath: str):
 
 ### 4.1 Single-File Session Logging (Recommended)
 - status: active
-
+<!-- content -->
 Instead of separate files per episode, maintain a single JSON file per session. This prevents clutter and makes data analysis easier.
 
 **Structure (`data/sessions/{session_id}.json`):**
@@ -741,7 +747,7 @@ Use `datetime.datetime.now().astimezone().isoformat()` for `start_time` to prese
 
 ## Summary
 - status: active
-
+<!-- content -->
 This architecture cleanly separates concerns:
 
 | Layer | Technology | Responsibility |
@@ -756,19 +762,19 @@ AI assistants should use this pattern when helping users create web-based simula
 
 ## Step 4: Cloud Deployment (Render & Vercel)
 - status: active
-
+<!-- content -->
 For production deployment, use **Render** for the Python backend and **Vercel** for the React frontend.
 
 ### 4.1 Prerequisites
 - status: active
-
+<!-- content -->
 - GitHub Account (project must be in a repository)
 - Render Account (for backend)
 - Vercel Account (for frontend)
 
 ### 4.2 Preparation: Environment Variables
 - status: active
-
+<!-- content -->
 **Code Refactoring Required Before Deployment:**
 1.  **Backend (`main.py`):** Update CORS to allow production origins.
     ```python
@@ -786,7 +792,7 @@ For production deployment, use **Render** for the Python backend and **Vercel** 
 
 ### 4.3 Backend Deployment (Render.com)
 - status: active
-
+<!-- content -->
 1.  **Create Service:**
     - Dashboard -> New + -> **Web Service**
     - Connect GitHub repository
@@ -802,7 +808,7 @@ For production deployment, use **Render** for the Python backend and **Vercel** 
 
 ### 4.4 Frontend Deployment (Vercel)
 - status: active
-
+<!-- content -->
 1.  **Create Project:**
     - Dashboard -> **Add New...** -> **Project**
     - Import GitHub repository
@@ -815,4 +821,3 @@ For production deployment, use **Render** for the Python backend and **Vercel** 
 4.  **Update Backend CORS:**
     - Update `backend/api/main.py` with the new Vercel domain.
     - Push changes to GitHub to trigger Render redeploy.
-

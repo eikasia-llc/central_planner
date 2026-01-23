@@ -1,13 +1,13 @@
 # Recommender System Agent Instructions
 - status: active
-
+<!-- content -->
 **Role:** You are the **RecSys Agent**, a specialist in recommender systems, covering both static collaborative filtering and dynamic contextual bandit approaches.
 
 **Goal:** Manage the full recommender system lifecycle—from data ingestion and processing to model training, evaluation, and inference. Ensure data pipelines are robust, models are properly trained, and recommendations are correctly generated.
 
 ## Background: Dual-Paradigm Recommender System
 - status: active
-
+<!-- content -->
 This project implements two complementary recommendation paradigms:
 
 | Paradigm | Algorithm | Dataset | Use Case |
@@ -21,7 +21,7 @@ These paradigms address different aspects of recommendation:
 
 ## Core Constraints (Strict)
 - status: active
-
+<!-- content -->
 1. **Immutable Core Files:** You **MUST NOT** modify `agents.py`, `model.py`, or `simulation_functions.py` (legacy constraint from `AGENTS.md`).
 2. **Interface Compliance:** New models must follow the existing patterns in `src/models/`.
 3. **Data Integrity:** Never modify raw data files in `data/raw/`. All transformations go to `data/interim/` or `data/processed/`.
@@ -30,7 +30,7 @@ These paradigms address different aspects of recommendation:
 
 ## Project Structure
 - status: active
-
+<!-- content -->
 ```
 rec_sys_core/
 ├── src/
@@ -51,17 +51,18 @@ rec_sys_core/
 
 ## Data Pipeline Protocols
 - status: active
+<!-- content -->
 
 ### Protocol 1: MovieLens Data Pipeline
 - status: active
-
+<!-- content -->
 **Source:** GroupLens MovieLens Latest Small Dataset
 **URL:** `https://files.grouplens.org/datasets/movielens/ml-latest-small.zip`
 **Output:** `data/interim/ratings.csv`, `data/interim/movies.csv`
 
 #### Pipeline Class: `MovieLensPipeline`
 - status: active
-
+<!-- content -->
 ```python
 from src.data.download import MovieLensPipeline
 
@@ -86,26 +87,27 @@ ratings_df, movies_df = pipeline.load_data()
 
 #### Processing Function
 - status: active
-
+<!-- content -->
 ```python
 from src.data.process import process_movielens
 
 output_path = process_movielens(save_dir="data")
+
 # Saves to: data/interim/ratings.csv, data/interim/movies.csv
 - status: active
-
+<!-- content -->
 ```
 
 ### Protocol 2: Amazon Beauty Data Pipeline
 - status: active
-
+<!-- content -->
 **Source:** Stanford SNAP Amazon Beauty 5-core Dataset
 **URL:** `http://snap.stanford.edu/data/amazon/productGraph/categoryFiles/reviews_Beauty_5.json.gz`
 **Output:** `data/interim/amazon_beauty.json`
 
 #### Pipeline Class: `AmazonBeautyPipeline`
 - status: active
-
+<!-- content -->
 ```python
 from src.data.download import AmazonBeautyPipeline
 
@@ -124,44 +126,47 @@ reviews_df = pipeline.load_data()
 
 #### Processing Function
 - status: active
-
+<!-- content -->
 ```python
 from src.data.process import process_amazon
 
 output_path = process_amazon(save_dir="data")
+
 # Saves to: data/interim/amazon_beauty.json
 - status: active
-
+<!-- content -->
 ```
 
 ### Protocol 3: Full Data Pipeline Execution
 - status: active
-
+<!-- content -->
 Use the Makefile for reproducible data preparation:
 
 ```bash
+
 # Install dependencies
 - status: active
-
+<!-- content -->
 make setup
 
 # Download and process all datasets
 - status: active
-
+<!-- content -->
 make data
 
 # Or run directly
 - status: active
-
+<!-- content -->
 python -m src.data.process
 ```
 
 ## Collaborative Filtering Protocols
 - status: active
+<!-- content -->
 
 ### Protocol 4: SVD Model Training
 - status: active
-
+<!-- content -->
 **Library:** Scikit-Surprise
 **Algorithm:** SVD (Singular Value Decomposition) via SGD optimization
 **Input:** `data/interim/ratings.csv`
@@ -169,22 +174,24 @@ python -m src.data.process
 
 #### Training Function
 - status: active
-
+<!-- content -->
 ```python
 from src.models.train_cf import train_cf_model
 
 train_cf_model(data_dir="data")
+
 # Performs 5-fold cross-validation, then full training
 - status: active
+<!-- content -->
 
 # Outputs RMSE and MAE metrics
 - status: active
-
+<!-- content -->
 ```
 
 #### Training Pipeline Details
 - status: active
-
+<!-- content -->
 1. **Data Loading:** Read ratings from `data/interim/ratings.csv`
 2. **Reader Configuration:** Set rating scale (0.5, 5.0) for Surprise
 3. **Cross-Validation:** 5-fold CV with RMSE and MAE metrics
@@ -193,25 +200,25 @@ train_cf_model(data_dir="data")
 
 #### Making Predictions with SVD
 - status: active
-
+<!-- content -->
 ```python
 import joblib
 
 # Load trained model
 - status: active
-
+<!-- content -->
 model = joblib.load("models/svd_model.pkl")
 
 # Predict rating for user-item pair
 - status: active
-
+<!-- content -->
 prediction = model.predict(uid=1, iid=318)  # user 1, movie 318
 print(f"Predicted rating: {prediction.est}")
 ```
 
 #### SVD Hyperparameters
 - status: active
-
+<!-- content -->
 Default parameters (can be tuned):
 | Parameter | Default | Description |
 |-----------|---------|-------------|
@@ -223,7 +230,7 @@ Default parameters (can be tuned):
 
 ### Protocol 5: CF Model Evaluation
 - status: active
-
+<!-- content -->
 **Metrics:**
 - **RMSE (Root Mean Square Error):** Standard rating prediction error
 - **MAE (Mean Absolute Error):** Average absolute prediction error
@@ -233,16 +240,19 @@ from surprise.model_selection import cross_validate
 
 # During training, cross_validate outputs:
 - status: active
+<!-- content -->
 
 # - Mean RMSE across 5 folds
 - status: active
+<!-- content -->
 
 # - Mean MAE across 5 folds
 - status: active
+<!-- content -->
 
 # - Standard deviation for both metrics
 - status: active
-
+<!-- content -->
 ```
 
 **Expected Performance (MovieLens Small):**
@@ -251,7 +261,7 @@ from surprise.model_selection import cross_validate
 
 ### Protocol 6: Generating Top-N Recommendations
 - status: active
-
+<!-- content -->
 ```python
 import pandas as pd
 import joblib
@@ -297,10 +307,11 @@ def get_top_n_recommendations(model, user_id, ratings_df, movies_df, n=10):
 
 ## Contextual Bandit Protocols
 - status: active
+<!-- content -->
 
 ### Protocol 7: LinUCB Model Training
 - status: active
-
+<!-- content -->
 **Library:** contextualbandits
 **Algorithm:** LinUCB (Linear Upper Confidence Bound)
 **Input:** `data/interim/amazon_beauty.json`
@@ -308,22 +319,24 @@ def get_top_n_recommendations(model, user_id, ratings_df, movies_df, n=10):
 
 #### Training Function
 - status: active
-
+<!-- content -->
 ```python
 from src.models.train_bandit import train_bandit_model
 
 train_bandit_model(data_dir="data")
+
 # Filters to top 50 items, creates TF-IDF contexts
 - status: active
+<!-- content -->
 
 # Evaluates using Rejection Sampling (Replay method)
 - status: active
-
+<!-- content -->
 ```
 
 #### Training Pipeline Details
 - status: active
-
+<!-- content -->
 1. **Data Loading:** Read reviews from `data/interim/amazon_beauty.json`
 2. **Item Filtering:** Select top 50 most-reviewed items (arms)
 3. **Context Creation:** TF-IDF vectorization of review text (100 features)
@@ -334,7 +347,7 @@ train_bandit_model(data_dir="data")
 
 #### LinUCB Hyperparameters
 - status: active
-
+<!-- content -->
 | Parameter | Default | Description |
 |-----------|---------|-------------|
 | `nchoices` | 50 | Number of arms (items) |
@@ -343,7 +356,7 @@ train_bandit_model(data_dir="data")
 
 ### Protocol 8: Understanding LinUCB
 - status: active
-
+<!-- content -->
 **Mathematical Formulation:**
 
 LinUCB maintains for each arm $a$:
@@ -362,7 +375,7 @@ After observing reward $r_t$ for arm $a_t$:
 
 ### Protocol 9: Bandit Policy Evaluation
 - status: active
-
+<!-- content -->
 **Offline Evaluation Method:** Rejection Sampling (Replay)
 
 The replay method provides unbiased offline policy evaluation:
@@ -390,7 +403,7 @@ mean_rewards = evaluateRejectionSampling(
 
 ### Protocol 10: Making Bandit Decisions
 - status: active
-
+<!-- content -->
 ```python
 import joblib
 import numpy as np
@@ -398,16 +411,17 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Load trained policy
 - status: active
-
+<!-- content -->
 policy = joblib.load("models/bandit_policy.pkl")
 
 # Create context from new review text
 - status: active
-
+<!-- content -->
 tfidf = TfidfVectorizer(max_features=100, stop_words='english')
+
 # Note: In production, fit TF-IDF on training data and save it
 - status: active
-
+<!-- content -->
 def recommend_item(policy, review_text, tfidf_vectorizer):
     """
     Recommend an item based on review context.
@@ -428,7 +442,7 @@ def recommend_item(policy, review_text, tfidf_vectorizer):
 
 ### Protocol 11: Online Bandit Updates
 - status: active
-
+<!-- content -->
 For online learning scenarios where you observe rewards:
 
 ```python
@@ -452,79 +466,85 @@ def update_policy(policy, context, action, reward):
 
 ## Full Workflow Protocols
 - status: active
+<!-- content -->
 
 ### Protocol 12: Complete Training Pipeline
 - status: active
-
+<!-- content -->
 ```bash
+
 # 1. Setup environment
 - status: active
-
+<!-- content -->
 make setup
 
 # 2. Download and process data
 - status: active
-
+<!-- content -->
 make data
 
 # 3. Train both models
 - status: active
-
+<!-- content -->
 make train
 
 # 4. Run tests to verify
 - status: active
-
+<!-- content -->
 make test
 ```
 
 ### Protocol 13: Clean Rebuild
 - status: active
-
+<!-- content -->
 ```bash
+
 # Remove all generated files
 - status: active
-
+<!-- content -->
 make clean
 
 # Full rebuild
 - status: active
-
+<!-- content -->
 make data && make train
 ```
 
 ## Testing Protocols
 - status: active
+<!-- content -->
 
 ### Protocol 14: Running Tests
 - status: active
-
+<!-- content -->
 ```bash
+
 # Run all tests
 - status: active
-
+<!-- content -->
 make test
 
 # Run specific test file
 - status: active
-
+<!-- content -->
 python -m pytest tests/test_download_mock.py -v
 
 # Run integration tests (requires network)
 - status: active
-
+<!-- content -->
 python -m pytest tests/test_integration.py -v
 ```
 
 ### Protocol 15: Adding New Tests
 - status: active
-
+<!-- content -->
 When adding new functionality, create tests in `tests/`:
 
 ```python
+
 # tests/test_recommendations.py
 - status: active
-
+<!-- content -->
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -543,10 +563,11 @@ class TestRecommendations(unittest.TestCase):
 
 ## Troubleshooting Guide
 - status: active
+<!-- content -->
 
 ### Common Issues
 - status: active
-
+<!-- content -->
 | Issue | Cause | Solution |
 |-------|-------|----------|
 | `ModuleNotFoundError: surprise` | Missing dependency | `pip install scikit-surprise` |
@@ -557,11 +578,12 @@ class TestRecommendations(unittest.TestCase):
 
 ### Dependency Verification
 - status: active
-
+<!-- content -->
 ```python
+
 # Verify all dependencies
 - status: active
-
+<!-- content -->
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -573,12 +595,12 @@ print("All dependencies available!")
 
 ## Future Extensions (Simulation Support)
 - status: active
-
+<!-- content -->
 *This section will be expanded to support simulation management.*
 
 ### Planned Capabilities
 - status: active
-
+<!-- content -->
 1. **Simulation Environments**
    - User behavior simulation for testing recommendation policies
    - A/B test simulation framework
@@ -596,7 +618,7 @@ print("All dependencies available!")
 
 ## Verification Checklist
 - status: active
-
+<!-- content -->
 Before any RecSys implementation is complete, verify:
 
 - [ ] **Data Integrity:** Raw data unchanged, interim data properly formatted
@@ -607,13 +629,14 @@ Before any RecSys implementation is complete, verify:
 
 ## Agent Log Entry Template
 - status: active
-
+<!-- content -->
 When implementing RecSys features, log in `AGENTS_LOG.md`:
 
 ```markdown
+
 ### [DATE] - RecSys Implementation (RecSys Agent)
 - status: active
-
+<!-- content -->
 *   **Task:** [Specific feature implemented]
 *   **Actions:**
     *   [Data pipeline changes]

@@ -1,13 +1,13 @@
 # Project Setup Guide
 - status: active
-
+<!-- content -->
 > **Purpose:** Instructions for creating a simulation project with the required directory structure and components.
 
 ---
 
 ## Required Project Structure
 - status: active
-
+<!-- content -->
 Every simulation project must have **6 core parts minimum**:
 
 ```
@@ -24,7 +24,7 @@ project_name/
 
 ## 1. Frontend (`frontend/`)
 - status: active
-
+<!-- content -->
 **Purpose:** Display layer for human subjects. No simulation logic.
 
 **Required files:**
@@ -54,7 +54,7 @@ frontend/
 
 ## 2. Backend (`backend/`)
 - status: active
-
+<!-- content -->
 **Purpose:** All simulation logic, agent behavior, and game state management.
 
 **Required structure:**
@@ -86,14 +86,14 @@ backend/
 
 ## 3. Database (`database/` or `data/`)
 - status: active
-
+<!-- content -->
 **Purpose:** Store session data, behavioral logs, and experimental results.
 
 **Options:**
 
 ### Local Storage (Simple)
 - status: active
-
+<!-- content -->
 ```
 data/
 └── sessions/
@@ -102,7 +102,7 @@ data/
 
 ### Remote Database (Production)
 - status: active
-
+<!-- content -->
 - **MongoDB:** For document storage
 - **Google Sheets:** For easy data sharing
 - Configure via environment variables
@@ -126,7 +126,7 @@ data/
 
 ## 4. AI_AGENTS (`AI_AGENTS/`)
 - status: active
-
+<!-- content -->
 **Purpose:** Documentation and instructions for AI coding assistants.
 
 **Required files:**
@@ -146,7 +146,7 @@ AI_AGENTS/
 
 ## 5. Tests (`tests/`)
 - status: active
-
+<!-- content -->
 **Purpose:** Unit tests for backend logic using pytest.
 
 **Required structure:**
@@ -169,7 +169,7 @@ tests/
 
 ## 6. Notebooks (`notebooks/`)
 - status: active
-
+<!-- content -->
 **Purpose:** Jupyter notebooks for running experiments in Google Colaboratory.
 
 **Required structure:**
@@ -204,7 +204,7 @@ notebooks/
 
 ## Root Level Files
 - status: active
-
+<!-- content -->
 ```
 project_name/
 ├── AGENTS.md              # Main documentation for AI assistants
@@ -218,10 +218,11 @@ project_name/
 
 ## Quick Setup Commands
 - status: active
+<!-- content -->
 
 ### Create New Project
 - status: active
-
+<!-- content -->
 ```bash
 mkdir project_name && cd project_name
 mkdir -p frontend backend/api backend/engine data/sessions AI_AGENTS tests notebooks
@@ -230,29 +231,30 @@ touch requirements.txt AGENTS.md AGENTS_LOG.md HOUSEKEEPING.md README.md
 
 ### Initialize Frontend
 - status: active
-
+<!-- content -->
 ```bash
 npm create vite@latest frontend -- --template react-ts
 ```
 
 ### Run Project
 - status: active
-
+<!-- content -->
 ```bash
+
 # Terminal 1: Backend
 - status: active
-
+<!-- content -->
 python -m uvicorn backend.api.main:app --reload --port 8000
 
 # Terminal 2: Frontend
 - status: active
-
+<!-- content -->
 cd frontend && npm run dev
 ```
 
 ### Run Tests
 - status: active
-
+<!-- content -->
 ```bash
 python -m pytest tests/ -v
 ```
@@ -261,7 +263,7 @@ python -m pytest tests/ -v
 
 ## Checklist for New Projects
 - status: active
-
+<!-- content -->
 - [ ] `frontend/` - Vite + React + TypeScript
 - [ ] `backend/` - FastAPI with api/, engine/, agents.py, environment.py
 - [ ] `data/sessions/` - JSON storage for session data

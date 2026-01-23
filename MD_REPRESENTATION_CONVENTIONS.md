@@ -15,10 +15,11 @@ The system uses **Markdown headers** to define the structural hierarchy (the nod
 
 ## Schema Rules
 - status: active
+<!-- content -->
 
 ### 1. Hierarchy & Nodes
 - status: active
-
+<!-- content -->
 - **Headers**: Use standard Markdown headers (`#`, `##`, `###`) to define the hierarchy.
 - **Nesting**: 
     - `#` is the Root/Document Title (usually only one per file).
@@ -42,6 +43,7 @@ The system uses **Markdown headers** to define the structural hierarchy (the nod
 **Example:**
 
 ```markdown
+
 ## Implement User Auth
 - status: in-progress
 - type: episodic
@@ -54,7 +56,7 @@ This section describes the implementation details...
 
 ### 3. Allowed Fields
 - status: active
-
+<!-- content -->
 The following fields are standard, but the schema allows extensibility.
 
 | Field | Type | Description |
@@ -75,17 +77,19 @@ For extended fields consider:
 
 ### 4. Context & Description
 - status: active
-
+<!-- content -->
 - Any text following the metadata block is considered "Context" or "Description".
 - It can contain free-form Markdown, code blocks, images, etc.
 
 ## Examples
 - status: active
+<!-- content -->
 
 ### Valid Node
 - status: active
 <!-- content -->
 ```markdown
+
 ### Database Schema
 - status: done
 - owner: dev-2
@@ -96,11 +100,12 @@ Set up PostgreSQL schema for users and sessions.
 
 ### Invalid Node (Metadata not immediate)
 - status: active
-
+<!-- content -->
 ```markdown
+
 ### Database Schema
 - status: active
-
+<!-- content -->
 Some text here first.
 
 - status: done
@@ -110,8 +115,9 @@ Some text here first.
 
 ### Invalid Node (Bad indentation/METADATA)
 - status: active
-
+<!-- content -->
 ```markdown
+
 ### Database Schema
 status: done
 owner: dev-2
@@ -132,7 +138,7 @@ owner: dev-2
 
 ## Tooling Reference
 - status: active
-
+<!-- content -->
 The following Python scripts are available in `language/` to interact with this schema:
 
 ### 1. `language/md_parser.py`
@@ -150,14 +156,14 @@ The following Python scripts are available in `language/` to interact with this 
 
 ### 2. `language/visualization.py`
 - status: active
-
+<!-- content -->
 - **Purpose**: Visualizes the task tree in the terminal with metadata.
 - **Usage**: `python3 language/visualization.py <file.md>`
 - **Output**: Unicode tree visualization.
 
 ### 3. `language/operations.py`
 - status: active
-
+<!-- content -->
 - **Purpose**: Manipulate task trees (merge, extend).
 - **Usage**:
     - **Merge**: `python3 language/operations.py merge <target.md> <source.md> "<Target Node Title>" [--output <out.md>]`
@@ -167,22 +173,24 @@ The following Python scripts are available in `language/` to interact with this 
 
 ### 4. `language/migrate.py`
 - status: active
-
+<!-- content -->
 - **Purpose**: Heuristically adds default metadata to standard Markdown headers to make them schema-compliant.
 - **Usage**: `python3 language/migrate.py <file.md> [file2.md ...]`
 - **Effect**: Modifies files in-place by injecting `- status: active` after headers that lack metadata.
+
 ### 5. `language/importer.py`
 - status: active
-
+<!-- content -->
 - **Purpose**: Converts legacy documents (`.docx`, `.pdf`, `.doc`) into Markdown and auto-applies the Protocol.
 - **Usage**: `python3 language/importer.py <file.docx> [file.pdf ...]`
 - **Capabilities**:
     - **DOCX**: Preserves headers (Heading 1-3) if `python-docx` is installed. Fallbacks to text extraction.
     - **PDF**: Extracts text if `pypdf` or `pdftotext` is available.
     - **DOC**: Uses MacOS `textutil` for text extraction.
+
 ## Migration Guidelines
 - status: active
-
+<!-- content -->
 When migrating existing documentation to this schema:
 1. **Run the Migration Script**: Use `language/migrate.py` to add baseline metadata.
 2. **Review and Refine**: Manually update the `status` fields (e.g., change `active` to `draft` or `deprecated` where appropriate) and add `owner` information.
@@ -190,7 +198,7 @@ When migrating existing documentation to this schema:
 
 ## Best Practices for AI Generation
 - status: active
-
+<!-- content -->
 When generating or modifying files in this repository, AI agents MUST adhere to the following best practices to ensure system stability and parsing accuracy:
 
 1.  **Always Generate IDs**: When creating new nodes (tasks, features, sections), always generate a unique `id` in the metadata (e.g., `id: component.subcomponent.task`). This ensures that references remain stable even if titles change.
@@ -210,4 +218,3 @@ When generating or modifying files in this repository, AI agents MUST adhere to 
         Content starts here...
         ```
 4.  **Use Allowed Fields**: Only use metadata keys explicitly listed in the "Allowed Fields" section (`status`, `type`, `owner`, `estimate`, `blocked_by`, `priority`, `id`, `last_checked`) unless you have a specific, documented reason to extend the schema.
-

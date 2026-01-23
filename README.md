@@ -1,5 +1,6 @@
 # Central Planner
 - status: active
+<!-- content -->
 
 ## Project Overview
 - status: active
@@ -13,7 +14,7 @@ The project uses a strict **Markdown-JSON Hybrid Schema** to treat documentation
 
 ### Structure & Hierarchy
 - status: active
-
+<!-- content -->
 - **Hierarchy**: Defined by standard Markdown headers (`#`, `##`, `###`). The nesting level indicates parent-child relationships, allowing for infinite depth.
 - **Dependencies**:
     - **Implicit**: A child node is strictly dependent on its parent.
@@ -26,6 +27,7 @@ The project uses a strict **Markdown-JSON Hybrid Schema** to treat documentation
 
 **Example Node:**
 ```markdown
+
 ## Implement Login Feature
 - id: feature.auth.login
 - status: in-progress
@@ -38,7 +40,7 @@ Description of the login feature implementation...
 
 ### The Language System (Tooling)
 - status: active
-
+<!-- content -->
 A suite of Python scripts in the `language/` directory allows agents and humans to interact with this protocol programmatically:
 
 - **Parsing**: `md_parser.py` converts raw Markdown into structured Python objects, validating schema compliance.
@@ -55,7 +57,7 @@ A suite of Python scripts in the `language/` directory allows agents and humans 
 
 ## Repository Manager
 - status: active
-
+<!-- content -->
 The `manager/` directory contains tools for coordinating multiple external repositories:
 
 - **Cleaning**: `clean_repo.py` clones an external repository, extracts relevant Markdown files, and standardizes them using `migrate.py`. It supports standard Git URLs and branch URLs (e.g., `/tree/branch-name`).
@@ -63,7 +65,7 @@ The `manager/` directory contains tools for coordinating multiple external repos
 
 ## Directory Structure
 - status: active
-
+<!-- content -->
 ```
 central_planner/
 ├── AGENTS.md                     # General Agent Guidelines & Workflow
@@ -92,6 +94,6 @@ central_planner/
 
 ## Key Files
 - status: active
-
+<!-- content -->
 - **`MD_REPRESENTATION_CONVENTIONS.md`**: The definitive guide on how to write files in this repository.
 - **`AGENTS.md`**: The entry point for any AI agent joining the project.

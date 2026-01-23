@@ -1,6 +1,6 @@
 # Housekeeping Protocol
 - status: active
-
+<!-- content -->
 1. Read the AGENTS.md file.
 2. Look at the dependency network of the project, namely which script refers to which one.
 3. Proceed doing different sanity checks and unit tests from root scripts to leaves.
@@ -10,10 +10,11 @@
 
 # Current Project Housekeeping
 - status: active
+<!-- content -->
 
 ## Dependency Network
 - status: active
-
+<!-- content -->
 Based on post-React integration analysis:
 - **Core Modules:**
 - **Advanced Modules:**
@@ -24,7 +25,7 @@ Based on post-React integration analysis:
 
 ## Latest Report
 - status: active
-
+<!-- content -->
 **Execution Date:** 2026-01-19
 
 **Test Results:**

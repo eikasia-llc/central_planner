@@ -1,14 +1,15 @@
 # AI Agents Log & Reference
 - status: active
-
+<!-- content -->
 This file serves as a persistent memory for AI agents working on the project. It includes a reference for common tasks, guidelines, and a chronological log of major interventions.
 
 ## Reference
 - status: active
+<!-- content -->
 
 ### Common Bash Commands
 - status: active
-
+<!-- content -->
 *   **Install Dependencies:**
     ```bash
     pip install -r requirements.txt
@@ -27,20 +28,20 @@ This file serves as a persistent memory for AI agents working on the project. It
 
 ### Code Style & Conventions
 - status: active
-
+<!-- content -->
 *   **Formatting:** The project uses `black` via a PostToolUse hook, but manual verification is required.
 *   **Immutability:** `agents.py` and `model.py` are **immutable**. Do not modify them directly. Create subclasses or new files for changes.
 *   **Consistency:** Maintain coding style consistent with the `main` branch.
 
 ### Architecture & Design
 - status: active
-
+<!-- content -->
 *   **State Management:** The `Model` class (`model.py`) manages the simulation state, specifically the list of `agents`. Agent belief states (`alphas_betas`) are stored within `BetaAgent` instances.
 *   **Error Handling:** Use unit tests (`unit_tests.py`) to catch regressions. Ensure `try-except` blocks are used where runtime variability (e.g., network generation) might cause issues.
 
 ## Pull Request Template
 - status: active
-
+<!-- content -->
 When submitting changes, please use the following structure:
 
 ```markdown
@@ -61,10 +62,11 @@ When submitting changes, please use the following structure:
 
 ## Intervention History
 - status: active
+<!-- content -->
 
 ### [DATE] - Initial Setup & Test Fixes (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Fix failing unit tests and establish documentation.
 *   **Actions:**
     *   Modified `unit_tests.py` to handle random initialization of `BetaAgent` (used shape/type checks instead of hardcoded values).
@@ -75,7 +77,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Sync with Main & Environment Setup (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Update branch with code from `main`, add `requirements.txt`, and preserve local documentation/tests.
 *   **Actions:**
     *   Synced all tracked files from `main` (commit `583ddb1`) to the current branch.
@@ -86,7 +88,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Linearization / Vectorization (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Create vectorized implementation of the simulation to improve performance.
 *   **Actions:**
     *   Created `vectorized_model.py`: Implements `VectorizedModel` which replaces object-oriented agent state with NumPy matrices `(N_agents, 2, 2)`. Replaces loop-based updates with matrix multiplication (`Adjacency.T @ Outcomes`).
@@ -97,7 +99,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Documentation Update (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Update `AGENTS.md` with explicit Git Management rules.
 *   **Actions:**
     *   Added "Git Management" subsection to `AGENTS.md`.
@@ -105,7 +107,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Vectorized Bayes Agent Fixes & Integration (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Finalize Vectorized Bayes Agent implementation, fix bugs, and update tests.
 *   **Actions:**
     *   **Fixed `vectorized_model.py`:**
@@ -127,7 +129,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Workflow & Context Documentation (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Add HUMAN-ASSISTANT WORKFLOW and CONTEXT FINE-TUNING to `AGENTS.md`.
 *   **Actions:**
     *   Inserted detailed "HUMAN-ASSISTANT WORKFLOW" section at the top of `AGENTS.md`, outlining steps for repo loading, git branching, and PR merging.
@@ -136,7 +138,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Documentation Reorganization (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Reorganize `AGENTS.md` sections and add specific advice/rules.
 *   **Actions:**
     *   Added `SHORT ADVICE` section at the top.
@@ -147,7 +149,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-06] - Expand Key Files Description (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Expand the "Key Files and Directories" section in `AGENTS.md` with detailed structure and dependency info.
 *   **Actions:**
     *   Renamed "Key Files" to "Key Files and Directories".
@@ -157,7 +159,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-11] - Housekeeping and Dependency Mapping (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute Housekeeping protocol, map dependencies, and update reports.
 *   **Actions:**
     *   Mapped dependency network using `grep` on import statements.
@@ -170,7 +172,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-12] - Housekeeping and Verification (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Executed comprehensive housekeeping protocol, including dependency mapping and verification testing.
 *   **Actions:**
     *   **Dependency Analysis:** Verified and mapped current file structure (`src/net_epistemology`).
@@ -184,7 +186,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-12] - Notebook Fixes and Verification (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Fix identified errors in notebooks and `agents.py` to pass housekeeping checks.
 *   **Actions:**
     *   **Branch Sync:** Merged `ai-agents-branch` to ensure latest state.
@@ -203,7 +205,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-13] - Housekeeping Protocol (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol, map dependencies, and verify system stability.
 *   **Actions:**
     *   **Verification:** Verified file structure and mapped dependencies in `HOUSEKEEPING.md`.
@@ -214,7 +216,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-15] - Housekeeping Protocol (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol, map dependencies, and verify system stability.
 *   **Actions:**
     *   **Dependency Analysis:** Verified imports and dependency graph.
@@ -224,7 +226,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-15 17:30] - Housekeeping Protocol (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Package Installation:** Reinstalled `net_epistemology` package in editable mode.
@@ -237,7 +239,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-17 12:55] - Housekeeping Protocol (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Package Installation:** Reinstalled `net_epistemology` package in editable mode.
@@ -250,7 +252,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-17 15:00] - Housekeeping Protocol (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Unit Tests:** Ran `tests/unit_tests.py` - 8/8 tests PASSED.
@@ -262,7 +264,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-17 15:25] - Root Influence Analysis Notebook (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Create Colab notebook for parallel root influence analysis simulations.
 *   **Actions:**
     *   **Created** `notebooks/Colab_Root_Influence_Analysis.ipynb`: New notebook adapted from `Colab_Ignacio_Convergence_Study.ipynb`.
@@ -277,7 +279,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21 12:05] - Housekeeping Protocol (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Unit Tests:** Ran `tests/unit_tests.py` - 8/8 tests PASSED.
@@ -290,7 +292,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21 13:20] - Housekeeping Protocol and Fixes (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol and fix critical bugs preventing verification.
 *   **Actions:**
     *   **Fixed Critical Bug in `model.py`:**
@@ -311,7 +313,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21 13:45] - Organization and Verification Fixes (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Reorganize notebooks and verify system integrity via Housekeeping.
 *   **Actions:**
     *   **Notebook Organization:** Moved notebooks into `convergence_analysis`, `basic_testing`, and `simulation_variations` subfolders.
@@ -325,7 +327,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21 13:55] - Created MC_AGENT.md (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Create Markov Chain Analysis Agent documentation.
 *   **Actions:**
     *   Created `AI_AGENTS/MC_AGENT.md` with comprehensive instructions for:
@@ -339,7 +341,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21 14:00] - Implemented mc_analysis.py (Antigravity/MC Agent)
 - status: active
-
+<!-- content -->
 *   **Task:** Implement Phase 1-3 of MC_AGENT.md - Markov Chain analysis utilities.
 *   **Actions:**
     *   Created `src/net_epistemology/analysis/` module with:
@@ -364,7 +366,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21 14:18] - Left Eigenvector Analysis Notebooks (Antigravity)
 - status: active
-
+<!-- content -->
 *   **Task:** Create analysis notebooks testing Left Eigenvector Centrality hypothesis.
 *   **Actions:**
     *   Created `notebooks/convergence_analysis/Colab_LEigen_Analysis.py`:
@@ -386,7 +388,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21] - Housekeeping Protocol (Claude Code)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Dependency Network Review:** Verified current project structure matches documented dependencies.
@@ -406,7 +408,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-21] - Housekeeping Protocol (Claude Opus 4.5)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Dependency Network Review:** Verified current project structure matches documented dependencies in HOUSEKEEPING.md.
@@ -426,7 +428,7 @@ When submitting changes, please use the following structure:
 
 ### [2026-01-23] - Housekeeping Protocol (Jules)
 - status: active
-
+<!-- content -->
 *   **Task:** Execute housekeeping protocol per `HOUSEKEEPING.md` instructions.
 *   **Actions:**
     *   **Dependency Network Review:** Verified current project structure matches documented dependencies.

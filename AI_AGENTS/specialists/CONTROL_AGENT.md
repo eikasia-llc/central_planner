@@ -1,13 +1,13 @@
 # Control Agent Instructions
 - status: active
-
+<!-- content -->
 **Role:** You are the **Control Agent**, a specialist in classical and modern control theory implementation.
 
 **Goal:** Implement and integrate control-theoretic methods (PID, LQR, MPC, etc.) into the Ab Initio RL Simulation System, providing baseline controllers and hybrid RL-control approaches for the existing environments.
 
 ## Background: Control Theory in RL Environments
 - status: active
-
+<!-- content -->
 The simulation system contains three environments that are fundamentally **control problems**:
 
 | Environment | Control Challenge | Classical Approach |
@@ -23,7 +23,7 @@ These environments have well-understood dynamics that make them amenable to mode
 
 ## Core Constraints (Strict)
 - status: active
-
+<!-- content -->
 1. **Immutable Core Files:** You **MUST NOT** modify `agents.py`, `model.py`, or `simulation_functions.py` (legacy constraint from AGENTS.md).
 2. **Interface Compliance:** All controllers must implement the `BaseAgent` interface from `src/agents/base.py`.
 3. **New Implementation:** Create new files in `src/agents/` for control-based agents.
@@ -32,13 +32,15 @@ These environments have well-understood dynamics that make them amenable to mode
 
 ## Control Methods to Implement
 - status: active
+<!-- content -->
 
 ### Phase 1: Classical Controllers
 - status: active
+<!-- content -->
 
 #### 1.1 PID Controller (`src/agents/pid.py`)
 - status: active
-
+<!-- content -->
 **Target Environment:** Homeostasis (glucose regulation)
 
 ```python
@@ -79,7 +81,7 @@ class PIDAgent(BaseAgent):
 
 #### 1.2 Threshold/Heuristic Controller (`src/agents/threshold.py`)
 - status: active
-
+<!-- content -->
 **Target Environment:** Server Load (queue routing)
 
 ```python
@@ -105,10 +107,11 @@ class ThresholdAgent(BaseAgent):
 
 ### Phase 2: Optimal Control
 - status: active
+<!-- content -->
 
 #### 2.1 LQR Controller (`src/agents/lqr.py`)
 - status: active
-
+<!-- content -->
 **Target Environment:** Smart Grid (linearized around equilibrium)
 
 ```python
@@ -163,7 +166,7 @@ def linearize_dynamics(
 
 #### 2.2 Model Predictive Control (`src/agents/mpc.py`)
 - status: active
-
+<!-- content -->
 **Target Environments:** Homeostasis, Smart Grid
 
 ```python
@@ -210,10 +213,11 @@ class MPCAgent(BaseAgent):
 
 ### Phase 3: Hybrid Control-RL Methods
 - status: active
+<!-- content -->
 
 #### 3.1 Residual Policy Learning (`src/agents/residual_rl.py`)
 - status: active
-
+<!-- content -->
 ```python
 class ResidualPolicyAgent(BaseAgent):
     """
@@ -236,7 +240,7 @@ class ResidualPolicyAgent(BaseAgent):
 
 #### 3.2 Gain-Scheduled Controller (`src/agents/gain_scheduled.py`)
 - status: active
-
+<!-- content -->
 ```python
 class GainScheduledAgent(BaseAgent):
     """
@@ -251,7 +255,7 @@ class GainScheduledAgent(BaseAgent):
 
 #### 3.3 Safe RL with Control Barrier Functions (`src/agents/cbf_rl.py`)
 - status: active
-
+<!-- content -->
 ```python
 class CBFSafeAgent(BaseAgent):
     """
@@ -273,10 +277,11 @@ class CBFSafeAgent(BaseAgent):
 
 ## Environment-Specific Guidance
 - status: active
+<!-- content -->
 
 ### Homeostasis Environment
 - status: active
-
+<!-- content -->
 **Dynamics:** Bergman Minimal Model (3 ODEs)
 ```
 dG/dt = -p1(G - G_b) - X*G + D(t)
@@ -299,7 +304,7 @@ dI/dt = -n*I + gamma*(G - h)^+ + u(t)
 
 ### Smart Grid Environment
 - status: active
-
+<!-- content -->
 **Dynamics:** BESS with efficiency losses, OU price process
 ```
 SoC_{t+1} = SoC_t + η_c * P_charge - P_discharge / η_d
@@ -319,7 +324,7 @@ Price follows: dP = θ(μ - P)dt + σdW
 
 ### Server Load Environment
 - status: active
-
+<!-- content -->
 **Dynamics:** M/M/k queueing with Discrete Event Simulation
 
 **Control Design:**
@@ -330,7 +335,7 @@ Price follows: dP = θ(μ - P)dt + σdW
 
 ## Utility Functions (`src/utils/control_utils.py`)
 - status: active
-
+<!-- content -->
 ```python
 def discretize_continuous_system(
     A_c: np.ndarray,
@@ -373,10 +378,11 @@ def pole_placement(
 
 ## Testing Strategy
 - status: active
+<!-- content -->
 
 ### Unit Tests (`tests/test_control_agents.py`)
 - status: active
-
+<!-- content -->
 ```python
 class TestPIDAgent:
     def test_setpoint_tracking(self):
@@ -412,7 +418,7 @@ class TestMPCAgent:
 
 ### Integration Tests
 - status: active
-
+<!-- content -->
 ```python
 def test_pid_on_homeostasis():
     """Run PID controller on Homeostasis, verify glucose stays in range."""
@@ -432,7 +438,7 @@ def test_jsq_on_server_load():
 
 ### Benchmark Tests
 - status: active
-
+<!-- content -->
 Compare control baselines against RL agents:
 
 ```python
@@ -450,10 +456,11 @@ def benchmark_homeostasis_controllers():
 
 ## Implementation Checklist
 - status: active
+<!-- content -->
 
 ### Phase 1: Classical Controllers
 - status: active
-
+<!-- content -->
 - [ ] Implement `PIDAgent` with anti-windup
 - [ ] Implement `ShortestQueueAgent` and `PowerOfTwoChoices`
 - [ ] Add tests for PID step response and load balancing
@@ -461,7 +468,7 @@ def benchmark_homeostasis_controllers():
 
 ### Phase 2: Optimal Control
 - status: active
-
+<!-- content -->
 - [ ] Implement `linearize_dynamics` utility
 - [ ] Implement `LQRAgent` with DARE solver
 - [ ] Implement `MPCAgent` with scipy backend
@@ -470,21 +477,21 @@ def benchmark_homeostasis_controllers():
 
 ### Phase 3: Hybrid Methods
 - status: active
-
+<!-- content -->
 - [ ] Implement `ResidualPolicyAgent`
 - [ ] Implement `CBFSafeAgent` for Homeostasis
 - [ ] Benchmark hybrid vs. pure RL
 
 ### Documentation
 - status: active
-
+<!-- content -->
 - [ ] Update `AGENTS.md` with control agent descriptions
 - [ ] Add control theory references to `docs/`
 - [ ] Log all implementations in `AGENTS_LOG.md`
 
 ## References & Resources
 - status: active
-
+<!-- content -->
 **Textbooks (add to `docs/` for context fine-tuning):**
 - Astrom & Murray, "Feedback Systems" (PID, stability)
 - Borrelli, Bemporad, Morari, "Predictive Control" (MPC)
@@ -496,11 +503,12 @@ def benchmark_homeostasis_controllers():
 
 ## Agent Log Entry Template
 - status: active
-
+<!-- content -->
 ```markdown
+
 ### [DATE] - Control Agent Implementation (Control Agent)
 - status: active
-
+<!-- content -->
 *   **Task:** [Specific controller implemented]
 *   **Actions:**
     *   [File created/modified]

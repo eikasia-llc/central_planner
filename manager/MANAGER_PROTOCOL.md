@@ -1,21 +1,22 @@
 # Manager Agent Protocol
 - status: active
-
+<!-- content -->
 - role: system-architect
 - version: 1.0
 - tools: [md_parser.py, operations.py, migrate.py, importer.py]
 
 ## Overview
 - status: active
-
+<!-- content -->
 The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts as an auditor, librarian, and architect, ensuring that all distributed knowledge (across various company repositories) is correctly formatted, centralized, and integrated into a cohesive master plan.
 
 ## Core Responsibilities
 - status: active
+<!-- content -->
 
 ### 1. Auditing & Standardization (The "Librarian")
 - status: active
-
+<!-- content -->
 - **Goal**: Ensure strict adherence to `MD_REPRESENTATION_CONVENTIONS.md`.
 - **Scope**: Any `.md` file in any company repository.
 - **Workflow**:
@@ -29,7 +30,7 @@ The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts
 
 ### 2. Plan Integration (The "Architect")
 - status: active
-
+<!-- content -->
 - **Goal**: Build and maintain a "Master Plan" by aggregating sub-plans from other repositories.
 - **Tools**: `language/operations.py`
 - **Workflow**:
@@ -42,7 +43,7 @@ The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts
 
 ### 3. Agent Extraction & Registry (The "Headhunter")
 - status: active
-
+<!-- content -->
 - **Goal**: Centralize AI Persona definitions.
 - **Scope**: Look for `AGENTS.md` files or `AI_AGENTS/` folders in other repositories.
 - **Workflow**:
@@ -57,7 +58,7 @@ The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts
 
 ## Quick Command Reference
 - status: active
-
+<!-- content -->
 | Action | Command |
 | :--- | :--- |
 | **Check Syntax** | `python3 language/md_parser.py <file>` |
