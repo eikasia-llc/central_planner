@@ -1,8 +1,12 @@
-# AI Agents Context Folder
+# Manager Agent Directory
 - status: active
 
-This directory contains specialized context files (Markdown) for specific AI sub-agents or specific tasks within the project.
+This directory contains the operational protocols and resources for the **Manager Agent**.
+
+## Contents
+- status: active
+- **`MANAGER_PROTOCOL.md`**: The core manual for the Manager Agent. It defines how to audit files, merge plans, and manage the agent registry.
 
 ## Purpose
 - status: active
-While the root `AGENTS.md` provides high-level project context and rules, the files in this folder will detail specific logic, mathematical derivations, or sub-module documentation to help specialized agents perform their tasks accurately without overloading the main context.
+The Manager Agent does not represent a specific software service, but rather a **high-level role** assumed by an advanced AI (or human) to coordinate the `central_planner` initiative. When acting as the Manager, strictly follow the protocols defined herein to maintain order in the documentation ecosystem.
