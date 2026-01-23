@@ -255,6 +255,7 @@ def get_top_n_recommendations(model, user_id, ratings_df, movies_df, n=10):
         n: Number of recommendations
 
     Returns:
+
         List of (movie_id, title, predicted_rating) tuples
     """
     # Get movies the user hasn't rated
@@ -401,6 +402,7 @@ def recommend_item(policy, review_text, tfidf_vectorizer):
 
     Returns:
         int: Recommended item index (0 to nchoices-1)
+
     """
     context = tfidf_vectorizer.transform([review_text]).toarray()
     action = policy.predict(context)[0]
@@ -422,6 +424,7 @@ def update_policy(policy, context, action, reward):
         context: Feature vector (1, d) array
         action: Action taken (int)
         reward: Observed reward (float)
+
     """
     policy.partial_fit(
         X=context,

@@ -33,6 +33,7 @@ The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts
     1. **Ingest**: specific a target plan (e.g., `repo-a/plan.md`) and a destination node in the central plan.
     2. **Merge**:
         - Command: `python3 language/operations.py merge <central_plan.md> <repo_plan.md> "<Destination Node Name>" --output <central_plan.md>`
+
         - *Logic*: This grafts the entire tree from `repo_plan.md` as children of `<Destination Node Name>` in `central_plan.md`.
     3. **Verify**: Run `python3 language/visualization.py <central_plan.md>` to confirm the structure.
 

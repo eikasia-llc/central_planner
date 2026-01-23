@@ -11,6 +11,11 @@ import argparse
 # 4. If not, insert default METADATA block
 # 5. Write back
 
+ALLOWED_FIELDS = {
+    'status', 'type', 'owner', 'estimate', 'blocked_by', 
+    'priority', 'id', 'last_checked'
+}
+
 def has_meta_block(lines, header_index):
     # check next few lines for METADATA-like content
     if header_index + 1 >= len(lines):
@@ -20,9 +25,12 @@ def has_meta_block(lines, header_index):
     # Our convention says "immediately following", so let's check index+1
     next_line = lines[header_index + 1].strip()
     
-    # If it starts with "- key: value" or just "key: value"
-    if re.match(r'^-?\s*\w+:', next_line):
-        return True
+    # Regex to capture key: "- key: value" or "key: value"
+    match = re.match(r'^-?\s*(\w+):', next_line)
+    if match:
+        key = match.group(1)
+        if key in ALLOWED_FIELDS:
+            return True
         
     return False
 
@@ -47,7 +55,8 @@ def migrate_file(file_path):
                 # Insert default METADATA
                 # Infer status if possible, otherwise default to "active" or "documented"
                 # For AGENTS files, "active" seems appropriate.
-                default_meta = "- status: active\n"
+                # Convention update: add a blank line after metadata
+                default_meta = "- status: active\n\n"
                 
                 # If there's a newline after header, we can insert before it or after it?
                 # Usually we want Header\nMETADATA.
@@ -58,6 +67,39 @@ def migrate_file(file_path):
                 new_lines.append(default_meta)
                 
                 # Also, we might want to add 'owner' or 'updated' if we could guess, but let's keep it simple.
+        else:
+            # Header exists and has metadata block. Check for blank line after metadata.
+            # has_meta_block returned True.
+            # Re-find the metadata block end index
+            j = i + 1
+            meta_pattern = re.compile(r'^-?\s*(\w+):')
+            found_meta = False
+            while j < len(lines):
+                match = meta_pattern.match(lines[j].strip())
+                is_valid_meta = False
+                if match:
+                    key = match.group(1)
+                    if key in ALLOWED_FIELDS:
+                        is_valid_meta = True
+                
+                if is_valid_meta:
+                    found_meta = True
+                    j += 1
+                elif found_meta and lines[j].strip() == "":
+                     # Already has blank line
+                     break
+                else:
+                     # Found end of metadata, and lines[j] is NOT blank
+                     # Insert blank line
+                     if found_meta: # Only if we actually traversed some metadata
+                         new_lines.extend(lines[i+1:j])
+                         new_lines.append("\n")
+                         # We want to continue outer loop from j.
+                         # Outer loop does i+=1 at end.
+                         # So set i = j - 1
+                         i = j - 1
+                         break
+                     break
         
         i += 1
     

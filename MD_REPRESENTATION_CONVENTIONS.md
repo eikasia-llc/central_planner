@@ -13,6 +13,7 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 
 ### 1. Hierarchy & Nodes
 - status: active
+
 - **Headers**: Use standard Markdown headers (`#`, `##`, `###`) to define the hierarchy.
 - **Nesting**: 
     - `#` is the Root/Document Title (usually only one per file).
@@ -27,8 +28,10 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 
 ### 2. Metadata Blocks
 - status: active
-- **Location**: Metadata MUST be placed **immediately** after the header, before any free-form text.
-- **Format**: A METADATA block. It works best as a bulleted list of key-value pairs, which most parsers can interpret as METADATA (or we can use strict METADATA blocks if preferred, but the spec suggests "METADATA Key-Value Pairs (immediately following header)"). 
+
+- **Location**: Metadata MUST be placed **immediately** after the header.
+- **Separator**: There MUST be a blank line between the metadata block and the content.
+- **Format**: A METADATA block. It works best as a bulleted list of key-value pairs.
 - **Preferred Format**: A strict list of key-value pairs.
 
 **Example:**
@@ -40,6 +43,7 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 - owner: dev-1
 - estimate: 3d
 - blocked_by: []
+
 ```
 
 ### 3. Allowed Fields
@@ -65,6 +69,7 @@ For extended fields consider:
 
 ### 4. Context & Description
 - status: active
+
 - Any text following the metadata block is considered "Context" or "Description".
 - It can contain free-form Markdown, code blocks, images, etc.
 
@@ -73,6 +78,7 @@ For extended fields consider:
 
 ### Valid Node
 - status: active
+
 ```markdown
 ### Database Schema
 - status: done
@@ -84,6 +90,7 @@ Set up PostgreSQL schema for users and sessions.
 
 ### Invalid Node (Metadata not immediate)
 - status: active
+
 ```markdown
 ### Database Schema
 - status: active
@@ -91,15 +98,18 @@ Set up PostgreSQL schema for users and sessions.
 Some text here first.
 
 - status: done
+
 ```
 *Error: Metadata block must immediately follow the header.*
 
 ### Invalid Node (Bad indentation/METADATA)
 - status: active
+
 ```markdown
 ### Database Schema
 status: done
 owner: dev-2
+
 ```
 *Warning: While some parsers might handle this, prefer bullet points `- key: value` for readability and stricter parsing.*
 
@@ -109,7 +119,7 @@ owner: dev-2
 1. **Scan for Headers**.
 2. **Look ahead** at the lines immediately following the header.
 3. **Parse lines** that match the METADATA key-value pattern (`- key: value` or `key: value`) until a blank line or non-matching line is found.
-6. **Everything else** until the next header of equal or higher level is "Content".
+4. **Everything else** until the next header of equal or higher level is "Content".
 
 ## Tooling Reference
 - status: active
@@ -118,18 +128,21 @@ The following Python scripts are available in `language/` to interact with this 
 
 ### 1. `language/md_parser.py`
 - status: active
+
 - **Purpose**: Parses `.md` files into a Python object tree and validates schema compliance.
 - **Usage**: `python3 language/md_parser.py <file.md>`
 - **Output**: JSON representation of the tree or validation errors.
 
 ### 2. `language/visualization.py`
 - status: active
+
 - **Purpose**: Visualizes the task tree in the terminal with metadata.
 - **Usage**: `python3 language/visualization.py <file.md>`
 - **Output**: Unicode tree visualization.
 
 ### 3. `language/operations.py`
 - status: active
+
 - **Purpose**: Manipulate task trees (merge, extend).
 - **Usage**:
     - **Merge**: `python3 language/operations.py merge <target.md> <source.md> "<Target Node Title>" [--output <out.md>]`
@@ -139,11 +152,13 @@ The following Python scripts are available in `language/` to interact with this 
 
 ### 4. `language/migrate.py`
 - status: active
+
 - **Purpose**: Heuristically adds default metadata to standard Markdown headers to make them schema-compliant.
 - **Usage**: `python3 language/migrate.py <file.md> [file2.md ...]`
 - **Effect**: Modifies files in-place by injecting `- status: active` after headers that lack metadata.
 ### 5. `language/importer.py`
 - status: active
+
 - **Purpose**: Converts legacy documents (`.docx`, `.pdf`, `.doc`) into Markdown and auto-applies the Protocol.
 - **Usage**: `python3 language/importer.py <file.docx> [file.pdf ...]`
 - **Capabilities**:
@@ -157,4 +172,27 @@ When migrating existing documentation to this schema:
 1. **Run the Migration Script**: Use `language/migrate.py` to add baseline metadata.
 2. **Review and Refine**: Manually update the `status` fields (e.g., change `active` to `draft` or `deprecated` where appropriate) and add `owner` information.
 3. **Structure Check**: Ensure the hierarchy makes sense as a task/node tree.
+
+## Best Practices for AI Generation
+- status: active
+
+When generating or modifying files in this repository, AI agents MUST adhere to the following best practices to ensure system stability and parsing accuracy:
+
+1.  **Always Generate IDs**: When creating new nodes (tasks, features, sections), always generate a unique `id` in the metadata (e.g., `id: component.subcomponent.task`). This ensures that references remain stable even if titles change.
+2.  **Update Timestamps**: When modifying a node, update the `last_checked` field to the current date (ISO-8601).
+3.  **Strict Spacing**: You **MUST** ensure there is exactly one blank line between the metadata block and the content. This is critical for the parser to distinguish between metadata and content lists.
+    *   *Correct*:
+        ```markdown
+        ## Title
+        - status: active
+        
+        Content starts here...
+        ```
+    *   *Incorrect*:
+        ```markdown
+        ## Title
+        - status: active
+        Content starts here...
+        ```
+4.  **Use Allowed Fields**: Only use metadata keys explicitly listed in the "Allowed Fields" section (`status`, `type`, `owner`, `estimate`, `blocked_by`, `priority`, `id`, `last_checked`) unless you have a specific, documented reason to extend the schema.
 

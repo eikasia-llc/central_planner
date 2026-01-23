@@ -31,6 +31,7 @@ The project uses a strict **Markdown-METADATA Hybrid Schema** to treat documenta
 - owner: @frontend-agent
 - priority: high
 - blocked_by: [feature.auth.backend, infra.db.setup]
+
 ```
 
 ### The Language System (Tooling)

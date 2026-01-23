@@ -48,6 +48,7 @@ class PIDAgent(BaseAgent):
 
     For Homeostasis:
     - Setpoint: Target glucose (G_target = 100 mg/dL)
+
     - Process Variable: Current glucose
     - Control Output: Insulin infusion rate
     """
@@ -60,6 +61,7 @@ class PIDAgent(BaseAgent):
         Kd: float,           # Derivative gain
         output_limits: Tuple[float, float],  # (min, max) output
         anti_windup: bool = True,
+
     ):
         pass
 ```
@@ -116,6 +118,7 @@ class LQRAgent(BaseAgent):
 
     Requires linearized system dynamics: x_{t+1} = Ax_t + Bu_t
     Minimizes: J = sum(x'Qx + u'Ru)
+
     """
 
     def __init__(
@@ -126,6 +129,7 @@ class LQRAgent(BaseAgent):
         R: np.ndarray,       # Control cost matrix
         state_dim: int,
         action_dim: int,
+
     ):
         pass
 
@@ -148,6 +152,7 @@ def linearize_dynamics(
     x0: np.ndarray,        # Operating point state
     u0: np.ndarray,        # Operating point control
     delta: float = 1e-5,   # Finite difference step
+
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Numerically linearize environment dynamics around (x0, u0).
@@ -183,6 +188,7 @@ class MPCAgent(BaseAgent):
         action_bounds: Tuple[np.ndarray, np.ndarray],
         state_constraints: Optional[Callable] = None,
         solver: str = "scipy",   # or "cvxpy", "casadi"
+
     ):
         pass
 
@@ -223,6 +229,7 @@ class ResidualPolicyAgent(BaseAgent):
         base_controller: BaseAgent,  # e.g., PID or LQR
         residual_agent: BaseAgent,   # e.g., PPO or DQN
         residual_scale: float = 0.1, # Limit residual magnitude
+
     ):
         pass
 ```
@@ -259,6 +266,7 @@ class CBFSafeAgent(BaseAgent):
         rl_agent: BaseAgent,
         barrier_fn: Callable,    # h(x) >= 0 defines safe set
         alpha: float = 1.0,      # CBF class-K function parameter
+
     ):
         pass
 ```
@@ -283,6 +291,7 @@ dI/dt = -n*I + gamma*(G - h)^+ + u(t)
 
 2. **MPC:** Use full nonlinear model
    - Horizon: 30-60 minutes (10-20 steps at dt_control=3min)
+
    - Terminal cost: distance to basal equilibrium
    - Hard constraint: G >= 50 mg/dL
 
@@ -327,6 +336,7 @@ def discretize_continuous_system(
     A_c: np.ndarray,
     B_c: np.ndarray,
     dt: float
+
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Convert continuous A, B to discrete time."""
     pass
@@ -334,6 +344,7 @@ def discretize_continuous_system(
 def compute_controllability_matrix(
     A: np.ndarray,
     B: np.ndarray
+
 ) -> np.ndarray:
     """Return [B, AB, A^2B, ..., A^{n-1}B]."""
     pass
@@ -345,6 +356,7 @@ def check_controllability(A: np.ndarray, B: np.ndarray) -> bool:
 def compute_observability_matrix(
     A: np.ndarray,
     C: np.ndarray
+
 ) -> np.ndarray:
     """Return [C; CA; CA^2; ...; CA^{n-1}]."""
     pass
@@ -353,6 +365,7 @@ def pole_placement(
     A: np.ndarray,
     B: np.ndarray,
     poles: np.ndarray
+
 ) -> np.ndarray:
     """Compute state feedback gain K for desired poles."""
     pass

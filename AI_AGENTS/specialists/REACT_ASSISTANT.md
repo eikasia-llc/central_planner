@@ -132,6 +132,8 @@ app.add_middleware(
 )
 
 # Store active simulation sessions
+- status: active
+
 simulations: dict[str, Simulation] = {}
 ```
 
@@ -144,11 +146,13 @@ Use Pydantic `BaseModel` for request/response validation:
 class SimulationConfig(BaseModel):
     gridWidth: int
     gridHeight: int
+
     # Add simulation-specific config fields
     
 class StepRequest(BaseModel):
     session_id: str
     action: Literal["up", "down", "left", "right"]  # Define valid actions
+
 ```
 
 ### 1.4 Required API Endpoints
@@ -369,11 +373,13 @@ interface SimulationConfig {
     gridWidth: number
     gridHeight: number
     obstacleCount: number
+
 }
 
 interface Position {
     x: number
     y: number
+
 }
 
 interface SimulationState {
@@ -383,9 +389,11 @@ interface SimulationState {
         width: number
         height: number
         obstacles: Position[]
+
     }
     game_over: boolean
     score: number
+
 }
 
 function Controls() {
@@ -394,6 +402,7 @@ function Controls() {
         gridWidth: 10,
         gridHeight: 10,
         obstacleCount: 3,
+
     })
     
     // Simulation state
@@ -418,6 +427,7 @@ function Controls() {
                     gridWidth: config.gridWidth,
                     gridHeight: config.gridHeight,
                     obstacleCount: config.obstacleCount,
+
                 }),
             })
             
@@ -442,6 +452,7 @@ function Controls() {
                 body: JSON.stringify({
                     session_id: state.session_id,
                     action: direction,
+
                 }),
             })
             
@@ -499,6 +510,7 @@ function Controls() {
                 className="grid"
                 style={{
                     gridTemplateColumns: `repeat(${state.environment.width}, 1fr)`
+
                 }}
             >
                 {cells}
@@ -526,6 +538,7 @@ export default Controls
     gap: 2px;
     background: #1a1a2e;
     padding: 10px;
+
     border-radius: 8px;
 }
 
@@ -533,19 +546,23 @@ export default Controls
     width: 30px;
     height: 30px;
     background: #16213e;
+
     border-radius: 4px;
 }
 
 .grid-cell.agent {
     background: #00ff88;
+
 }
 
 .grid-cell.obstacle {
     background: #ff4444;
+
 }
 
 .grid-cell.goal {
     background: #4488ff;
+
 }
 ```
 
