@@ -55,6 +55,9 @@ HTML_TEMPLATE = """
     
     .link { fill: none; stroke: #ccc; stroke-width: 1.5px; transition: all 0.5s; stroke-opacity: 0.6; }
 
+    .dep-link { fill: none; stroke: #e74c3c; stroke-width: 1.5px; stroke-dasharray: 4; marker-end: url(#arrowhead); opacity: 0.6; }
+    .dep-link:hover { opacity: 1.0; stroke-width: 2.5px; }
+
     /* Metadata Colors */
     .status-done { stroke: #2ecc71 !important; fill: #e8f8f5; }
     .status-active, .status-in-progress { stroke: #3498db !important; fill: #ebf5fb; }
@@ -92,6 +95,7 @@ HTML_TEMPLATE = """
         <button onclick="expandAll()">Expand All</button>
         <button onclick="collapseAll()">Collapse All</button>
         <button onclick="resetZoom()">Reset Zoom</button>
+        <button onclick="toggleDeps()">Toggle Dependencies</button>
     </div>
   </div>
   <div id="sidebar">
@@ -106,6 +110,8 @@ HTML_TEMPLATE = """
 let root, svg, g, zoom, tree;
 let i = 0;
 let duration = 500;
+let parsedData = null;
+let showDependencies = true;
 
 function log(msg) {
     console.log(msg);
@@ -142,7 +148,8 @@ try {
         if (data && typeof d3 !== 'undefined') {
             log("D3 loaded. Version: " + d3.version);
             document.getElementById('loading').style.display = 'none';
-            initViz(data);
+            parsedData = data.tree ? data : { tree: data, dependencies: [] }; // Handle legacy format if needed
+            initViz(parsedData);
         } else {
             if (typeof d3 === 'undefined') {
                 handleScriptError();
@@ -155,7 +162,7 @@ try {
     log("Global Error: " + globalErr.message);
 }
 
-function initViz(data) {
+function initViz(fullData) {
     log("Initializing Visualization...");
     try {
         const width = window.innerWidth;
@@ -166,6 +173,19 @@ function initViz(data) {
         // Clear previous if any
         svg.selectAll("*").remove();
         
+        // Defs for arrows
+        const defs = svg.append("defs");
+        defs.append("marker")
+            .attr("id", "arrowhead")
+            .attr("refX", 10) /* adjust based on node radius */
+            .attr("refY", 0)
+            .attr("markerWidth", 6)
+            .attr("markerHeight", 6)
+            .attr("orient", "auto")
+            .append("path")
+            .attr("d", "M0,-2.5 L6,0 L0,2.5")
+            .style("fill", "#e74c3c");
+
         g = svg.append("g");
 
         zoom = d3.zoom()
@@ -180,7 +200,7 @@ function initViz(data) {
         // For left-right (projecting y as x): [height, width]
         tree = d3.tree().nodeSize([40, 300]); 
 
-        root = d3.hierarchy(data, d => d.children);
+        root = d3.hierarchy(fullData.tree, d => d.children);
         root.x0 = 0;
         root.y0 = 0;
 
@@ -240,6 +260,11 @@ function resetZoom() {
     svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(100, height/2).scale(1));
 }
 
+function toggleDeps() {
+    showDependencies = !showDependencies;
+    update(root);
+}
+
 function update(source) {
   const treeData = tree(root);
 
@@ -250,6 +275,77 @@ function update(source) {
   // Normalize for left-right tree
   // Swap x and y for horizontal layout
   nodes.forEach(d => { d.y = d.depth * 300; });
+
+  // Node Map for calculating dependencies
+  const nodeMap = new Map();
+  nodes.forEach(d => {
+      // Key can be ID or Node Title (fallback)
+      if (d.data.metadata && d.data.metadata.id) {
+          nodeMap.set(d.data.metadata.id, d);
+      }
+      // Also map by title for redundancy if needed, but ID is preferred
+  });
+
+
+  // ****************** Links (Hierarchy) ***************************
+  const link = g.selectAll('path.link')
+      .data(links, d => d.target.id);
+
+  const linkEnter = link.enter().insert('path', "g")
+      .attr("class", "link")
+      .attr('d', d => {
+        const o = {x: source.x0, y: source.y0};
+        return diagonal(o, o);
+      });
+
+  const linkUpdate = linkEnter.merge(link);
+
+  linkUpdate.transition()
+      .duration(duration)
+      .attr('d', d => diagonal(d.source, d.target));
+
+  link.exit().transition()
+      .duration(duration)
+      .attr('d', d => {
+        const o = {x: source.x, y: source.y};
+        return diagonal(o, o);
+      })
+      .remove();
+
+  // ****************** Dependency Links (Explicit) ***************************
+  // Calculate active dependencies based on current visible nodes
+  let depLinksData = [];
+  if (showDependencies && parsedData.dependencies) {
+      parsedData.dependencies.forEach(dep => {
+          const sourceNode = nodeMap.get(dep.source);
+          const targetNode = nodeMap.get(dep.target);
+          
+          if (sourceNode && targetNode) {
+              depLinksData.push({source: sourceNode, target: targetNode});
+          }
+      });
+  }
+
+  const depLink = g.selectAll('path.dep-link')
+      .data(depLinksData, d => d.source.id + "-" + d.target.id);
+
+  const depLinkEnter = depLink.enter().append('path')
+      .attr("class", "dep-link")
+      .attr('d', d => {
+           // Start from wherever the source is currently (animation) -> usually nice to just fade in or pop in
+           // For simplicity, we calculate the curve immediately or use the source position
+           return dependencyPath(d.source, d.target);
+      })
+      .style("opacity", 0);
+
+  depLinkEnter.transition().duration(duration).style("opacity", 0.6);
+
+  depLink.transition().duration(duration)
+      .attr('d', d => dependencyPath(d.source, d.target))
+      .style("opacity", 0.6);
+
+  depLink.exit().transition().duration(duration).style("opacity", 0).remove();
+
 
   // ****************** Nodes ***************************
   const node = g.selectAll('g.node')
@@ -280,13 +376,13 @@ function update(source) {
   const nodeUpdate = nodeEnter.merge(node);
 
   nodeUpdate.transition()
-    .duration(duration)
-    .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
+      .duration(duration)
+      .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
 
   nodeUpdate.select('circle')
-    .attr('r', 8)
-    .style("fill", d => d._children ? "#fff" : "") 
-    .attr('class', d => `status-${((d.data.metadata && d.data.metadata.status) || 'default').replace(' ', '-')}`);
+      .attr('r', 8)
+      .style("fill", d => d._children ? "#fff" : "") 
+      .attr('class', d => `status-${((d.data.metadata && d.data.metadata.status) || 'default').replace(' ', '-')}`);
 
   nodeUpdate.select('text').style("fill-opacity", 1);
 
@@ -298,30 +394,6 @@ function update(source) {
   nodeExit.select('circle').attr('r', 1e-6);
   nodeExit.select('text').style('fill-opacity', 1e-6);
 
-  // ****************** Links ***************************
-  const link = g.selectAll('path.link')
-      .data(links, d => d.target.id);
-
-  const linkEnter = link.enter().insert('path', "g")
-      .attr("class", "link")
-      .attr('d', d => {
-        const o = {x: source.x0, y: source.y0};
-        return diagonal(o, o);
-      });
-
-  const linkUpdate = linkEnter.merge(link);
-
-  linkUpdate.transition()
-      .duration(duration)
-      .attr('d', d => diagonal(d.source, d.target));
-
-  link.exit().transition()
-      .duration(duration)
-      .attr('d', d => {
-        const o = {x: source.x, y: source.y};
-        return diagonal(o, o);
-      })
-      .remove();
 
   nodes.forEach(d => {
     d.x0 = d.x;
@@ -333,6 +405,17 @@ function update(source) {
             C ${(s.y + d.y) / 2} ${s.x},
               ${(s.y + d.y) / 2} ${d.x},
               ${d.y} ${d.x}`;
+  }
+
+  function dependencyPath(s, t) {
+      // Custom path for dependencies - larger arc to avoid hierarchy lines?
+      // Or just a straightish Bezier
+      const dx = t.y - s.y;
+      const dy = t.x - s.x;
+      const dr = Math.sqrt(dx * dx + dy * dy) * 1.5; // Controls curvature
+      
+      // Arc path
+      return `M${s.y},${s.x}A${dr},${dr} 0 0,1 ${t.y},${t.x}`;
   }
 
   function click(event, d) {
@@ -386,6 +469,23 @@ def node_to_dict(node):
         "children": [node_to_dict(child) for child in node.children]
     }
 
+def collect_dependencies(node, dependencies_list=None):
+    if dependencies_list is None:
+        dependencies_list = []
+    
+    # Check for blocked_by
+    if node.metadata and 'blocked_by' in node.metadata and 'id' in node.metadata:
+        target_id = node.metadata['id']
+        blockers = node.metadata['blocked_by']
+        if isinstance(blockers, list):
+            for source_id in blockers:
+                 dependencies_list.append({"source": source_id, "target": target_id})
+    
+    for child in node.children:
+        collect_dependencies(child, dependencies_list)
+        
+    return dependencies_list
+
 def main():
     target_file = os.path.join(planner_dir, "MASTER_PLAN.md")
     if not os.path.exists(target_file):
@@ -399,16 +499,24 @@ def main():
     parser = MarkdownParser()
     root_node = parser.parse_file(target_file)
 
-    # Adjust root logic
+    # Adjust root logic - we want the real content root
     if root_node.title == "Root" and len(root_node.children) == 1:
-        data = node_to_dict(root_node.children[0])
+        tree_root = root_node.children[0]
     elif root_node.title == "Root" and len(root_node.children) > 1:
-        data = node_to_dict(root_node)
-        data["title"] = "Central Planner"
+        tree_root = root_node
+        tree_root.title = "Central Planner" # Rename for viz
     else:
-        data = node_to_dict(root_node)
+        tree_root = root_node
         
-    json_str = json.dumps(data)
+    tree_data = node_to_dict(tree_root)
+    dependencies = collect_dependencies(tree_root)
+    
+    full_data = {
+        "tree": tree_data,
+        "dependencies": dependencies
+    }
+        
+    json_str = json.dumps(full_data)
     b64_data = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
     
     html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)

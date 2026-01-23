@@ -85,10 +85,20 @@ The system separates Analytical Queries (Code Execution) from Control Tasks (Mod
 -   Schema validation via Pydantic.
 -   Endpoints: `/v1/events` (to BigQuery) and `/v1/telemetry` (to BigQuery/BigTable).
 
+##### Basic Chatbot Interface
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase1.chatbot
+- estimate: 1w
+- last_checked: 2026-01-23T15:11:55+01:00
+<!-- content -->
+Create a basic chat interface to interact with the LLMs. This involves setting up a simple React UI, establishing the API connection to Vertex AI / OpenAI, and implementing basic cost tracking per session.
+
 ##### Client Data Warehouse App
 - status: todo
 - type: task
 - id: product.saas.roadmap.phase1.warehouse_app
+- blocked_by: [product.saas.roadmap.phase1.chatbot]
 - estimate: 1w
 - last_checked: 2026-01-23T14:48:58+01:00
 <!-- content -->
