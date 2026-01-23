@@ -10,6 +10,7 @@
 The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts as an auditor, librarian, and architect, ensuring that all distributed knowledge (across various company repositories) is correctly formatted, centralized, and integrated into a cohesive master plan.
 
 ## Core Responsibilities
+- status: active
 
 ### 1. Auditing & Standardization (The "Librarian")
 - status: active
@@ -50,6 +51,7 @@ The Manager Agent is the custodian of the **Central Planner** ecosystem. It acts
     4. **Register**: (Optional) Update `central_planner/AGENTS.md` to reference the new recruit.
 
 ## Quick Command Reference
+- status: active
 
 | Action | Command |
 | :--- | :--- |
