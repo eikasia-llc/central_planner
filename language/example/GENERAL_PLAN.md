@@ -2,12 +2,14 @@
 - status: active
 - owner: project-manager
 - estimate: 2w
+- type: plan
 <!-- content -->
 
 ## Phase 1: Infrastructure Setup
 - status: done
 - owner: devops-lead
 - estimate: 3d
+- type: task
 <!-- content -->
 Provision servers and set up networking.
 
@@ -15,6 +17,7 @@ Provision servers and set up networking.
 - status: in-progress
 - owner: tech-lead
 - estimate: 1w
+- type: task
 <!-- content -->
 Implement the core logic of the application.
 
@@ -22,4 +25,5 @@ Implement the core logic of the application.
 - status: todo
 - owner: qa-team
 - estimate: 3d
+- type: task
 <!-- content -->

@@ -1,5 +1,6 @@
 # Recommender System Agent Instructions
 - status: active
+- type: agent_skill
 <!-- content -->
 **Role:** You are the **RecSys Agent**, a specialist in recommender systems, covering both static collaborative filtering and dynamic contextual bandit approaches.
 
@@ -95,6 +96,7 @@ output_path = process_movielens(save_dir="data")
 
 # Saves to: data/interim/ratings.csv, data/interim/movies.csv
 - status: active
+- type: agent_skill
 <!-- content -->
 ```
 
@@ -134,6 +136,7 @@ output_path = process_amazon(save_dir="data")
 
 # Saves to: data/interim/amazon_beauty.json
 - status: active
+- type: agent_skill
 <!-- content -->
 ```
 
@@ -146,16 +149,19 @@ Use the Makefile for reproducible data preparation:
 
 # Install dependencies
 - status: active
+- type: agent_skill
 <!-- content -->
 make setup
 
 # Download and process all datasets
 - status: active
+- type: agent_skill
 <!-- content -->
 make data
 
 # Or run directly
 - status: active
+- type: agent_skill
 <!-- content -->
 python -m src.data.process
 ```
@@ -182,10 +188,12 @@ train_cf_model(data_dir="data")
 
 # Performs 5-fold cross-validation, then full training
 - status: active
+- type: agent_skill
 <!-- content -->
 
 # Outputs RMSE and MAE metrics
 - status: active
+- type: agent_skill
 <!-- content -->
 ```
 
@@ -206,11 +214,13 @@ import joblib
 
 # Load trained model
 - status: active
+- type: agent_skill
 <!-- content -->
 model = joblib.load("models/svd_model.pkl")
 
 # Predict rating for user-item pair
 - status: active
+- type: agent_skill
 <!-- content -->
 prediction = model.predict(uid=1, iid=318)  # user 1, movie 318
 print(f"Predicted rating: {prediction.est}")
@@ -240,18 +250,22 @@ from surprise.model_selection import cross_validate
 
 # During training, cross_validate outputs:
 - status: active
+- type: agent_skill
 <!-- content -->
 
 # - Mean RMSE across 5 folds
 - status: active
+- type: agent_skill
 <!-- content -->
 
 # - Mean MAE across 5 folds
 - status: active
+- type: agent_skill
 <!-- content -->
 
 # - Standard deviation for both metrics
 - status: active
+- type: agent_skill
 <!-- content -->
 ```
 
@@ -327,10 +341,12 @@ train_bandit_model(data_dir="data")
 
 # Filters to top 50 items, creates TF-IDF contexts
 - status: active
+- type: agent_skill
 <!-- content -->
 
 # Evaluates using Rejection Sampling (Replay method)
 - status: active
+- type: agent_skill
 <!-- content -->
 ```
 
@@ -411,16 +427,19 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Load trained policy
 - status: active
+- type: agent_skill
 <!-- content -->
 policy = joblib.load("models/bandit_policy.pkl")
 
 # Create context from new review text
 - status: active
+- type: agent_skill
 <!-- content -->
 tfidf = TfidfVectorizer(max_features=100, stop_words='english')
 
 # Note: In production, fit TF-IDF on training data and save it
 - status: active
+- type: agent_skill
 <!-- content -->
 def recommend_item(policy, review_text, tfidf_vectorizer):
     """
@@ -475,21 +494,25 @@ def update_policy(policy, context, action, reward):
 
 # 1. Setup environment
 - status: active
+- type: agent_skill
 <!-- content -->
 make setup
 
 # 2. Download and process data
 - status: active
+- type: agent_skill
 <!-- content -->
 make data
 
 # 3. Train both models
 - status: active
+- type: agent_skill
 <!-- content -->
 make train
 
 # 4. Run tests to verify
 - status: active
+- type: agent_skill
 <!-- content -->
 make test
 ```
@@ -501,11 +524,13 @@ make test
 
 # Remove all generated files
 - status: active
+- type: agent_skill
 <!-- content -->
 make clean
 
 # Full rebuild
 - status: active
+- type: agent_skill
 <!-- content -->
 make data && make train
 ```
@@ -521,16 +546,19 @@ make data && make train
 
 # Run all tests
 - status: active
+- type: agent_skill
 <!-- content -->
 make test
 
 # Run specific test file
 - status: active
+- type: agent_skill
 <!-- content -->
 python -m pytest tests/test_download_mock.py -v
 
 # Run integration tests (requires network)
 - status: active
+- type: agent_skill
 <!-- content -->
 python -m pytest tests/test_integration.py -v
 ```
@@ -544,6 +572,7 @@ When adding new functionality, create tests in `tests/`:
 
 # tests/test_recommendations.py
 - status: active
+- type: agent_skill
 <!-- content -->
 import unittest
 from unittest.mock import patch, MagicMock
@@ -583,6 +612,7 @@ class TestRecommendations(unittest.TestCase):
 
 # Verify all dependencies
 - status: active
+- type: agent_skill
 <!-- content -->
 import pandas as pd
 import numpy as np

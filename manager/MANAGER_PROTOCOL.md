@@ -1,5 +1,6 @@
 # Manager Agent Protocol
 - status: active
+- type: protocol
 <!-- content -->
 - role: system-architect
 - version: 1.0

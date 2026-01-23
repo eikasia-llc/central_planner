@@ -1,5 +1,6 @@
 # Left Eigenvector Centrality Hypothesis
 - status: active
+- type: context
 <!-- content -->
 
 ## Overview

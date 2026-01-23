@@ -1,5 +1,6 @@
 # AI Agents Context Folder
 - status: active
+- type: guideline
 <!-- content -->
 This directory contains specialized context files (Markdown) for specific AI sub-agents or specific tasks within the project.
 

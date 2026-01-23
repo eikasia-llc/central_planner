@@ -1,5 +1,6 @@
 # AI Agents Log & Reference
 - status: active
+- type: log
 <!-- content -->
 This file serves as a persistent memory for AI agents working on the project. It includes a reference for common tasks, guidelines, and a chronological log of major interventions.
 

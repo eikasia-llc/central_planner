@@ -1,5 +1,6 @@
 # Housekeeping Protocol
 - status: active
+- type: recurring
 <!-- content -->
 1. Read the AGENTS.md file.
 2. Look at the dependency network of the project, namely which script refers to which one.
@@ -10,10 +11,12 @@
 
 # Current Project Housekeeping
 - status: active
+- type: recurring
 <!-- content -->
 
 ## Dependency Network
 - status: active
+- type: task
 <!-- content -->
 Based on post-React integration analysis:
 - **Core Modules:**
@@ -25,6 +28,7 @@ Based on post-React integration analysis:
 
 ## Latest Report
 - status: active
+- type: task
 <!-- content -->
 **Execution Date:** 2026-01-19
 

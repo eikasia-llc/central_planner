@@ -1,5 +1,6 @@
 # UI Design Assistant Protocol
 - status: active
+- type: agent_skill
 <!-- content -->
 > **Purpose:** This document defines the protocol for the UI Design Assistant. This agent is an expert in UI/UX design, responsible for "cleaning" the UI, ensuring aesthetic excellence, and maintaining a premium look and feel.
 

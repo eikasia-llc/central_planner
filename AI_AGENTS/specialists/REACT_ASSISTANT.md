@@ -1,5 +1,6 @@
 # React Assistant Guide
 - status: active
+- type: agent_skill
 <!-- content -->
 > **Purpose:** This document provides AI assistants with guidelines for setting up simulation games as React + FastAPI monorepo projects. Follow this structure to create consistent, maintainable web-based simulations.
 
@@ -118,6 +119,7 @@ import uuid
 
 # Import your simulation package
 - status: active
+- type: agent_skill
 <!-- content -->
 from simulation_name import Simulation
 
@@ -125,6 +127,7 @@ app = FastAPI()
 
 # CRITICAL: Configure CORS for React dev server
 - status: active
+- type: agent_skill
 <!-- content -->
 app.add_middleware(
     CORSMiddleware,
@@ -136,6 +139,7 @@ app.add_middleware(
 
 # Store active simulation sessions
 - status: active
+- type: agent_skill
 <!-- content -->
 simulations: dict[str, Simulation] = {}
 ```
@@ -226,6 +230,7 @@ Create a simulation package with this pattern:
 
 # simulation_name/simulation.py
 - status: active
+- type: agent_skill
 <!-- content -->
 class Simulation:
     def __init__(self, session_id: str, agent, environment):
@@ -703,6 +708,7 @@ For ML training, log all user actions:
 
 # In Simulation class
 - status: active
+- type: agent_skill
 <!-- content -->
 self.history.append({
     "step": len(self.history),

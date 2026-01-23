@@ -1,5 +1,6 @@
 # Agents Log
 - status: active
+- type: log
 <!-- content -->
 Most recent event comes first
 

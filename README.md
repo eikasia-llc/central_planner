@@ -1,5 +1,6 @@
 # Central Planner
 - status: active
+- type: guideline
 <!-- content -->
 
 ## Project Overview

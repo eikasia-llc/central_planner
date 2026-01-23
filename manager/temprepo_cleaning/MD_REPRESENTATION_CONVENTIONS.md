@@ -1,5 +1,6 @@
 # Markdown-YAML Hybrid Schema Conventions
 - status: active
+- type: guideline
 <!-- content -->
 This document defines the strict conventions for the Markdown-YAML Hybrid Schema used in this project for hierarchical task coordination and agentic planning.
 

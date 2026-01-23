@@ -1,6 +1,7 @@
 # Software Release Cycle
 - id: release_cycle
 - status: active
+- type: context
 <!-- content -->
 
 ## Development

@@ -1,10 +1,12 @@
 # Implementation Plan - Python CLI Improvements
 - status: active
+- type: plan
 <!-- content -->
 Improve all Python programs in `manager` and `language` directories to have a POSIX-friendly command-line interface using `argparse`.
 
 ## Goal Description
 - status: active
+- type: task
 <!-- content -->
 - Standardize CLI across the codebase using `argparse`.
 - Implement POSIX-friendly argument parsing (handling `-oFILE` and `-o FILE`).
@@ -17,14 +19,17 @@ Improve all Python programs in `manager` and `language` directories to have a PO
 
 ## Proposed Changes
 - status: active
+- type: task
 <!-- content -->
 
 ### Shared Utilities
 - status: active
+- type: task
 <!-- content -->
 
 #### [NEW] `language/cli_utils.py`
 - status: active
+- type: task
 <!-- content -->
 - Create a shared module to handle the common argument parsing patterns.
 - Implement a custom `argparse.Action` or helper to handle:
@@ -58,10 +63,12 @@ Improve all Python programs in `manager` and `language` directories to have a PO
 
 ### Manager Tools
 - status: active
+- type: task
 <!-- content -->
 
 #### [MODIFY] [clean_repo.py](file:///home/zeta/src/eikasia/central_planner/manager/clean_repo.py)
 - status: active
+- type: task
 <!-- content -->
 - Update `argparse` description.
 - Ensure `-h/--help` is present.
@@ -69,15 +76,18 @@ Improve all Python programs in `manager` and `language` directories to have a PO
 
 #### [MODIFY] [update_master_plan.py](file:///home/zeta/src/eikasia/central_planner/manager/update_master_plan.py)
 - status: active
+- type: task
 <!-- content -->
 - Refine `argparse`.
 
 ### Language Tools
 - status: active
+- type: task
 <!-- content -->
 
 #### [MODIFY] [md_parser.py](file:///home/zeta/src/eikasia/central_planner/language/md_parser.py)
 - status: active
+- type: task
 <!-- content -->
 - Single-file tool.
 - Support `md_parser input` (print to stdout).
@@ -87,17 +97,20 @@ Improve all Python programs in `manager` and `language` directories to have a PO
 
 #### [MODIFY] [visualization.py](file:///home/zeta/src/eikasia/central_planner/language/visualization.py)
 - status: active
+- type: task
 <!-- content -->
 - Single-file tool. Same as `md_parser`.
 
 #### [MODIFY] [operations.py](file:///home/zeta/src/eikasia/central_planner/language/operations.py)
 - status: active
+- type: task
 <!-- content -->
 - Already takes named args `merge target source node`.
 - Will improve with `argparse` validation and `-h`.
 
 #### [MODIFY] [migrate.py](file:///home/zeta/src/eikasia/central_planner/language/migrate.py)
 - status: active
+- type: task
 <!-- content -->
 - Multi-file tool.
 - Disallow `migrate.py file.md`.
@@ -108,21 +121,25 @@ Improve all Python programs in `manager` and `language` directories to have a PO
 
 #### [MODIFY] [importer.py](file:///home/zeta/src/eikasia/central_planner/language/importer.py)
 - status: active
+- type: task
 <!-- content -->
 - Multi-file tool. Same as `migrate.py`.
 
 ## Verification Plan
 - status: active
+- type: task
 <!-- content -->
 
 ### Automated Tests
 - status: active
+- type: task
 <!-- content -->
 - I will create a new test script `language/test_cli.py` to test the CLI invocation and argument logic using `subprocess` or by mocking `sys.argv` and calling `main`.
 - I will verify the "fail if target exists" and "--force" behavior.
 
 ### Manual Verification
 - status: active
+- type: task
 <!-- content -->
 - Run help commands: `python language/migrate.py --help`
 - Run update: `python language/migrate.py test.md`
