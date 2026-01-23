@@ -67,39 +67,39 @@ def migrate_file(file_path):
                 new_lines.append(default_meta)
                 
                 # Also, we might want to add 'owner' or 'updated' if we could guess, but let's keep it simple.
-        else:
-            # Header exists and has metadata block. Check for blank line after metadata.
-            # has_meta_block returned True.
-            # Re-find the metadata block end index
-            j = i + 1
-            meta_pattern = re.compile(r'^-?\s*(\w+):')
-            found_meta = False
-            while j < len(lines):
-                match = meta_pattern.match(lines[j].strip())
-                is_valid_meta = False
-                if match:
-                    key = match.group(1)
-                    if key in ALLOWED_FIELDS:
-                        is_valid_meta = True
-                
-                if is_valid_meta:
-                    found_meta = True
-                    j += 1
-                elif found_meta and lines[j].strip() == "":
-                     # Already has blank line
-                     break
-                else:
-                     # Found end of metadata, and lines[j] is NOT blank
-                     # Insert blank line
-                     if found_meta: # Only if we actually traversed some metadata
-                         new_lines.extend(lines[i+1:j])
-                         new_lines.append("\n")
-                         # We want to continue outer loop from j.
-                         # Outer loop does i+=1 at end.
-                         # So set i = j - 1
-                         i = j - 1
+            else:
+                # Header exists and has metadata block. Check for blank line after metadata.
+                # has_meta_block returned True.
+                # Re-find the metadata block end index
+                j = i + 1
+                meta_pattern = re.compile(r'^-?\s*(\w+):')
+                found_meta = False
+                while j < len(lines):
+                    match = meta_pattern.match(lines[j].strip())
+                    is_valid_meta = False
+                    if match:
+                        key = match.group(1)
+                        if key in ALLOWED_FIELDS:
+                            is_valid_meta = True
+                    
+                    if is_valid_meta:
+                        found_meta = True
+                        j += 1
+                    elif found_meta and lines[j].strip() == "":
+                         # Already has blank line
                          break
-                     break
+                    else:
+                         # Found end of metadata, and lines[j] is NOT blank
+                         # Insert blank line
+                         if found_meta: # Only if we actually traversed some metadata
+                             new_lines.extend(lines[i+1:j])
+                             new_lines.append("\n")
+                             # We want to continue outer loop from j.
+                             # Outer loop does i+=1 at end.
+                             # So set i = j - 1
+                             i = j - 1
+                             break
+                         break
         
         i += 1
     

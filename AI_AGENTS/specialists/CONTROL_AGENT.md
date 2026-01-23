@@ -453,6 +453,7 @@ def benchmark_homeostasis_controllers():
 
 ### Phase 1: Classical Controllers
 - status: active
+
 - [ ] Implement `PIDAgent` with anti-windup
 - [ ] Implement `ShortestQueueAgent` and `PowerOfTwoChoices`
 - [ ] Add tests for PID step response and load balancing
@@ -460,6 +461,7 @@ def benchmark_homeostasis_controllers():
 
 ### Phase 2: Optimal Control
 - status: active
+
 - [ ] Implement `linearize_dynamics` utility
 - [ ] Implement `LQRAgent` with DARE solver
 - [ ] Implement `MPCAgent` with scipy backend
@@ -468,12 +470,14 @@ def benchmark_homeostasis_controllers():
 
 ### Phase 3: Hybrid Methods
 - status: active
+
 - [ ] Implement `ResidualPolicyAgent`
 - [ ] Implement `CBFSafeAgent` for Homeostasis
 - [ ] Benchmark hybrid vs. pure RL
 
 ### Documentation
 - status: active
+
 - [ ] Update `AGENTS.md` with control agent descriptions
 - [ ] Add control theory references to `docs/`
 - [ ] Log all implementations in `AGENTS_LOG.md`
@@ -496,6 +500,7 @@ def benchmark_homeostasis_controllers():
 ```markdown
 ### [DATE] - Control Agent Implementation (Control Agent)
 - status: active
+
 *   **Task:** [Specific controller implemented]
 *   **Actions:**
     *   [File created/modified]

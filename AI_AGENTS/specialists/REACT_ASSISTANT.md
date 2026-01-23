@@ -117,12 +117,14 @@ import uuid
 
 # Import your simulation package
 - status: active
+
 from simulation_name import Simulation
 
 app = FastAPI()
 
 # CRITICAL: Configure CORS for React dev server
 - status: active
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["http://localhost:5173"],  # Vite default port
@@ -222,6 +224,7 @@ Create a simulation package with this pattern:
 ```python
 # simulation_name/simulation.py
 - status: active
+
 class Simulation:
     def __init__(self, session_id: str, agent, environment):
         self.session_id = session_id
@@ -694,6 +697,7 @@ For ML training, log all user actions:
 ```python
 # In Simulation class
 - status: active
+
 self.history.append({
     "step": len(self.history),
     "action": action,

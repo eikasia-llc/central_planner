@@ -93,6 +93,7 @@ from src.data.process import process_movielens
 output_path = process_movielens(save_dir="data")
 # Saves to: data/interim/ratings.csv, data/interim/movies.csv
 - status: active
+
 ```
 
 ### Protocol 2: Amazon Beauty Data Pipeline
@@ -130,6 +131,7 @@ from src.data.process import process_amazon
 output_path = process_amazon(save_dir="data")
 # Saves to: data/interim/amazon_beauty.json
 - status: active
+
 ```
 
 ### Protocol 3: Full Data Pipeline Execution
@@ -140,14 +142,17 @@ Use the Makefile for reproducible data preparation:
 ```bash
 # Install dependencies
 - status: active
+
 make setup
 
 # Download and process all datasets
 - status: active
+
 make data
 
 # Or run directly
 - status: active
+
 python -m src.data.process
 ```
 
@@ -171,8 +176,10 @@ from src.models.train_cf import train_cf_model
 train_cf_model(data_dir="data")
 # Performs 5-fold cross-validation, then full training
 - status: active
+
 # Outputs RMSE and MAE metrics
 - status: active
+
 ```
 
 #### Training Pipeline Details
@@ -192,10 +199,12 @@ import joblib
 
 # Load trained model
 - status: active
+
 model = joblib.load("models/svd_model.pkl")
 
 # Predict rating for user-item pair
 - status: active
+
 prediction = model.predict(uid=1, iid=318)  # user 1, movie 318
 print(f"Predicted rating: {prediction.est}")
 ```
@@ -224,12 +233,16 @@ from surprise.model_selection import cross_validate
 
 # During training, cross_validate outputs:
 - status: active
+
 # - Mean RMSE across 5 folds
 - status: active
+
 # - Mean MAE across 5 folds
 - status: active
+
 # - Standard deviation for both metrics
 - status: active
+
 ```
 
 **Expected Performance (MovieLens Small):**
@@ -302,8 +315,10 @@ from src.models.train_bandit import train_bandit_model
 train_bandit_model(data_dir="data")
 # Filters to top 50 items, creates TF-IDF contexts
 - status: active
+
 # Evaluates using Rejection Sampling (Replay method)
 - status: active
+
 ```
 
 #### Training Pipeline Details
@@ -383,10 +398,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 # Load trained policy
 - status: active
+
 policy = joblib.load("models/bandit_policy.pkl")
 
 # Create context from new review text
 - status: active
+
 tfidf = TfidfVectorizer(max_features=100, stop_words='english')
 # Note: In production, fit TF-IDF on training data and save it
 - status: active
@@ -442,18 +459,22 @@ def update_policy(policy, context, action, reward):
 ```bash
 # 1. Setup environment
 - status: active
+
 make setup
 
 # 2. Download and process data
 - status: active
+
 make data
 
 # 3. Train both models
 - status: active
+
 make train
 
 # 4. Run tests to verify
 - status: active
+
 make test
 ```
 
@@ -463,10 +484,12 @@ make test
 ```bash
 # Remove all generated files
 - status: active
+
 make clean
 
 # Full rebuild
 - status: active
+
 make data && make train
 ```
 
@@ -479,14 +502,17 @@ make data && make train
 ```bash
 # Run all tests
 - status: active
+
 make test
 
 # Run specific test file
 - status: active
+
 python -m pytest tests/test_download_mock.py -v
 
 # Run integration tests (requires network)
 - status: active
+
 python -m pytest tests/test_integration.py -v
 ```
 
@@ -498,6 +524,7 @@ When adding new functionality, create tests in `tests/`:
 ```python
 # tests/test_recommendations.py
 - status: active
+
 import unittest
 from unittest.mock import patch, MagicMock
 
@@ -534,6 +561,7 @@ class TestRecommendations(unittest.TestCase):
 ```python
 # Verify all dependencies
 - status: active
+
 import pandas as pd
 import numpy as np
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -585,6 +613,7 @@ When implementing RecSys features, log in `AGENTS_LOG.md`:
 ```markdown
 ### [DATE] - RecSys Implementation (RecSys Agent)
 - status: active
+
 *   **Task:** [Specific feature implemented]
 *   **Actions:**
     *   [Data pipeline changes]

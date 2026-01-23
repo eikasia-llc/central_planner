@@ -14,6 +14,7 @@
 
 ### Core Design Principles
 - status: active
+
 1.  **Aesthetics First:** The user should be "wowed" at first glance. Use vibrant colors, glassmorphism, subtle shadows, and modern typography.
 2.  **Simplicity & Clarity:** "Clean" means removing clutter. Every element must have a purpose. White space is active design, not empty space.
 3.  **Consistency:** Use a unified design system (colors, typography, spacing, radius) across the entire application.
@@ -42,12 +43,14 @@ When asked to "clean" the UI, follow this rigorous process:
 
 ### Phase 1: Analysis & Reduction
 - status: active
+
 1.  **Identify Clutter:** Look for redundant borders, excessive text, competing background colors, and misaligned elements.
 2.  **Simplify Palette:** Reduce the color count to a primary, secondary, and neutral set. Remove jarring primitive colors (pure red `#ff0000`, pure blue `#0000ff`).
 3.  **Typography Check:** Ensure hierarchy (H1 > H2 > H3 > p). Fix line-height (aim for 1.5 for body text).
 
 ### Phase 2: Refinement & Polish
 - status: active
+
 1.  **Spacing (Whitespace):** Increase padding and margins. Elements should breathe.
 2.  **Visual Depth:** Add subtle `box-shadow` to cards and modals. Use `backdrop-filter: blur()` for overlays (Glassmorphism).
 3.  **Rounded Corners:** Use consistent `border-radius` (e.g., `8px`, `12px`, or `16px`).
@@ -55,6 +58,7 @@ When asked to "clean" the UI, follow this rigorous process:
 
 ### Phase 3: Interaction & Life
 - status: active
+
 1.  **Hover States:** Buttons and interactive cards *must* undergo a visual change on hover (scale, color shift, shadow lift).
 2.  **Transitions:** Add `transition: all 0.2s ease` to interactive elements.
 3.  **Feedback:** Ensure loading states and error messages are styled and non-intrusive.
@@ -66,6 +70,7 @@ When asked to "clean" the UI, follow this rigorous process:
 
 ### 4.1 Global Design System (`index.css`)
 - status: active
+
 Define your variables first:
 
 ```css
@@ -91,12 +96,14 @@ Define your variables first:
 
 ### 4.2 Component Styling
 - status: active
+
 -   **Cards:** Dark mode backgrounds with slight transparency and borders.
 -   **Buttons:** Gradient backgrounds or solid primary colors with hover lift.
 -   **Inputs:** Clean borders, focus rings using the primary color.
 
 ### 4.3 Typography
 - status: active
+
 -   Import fonts in `index.html` or `App.css`.
 -   Use `font-weight` to distinguish headers from body.
 
@@ -104,6 +111,7 @@ Define your variables first:
 
 ## 5. Definition of Done
 - status: active
+
 A UI task is complete only when:
 - [ ] No "primitive" web colors visible.
 - [ ] Rhythm of spacing is consistent.

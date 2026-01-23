@@ -1,5 +1,6 @@
 # Central Company Master Plan
 - status: active
+
 - version: 1.0
 
 ## Overview

@@ -93,6 +93,7 @@ backend/
 
 ### Local Storage (Simple)
 - status: active
+
 ```
 data/
 └── sessions/
@@ -101,6 +102,7 @@ data/
 
 ### Remote Database (Production)
 - status: active
+
 - **MongoDB:** For document storage
 - **Google Sheets:** For easy data sharing
 - Configure via environment variables
@@ -219,6 +221,7 @@ project_name/
 
 ### Create New Project
 - status: active
+
 ```bash
 mkdir project_name && cd project_name
 mkdir -p frontend backend/api backend/engine data/sessions AI_AGENTS tests notebooks
@@ -227,24 +230,29 @@ touch requirements.txt AGENTS.md AGENTS_LOG.md HOUSEKEEPING.md README.md
 
 ### Initialize Frontend
 - status: active
+
 ```bash
 npm create vite@latest frontend -- --template react-ts
 ```
 
 ### Run Project
 - status: active
+
 ```bash
 # Terminal 1: Backend
 - status: active
+
 python -m uvicorn backend.api.main:app --reload --port 8000
 
 # Terminal 2: Frontend
 - status: active
+
 cd frontend && npm run dev
 ```
 
 ### Run Tests
 - status: active
+
 ```bash
 python -m pytest tests/ -v
 ```
