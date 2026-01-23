@@ -85,6 +85,25 @@ The system separates Analytical Queries (Code Execution) from Control Tasks (Mod
 -   Schema validation via Pydantic.
 -   Endpoints: `/v1/events` (to BigQuery) and `/v1/telemetry` (to BigQuery/BigTable).
 
+##### Client Data Warehouse App
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase1.warehouse_app
+- estimate: 1w
+- last_checked: 2026-01-23T14:48:58+01:00
+<!-- content -->
+Develop a downloadable application for clients to install, enabling streamlined data streaming to our central warehouse.
+
+##### Data Stream Controllers & Planners
+- status: todo
+- type: task
+- id: product.saas.roadmap.phase1.controllers
+- blocked_by: [product.saas.roadmap.phase1.warehouse_app]
+- estimate: 1w
+- last_checked: 2026-01-23T14:48:58+01:00
+<!-- content -->
+Set up initial controllers and planners to process the incoming data stream from the client app.
+
 #### Phase 2: The Agentic Analyst (Generative UI)
 - status: todo
 - type: task
