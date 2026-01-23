@@ -1,6 +1,15 @@
 import re
 import sys
+import os
 import json
+import argparse
+# Add current directory to sys.path to ensure we can import cli_utils if running directly
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.append(current_dir)
+
+import cli_utils
+from cli_utils import add_standard_arguments, validate_and_get_pairs
 
 class Node:
     def __init__(self, level, title, metadata=None, content=""):
@@ -155,27 +164,36 @@ class MarkdownParser:
         return errors
 
 if __name__ == "__main__":
-    if len(sys.argv) < 2:
-        print("Usage: python md_parser.py <file.md>")
-        sys.exit(1)
+    parser = argparse.ArgumentParser(description="Parse and validate Markdown files with Metadata.")
+    add_standard_arguments(parser, multi_file=False)
+    # Also add positional args which are handled by validat_and_get_pairs
+    parser.add_argument('args', nargs='*', help='Input file (and optional output file)')
 
-    parser = MarkdownParser()
-    file_path = sys.argv[1]
+    args = parser.parse_args()
     
     try:
-        root_node = parser.parse_file(file_path)
-        errors = parser.validate(root_node)
+        # allow_single_file_stdio=True because md_parser can print to stdout
+        pairs = validate_and_get_pairs(args, args.args, tool_name="md_parser.py", allow_single_file_stdio=True)
         
-        if errors:
-            print("Validation Errors:")
-            for err in errors:
-                print(f"- {err}")
-            sys.exit(1)
-        else:
-            # Print JSON representation to stdout
-            print(json.dumps(root_node.to_dict(), indent=2))
-            # print("\nValidation Successful.", file=sys.stderr)
+        parser_obj = MarkdownParser()
+        
+        for input_path, output_path in pairs:
+            root_node = parser_obj.parse_file(input_path)
+            errors = parser_obj.validate(root_node)
             
+            if errors:
+                print(f"Validation Errors in {input_path}:", file=sys.stderr)
+                for err in errors:
+                    print(f"- {err}", file=sys.stderr)
+                sys.exit(1)
+            else:
+                result = json.dumps(root_node.to_dict(), indent=2)
+                if output_path:
+                    with open(output_path, 'w') as f:
+                        f.write(result)
+                else:
+                    print(result)
+
     except Exception as e:
-        print(f"Error: {e}")
+        print(f"Error: {e}", file=sys.stderr)
         sys.exit(1)

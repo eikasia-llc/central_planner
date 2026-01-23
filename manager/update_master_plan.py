@@ -161,10 +161,10 @@ def update_all(repolist_path, master_plan_path):
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Audit and Merge remote repository markdown files into Master Plan.")
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--repo", help="GitHub Repository URL")
+    group.add_argument("--repo", help="GitHub Repository URL to process")
     group.add_argument("--all", action="store_true", help="Update all repositories listed in manager/repolist.txt")
     
-    parser.add_argument("--master-plan", default="MASTER_PLAN.md", help="Path to Master Plan file")
+    parser.add_argument("--master-plan", default="MASTER_PLAN.md", help="Path to Master Plan file (default: MASTER_PLAN.md)")
     
     args = parser.parse_args()
     

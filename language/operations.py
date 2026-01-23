@@ -98,8 +98,8 @@ def extend_tree(target_file, source_file, output_file=None):
     print(f"Successfully extended {target_file} with {source_file}. Saved to {dest}.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Operations on Markdown-YAML trees.")
-    subparsers = parser.add_subparsers(dest="command", help="Command to execute")
+    parser = argparse.ArgumentParser(description="Operations on Markdown-METADATA trees.")
+    subparsers = parser.add_subparsers(dest="command", help="Command to execute", required=True)
 
     # Merge command
     merge_parser = subparsers.add_parser("merge", help="Insert source tree into target node")
@@ -115,6 +115,10 @@ if __name__ == "__main__":
     extend_parser.add_argument("--output", "-o", help="Output file (default: overwrite target)")
 
     args = parser.parse_args()
+
+    # Note: operations.py logic is 2-input (target, source) -> 1 output.
+    # It does not fit the simple "transform list of files" pattern.
+    # We keep it as is with explicit args.
 
     if args.command == "merge":
         merge_trees(args.target_file, args.source_file, args.target_node, args.output)

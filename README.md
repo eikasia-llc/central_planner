@@ -2,11 +2,11 @@
 - status: active
 
 ## Project Overview
-This repository serves as a **meta-project** to organize and coordinate multiple different repositories and workflows using AI agents. It implements a **Markdown-YAML Hybrid Schema** to define detailed implementation plans that are readable by both humans and AI agents.
+This repository serves as a **meta-project** to organize and coordinate multiple different repositories and workflows using AI agents. It implements a **Markdown-METADATA Hybrid Schema** to define detailed implementation plans that are readable by both humans and AI agents.
 
-## The Markdown-YAML Protocol
+## The Markdown-METADATA Protocol
 
-The project uses a strict **Markdown-YAML Hybrid Schema** to treat documentation as a computable graph.
+The project uses a strict **Markdown-METADATA Hybrid Schema** to treat documentation as a computable graph.
 
 ### Structure & Hierarchy
 - **Hierarchy**: Defined by standard Markdown headers (`#`, `##`, `###`). The nesting level indicates parent-child relationships, allowing for infinite depth.
@@ -16,7 +16,7 @@ The project uses a strict **Markdown-YAML Hybrid Schema** to treat documentation
 - **Identification**: 
     - **Title**: Default identification method.
     - **Global ID**: An optional `id` metadata field (e.g., `id: component.backend`). This is the **preferred** method for robust cross-file operations (merging/linking), as it persists even if the human-readable title changes.
-- **Metadata**: Every node (header) must be immediately followed by a YAML block defining its attributes.
+- **Metadata**: Every node (header) must be immediately followed by a METADATA block defining its attributes.
 
 **Example Node:**
 ```markdown
@@ -61,7 +61,7 @@ central_planner/
 │   ├── update_master_plan.py     # Integrates external plans
 │   └── repolist.txt              # List of target repositories
 ├── language/                     # Tooling for the Communication System
-│   ├── md_parser.py              # Parses & Validates MD/YAML files
+│   ├── md_parser.py              # Parses & Validates MD/METADATA files
 │   ├── visualization.py          # Visualizes task trees
 │   ├── visualize_dag.py          # Visualizes task DAGs (Text/Mermaid)
 │   ├── operations.py             # Merges and Extends task trees

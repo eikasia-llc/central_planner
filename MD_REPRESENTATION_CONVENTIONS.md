@@ -1,12 +1,12 @@
-# Markdown-YAML Hybrid Schema Conventions
+# Markdown-METADATA Hybrid Schema Conventions
 - status: active
 
-This document defines the strict conventions for the Markdown-YAML Hybrid Schema used in this project for hierarchical task coordination and agentic planning.
+This document defines the strict conventions for the Markdown-METADATA Hybrid Schema used in this project for hierarchical task coordination and agentic planning.
 
 ## Core Principle
 - status: active
 
-The system uses a **Markdown headers** to define the structural hierarchy (the nodes) and **YAML Frontmatter-style blocks** (immediately following the header) to define structured metadata.
+The system uses a **Markdown headers** to define the structural hierarchy (the nodes) and **METADATA Frontmatter-style blocks** (immediately following the header) to define structured metadata.
 
 ## Schema Rules
 - status: active
@@ -28,7 +28,7 @@ The system uses a **Markdown headers** to define the structural hierarchy (the n
 ### 2. Metadata Blocks
 - status: active
 - **Location**: Metadata MUST be placed **immediately** after the header, before any free-form text.
-- **Format**: A YAML block. It works best as a bulleted list of key-value pairs, which most parsers can interpret as YAML (or we can use strict YAML blocks if preferred, but the spec suggests "YAML Key-Value Pairs (immediately following header)"). 
+- **Format**: A METADATA block. It works best as a bulleted list of key-value pairs, which most parsers can interpret as METADATA (or we can use strict METADATA blocks if preferred, but the spec suggests "METADATA Key-Value Pairs (immediately following header)"). 
 - **Preferred Format**: A strict list of key-value pairs.
 
 **Example:**
@@ -56,6 +56,11 @@ The following fields are standard, but the schema allows extensibility.
 | `blocked_by`| `list` | List of explicit dependencies (IDs or relative paths) |
 | `priority` | `enum` | `low`, `medium`, `high`, `critical` (Optional) |
 | `id` | `string` | Unique identifier for the node (e.g., `project.component.task`). Used for robust merging and dependency tracking. |
+
+For extended fields consider:
+ - The key is entirely lowercase
+ - The key has no spaces (words are separated with dash or underscore)
+ - The value is single line
 
 ### 4. Context & Description
 - status: active
@@ -88,7 +93,7 @@ Some text here first.
 ```
 *Error: Metadata block must immediately follow the header.*
 
-### Invalid Node (Bad indentation/YAML)
+### Invalid Node (Bad indentation/METADATA)
 - status: active
 ```markdown
 ### Database Schema
@@ -102,7 +107,7 @@ owner: dev-2
 
 1. **Scan for Headers**.
 2. **Look ahead** at the lines immediately following the header.
-3. **Parse lines** that match the YAML key-value pattern (`- key: value` or `key: value`) until a blank line or non-matching line is found.
+3. **Parse lines** that match the METADATA key-value pattern (`- key: value` or `key: value`) until a blank line or non-matching line is found.
 6. **Everything else** until the next header of equal or higher level is "Content".
 
 ## Tooling Reference

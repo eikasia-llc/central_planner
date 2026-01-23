@@ -1,6 +1,8 @@
 # Agents Log
 - status: active
 
+Most recent event comes first
+
 ## Intervention History
 - status: active
 
