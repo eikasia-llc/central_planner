@@ -1,10 +1,13 @@
 # Agents Log
+- status: active
 
 Most recent event comes first
 
 ## Intervention History
+- status: active
 
 ### Feature: Remove Metadata Tool
+- status: active
 **Date:** 2026-01-22
 **AI Assistant:** Antigravity
 **Summary:** Created `remove_meta.py` to reverse `migrate.py` effects and clean incomplete content.
@@ -16,6 +19,7 @@ Most recent event comes first
 - **Files Modified:** `language/remove_meta.py` [NEW], `bin/language/remove_meta` [NEW].
 
 ### Feature: CLI Improvements
+- status: active
 **Date:** 2026-01-22
 **AI Assistant:** Antigravity
 **Summary:** Improved Python CLIs in `manager` and `language` to be POSIX-friendly and support flexible I/O modes.
@@ -28,6 +32,7 @@ Most recent event comes first
 - **Files Modified:** `language/*.py`, `manager/*.py`.
 
 ### Feature: Shell Wrapper for Python Scripts
+- status: active
 **Date:** 2026-01-22
 **AI Assistant:** Antigravity
 **Summary:** Created a generic shell wrapper `sh2py3.sh` and symlinks for python scripts.
