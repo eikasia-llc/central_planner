@@ -4,31 +4,30 @@
 <head>
   <meta charset="UTF-8">
   <title>Master Plan Visualization</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="d3.min.js" onerror="handleScriptError()"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; overflow: hidden; background: #f8f9fa; }
     #container { width: 100vw; height: 100vh; display: flex; }
     #viz { flex-grow: 1; height: 100%; position: relative; }
     #sidebar { width: 400px; height: 100vh; background: white; border-left: 1px solid #ddd; padding: 20px; box-sizing: border-box; overflow-y: auto; display: none; box-shadow: -2px 0 5px rgba(0,0,0,0.05); z-index: 10; transform: translateX(0); transition: transform 0.3s ease; }
-    #sidebar.hidden { transform: translateX(100%); display: block; }
     
     .node circle { fill: #fff; stroke: steelblue; stroke-width: 2px; cursor: pointer; transition: all 0.3s; }
     .node circle:hover { stroke-width: 4px; }
-    .node text { font: 12px sans-serif; cursor: pointer; }
+    .node text { font: 12px sans-serif; cursor: pointer; text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff; }
     
     .link { fill: none; stroke: #ccc; stroke-width: 1.5px; transition: all 0.5s; stroke-opacity: 0.6; }
 
     /* Metadata Colors */
-    .status-done { stroke: #2ecc71 !important; fill: #e8f8f5 !important; }
-    .status-active { stroke: #3498db !important; fill: #ebf5fb !important; }
-    .status-todo { stroke: #bdc3c7 !important; fill: #fbfcfc !important; }
-    .status-blocked { stroke: #e74c3c !important; fill: #fdedec !important; }
+    .status-done { stroke: #2ecc71 !important; fill: #e8f8f5; }
+    .status-active, .status-in-progress { stroke: #3498db !important; fill: #ebf5fb; }
+    .status-todo { stroke: #bdc3c7 !important; fill: #fbfcfc; }
+    .status-blocked { stroke: #e74c3c !important; fill: #fdedec; }
     
     h2 { margin-top: 0; font-size: 1.5em; color: #2c3e50; }
     .meta-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-right: 5px; margin-bottom: 5px; color: white; font-weight: 500;}
     
     .tag-todo { background: #95a5a6; }
-    .tag-active { background: #3498db; }
+    .tag-active, .tag-in-progress { background: #3498db; }
     .tag-done { background: #2ecc71; }
     .tag-blocked { background: #e74c3c; }
     .tag-default { background: #7f8c8d; }
@@ -37,18 +36,19 @@
     .content-block { line-height: 1.6; color: #34495e; font-size: 0.95em; }
 
     .control-panel { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    button { background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    button { background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; margin-right: 5px; }
     button:hover { background: #2980b9; }
 
-    /* Markdown styling specifics */
-    .content-block h1, .content-block h2, .content-block h3 { margin-top: 1.2em; color: #2c3e50; }
-    .content-block code { background: #eee; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+    #debug-log { position: absolute; bottom: 10px; left: 10px; font-family: monospace; font-size: 10px; color: #aaa; pointer-events: none; z-index: 100; max-height: 200px; overflow: hidden; }
+    #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5em; color: #666; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
 
 <div id="container">
   <div id="viz">
+    <div id="loading">Initializing...</div>
+    <div id="debug-log"></div>
     <svg width="100%" height="100%"></svg>
     <div class="control-panel">
         <button onclick="expandAll()">Expand All</button>
@@ -64,57 +64,123 @@
 </div>
 
 <script>
-const data = {"title": "Central Company Master Plan", "metadata": {"status": "active", "type": "plan", "id": "master_plan", "owner": "central-planner", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "This document serves as the central aggregation point for the company's strategic initiatives. It currently focuses on the flagship **Intelligent Control & Analysis Platform**.", "children": [{"title": "Intelligent Control & Analysis Platform (SaaS)", "metadata": {"status": "active", "type": "plan", "id": "product.saas", "owner": "product-manager", "priority": "critical", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "A dual-engine AI system functioning as both a **Business Analyst** and an **Autonomous Operator** for SMBs and industrial clients. It combines LLM reasoning (Analysis) with RL control (Optimization).", "children": [{"title": "Executive Summary", "metadata": {"status": "done", "type": "context", "id": "product.saas.summary", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "**The Vision**: Transform data into decision. The platform allows clients to \"chat with data\" and optimize operations using a conversational interface backed by rigorous execution engines.\n-   **Analyst**: \"Why is this happening?\" -> Code Interpreter analysis.\n-   **Controller**: \"Optimize for efficiency.\" -> RL Agent execution.", "children": []}, {"title": "Value Propositions", "metadata": {"status": "active", "type": "context", "id": "product.saas.value_prop", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "1.  **Retail/SMBs (The Agentic Analyst)**: Democratized Data Science. Instant answers to colloquial questions without a data team.\n2.  **Logistics (Inventory Auto-Pilot)**: Cash flow optimization. Automated reordering using RL agents to solve the Newsvendor problem (minimize holding costs vs. prevent stockouts).", "children": []}, {"title": "Technical Architecture", "metadata": {"status": "active", "type": "plan", "id": "product.saas.arch", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "The system separates Analytical Queries (Code Execution) from Control Tasks (Model Inference).", "children": [{"title": "Core Components", "metadata": {"status": "active", "type": "context", "id": "product.saas.arch.components", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "-   **Orchestrator (The Brain)**: Vertex AI (Gemini Pro). Routes requests to Analysis or Control.\n-   **Analysis Sandbox**: Ephemeral Docker Containers (E2B / Vertex Extensions) for safe code execution. Internal access only.\n-   **Control Factory**: Vertex AI Custom Training + Ray/Stable Baselines3 for training RL policies.", "children": []}, {"title": "Information Flow (Control Loop)", "metadata": {"status": "active", "type": "context", "id": "product.saas.arch.flow", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "1.  **Input**: Client streams telemetry ($s_t$) to `/v1/telemetry`.\n2.  **Inference**: Policy network $\\pi(s_t)$ or World Model $\\hat{f}(s, a)$ selects action.\n3.  **Action**: API returns action $a_t$.\n4.  **Feedback**: Client sends reward/new state during offline retraining.", "children": []}]}, {"title": "Implementation Roadmap", "metadata": {"status": "active", "type": "plan", "id": "product.saas.roadmap", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "", "children": [{"title": "Phase 1: Unified Data API", "metadata": {"status": "todo", "type": "task", "id": "product.saas.roadmap.phase1", "estimate": "2w", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "**Goal**: Single API surface for uploading both Event data (Recs) and Telemetry (Control).\n**Deliverables**:\n-   Robust Ingestion Layer.\n-   Schema validation via Pydantic.\n-   Endpoints: `/v1/events` (to BigQuery) and `/v1/telemetry` (to BigQuery/BigTable).", "children": []}, {"title": "Phase 2: The Agentic Analyst (Generative UI)", "metadata": {"status": "todo", "type": "task", "id": "product.saas.roadmap.phase2", "blocked_by": ["product.saas.roadmap.phase1"], "estimate": "4w", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "**Goal**: Enable \"Chat with Data\" with interactive components (React).\n**Actions**:\n-   **Frontend**: Build Component Registry (Charts, Tables, Sliders).\n-   **Backend**: Implement tool_call logic in Vertex AI to map requests to UI JSON payloads.\n-   **Prompting**: Train model to prefer returning UI components over dense text.", "children": []}, {"title": "Phase 3: The Control Loop (MVP)", "metadata": {"status": "todo", "type": "task", "id": "product.saas.roadmap.phase3", "blocked_by": ["product.saas.roadmap.phase2"], "estimate": "6w", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "**Goal**: End-to-end RL pipeline.\n**Actions**:\n-   Implement standard algorithm (e.g., PPO) on Vertex Custom Jobs.\n-   Train on a simple inventory management problem (Environment).", "children": []}]}, {"title": "Security & Safety Checks", "metadata": {"status": "active", "type": "guideline", "id": "product.saas.security", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "-   **Indirect Execution**: Clients only submit natural language, never code.\n-   **Repository Scoping**: Generated code can only import whitelisted libraries (`pandas`, `numpy`, `lib_analysis`). No `os` or `sys`.\n-   **Simulation Isolation**: User-provided logic runs in `gVisor` sandboxes.\n-   **Action Bounding**: Deterministic logic layer validates actions against safety constraints (e.g., `MAX_ORDER_LIMIT`) before execution.", "children": []}, {"title": "Research Directions", "metadata": {"status": "active", "type": "plan", "id": "product.saas.research", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "-   **MBRL (DreamerV3)**: Learning World Models from telemetry to simulate environments.\n-   **Safe RL**: Constrained MDPs (Lagrangian Relaxation) to ensure safety during exploration.\n-   **Reflexion**: Agents that analyze their own tracebacks to iteratively fix code.", "children": []}]}, {"title": "Repository Maintenance", "metadata": {"status": "active", "type": "recurring", "id": "meta.maintenance", "last_checked": "2026-01-23T13:47:07+01:00"}, "content": "To sync this plan with other repositories, run:\n`python3 manager/update_master_plan.py --all`", "children": []}]};
-
-const width = window.innerWidth;
-const height = window.innerHeight;
-
-const svg = d3.select("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-const g = svg.append("g");
-
-const zoom = d3.zoom()
-    .scaleExtent([0.1, 4])
-    .on("zoom", (event) => g.attr("transform", event.transform));
-
-svg.call(zoom);
-
+// Global Variables - Must be declared before use
+let root, svg, g, zoom, tree;
 let i = 0;
 let duration = 500;
-let root;
 
-// Tree Layout
-const tree = d3.tree().nodeSize([30, 250]); // Height, Width between levels
+function log(msg) {
+    console.log(msg);
+    const logDiv = document.getElementById('debug-log');
+    if (logDiv) logDiv.innerHTML += msg + "<br>";
+}
 
-root = d3.hierarchy(data, d => d.children);
-root.x0 = height / 2;
-root.y0 = 0;
+function handleScriptError() {
+    log("ERROR: Failed to load D3.js. Check if d3.min.js exists in the same folder.");
+    document.getElementById('loading').innerHTML = "Error: D3.js missing.<br><small>Ensure d3.min.js is in the folder.</small>";
+}
 
-// Collapse after level 2 by default
-root.children.forEach(collapse);
+// Base64 Decode
+function decodeData(enc) {
+    try {
+        log("Decoding data...");
+        const jsonStr = new TextDecoder().decode(Uint8Array.from(atob(enc), c => c.charCodeAt(0)));
+        log("Data decoded. Length: " + jsonStr.length);
+        return JSON.parse(jsonStr);
+    } catch(e) {
+        log("Decoding error: " + e.message);
+        document.getElementById('loading').innerText = "Error decoding data";
+        return null;
+    }
+}
 
-update(root);
+// Data Injection
+try {
+    const rawData = "eyJ0aXRsZSI6ICJDZW50cmFsIENvbXBhbnkgTWFzdGVyIFBsYW4iLCAibWV0YWRhdGEiOiB7InN0YXR1cyI6ICJhY3RpdmUiLCAidHlwZSI6ICJwbGFuIiwgImlkIjogIm1hc3Rlcl9wbGFuIiwgIm93bmVyIjogImNlbnRyYWwtcGxhbm5lciIsICJsYXN0X2NoZWNrZWQiOiAiMjAyNi0wMS0yM1QxMzo0NzowNyswMTowMCJ9LCAiY29udGVudCI6ICJUaGlzIGRvY3VtZW50IHNlcnZlcyBhcyB0aGUgY2VudHJhbCBhZ2dyZWdhdGlvbiBwb2ludCBmb3IgdGhlIGNvbXBhbnkncyBzdHJhdGVnaWMgaW5pdGlhdGl2ZXMuIEl0IGN1cnJlbnRseSBmb2N1c2VzIG9uIHRoZSBmbGFnc2hpcCAqKkludGVsbGlnZW50IENvbnRyb2wgJiBBbmFseXNpcyBQbGF0Zm9ybSoqLiIsICJjaGlsZHJlbiI6IFt7InRpdGxlIjogIkludGVsbGlnZW50IENvbnRyb2wgJiBBbmFseXNpcyBQbGF0Zm9ybSAoU2FhUykiLCAibWV0YWRhdGEiOiB7InN0YXR1cyI6ICJhY3RpdmUiLCAidHlwZSI6ICJwbGFuIiwgImlkIjogInByb2R1Y3Quc2FhcyIsICJvd25lciI6ICJwcm9kdWN0LW1hbmFnZXIiLCAicHJpb3JpdHkiOiAiY3JpdGljYWwiLCAibGFzdF9jaGVja2VkIjogIjIwMjYtMDEtMjNUMTM6NDc6MDcrMDE6MDAifSwgImNvbnRlbnQiOiAiQSBkdWFsLWVuZ2luZSBBSSBzeXN0ZW0gZnVuY3Rpb25pbmcgYXMgYm90aCBhICoqQnVzaW5lc3MgQW5hbHlzdCoqIGFuZCBhbiAqKkF1dG9ub21vdXMgT3BlcmF0b3IqKiBmb3IgU01CcyBhbmQgaW5kdXN0cmlhbCBjbGllbnRzLiBJdCBjb21iaW5lcyBMTE0gcmVhc29uaW5nIChBbmFseXNpcykgd2l0aCBSTCBjb250cm9sIChPcHRpbWl6YXRpb24pLiIsICJjaGlsZHJlbiI6IFt7InRpdGxlIjogIkV4ZWN1dGl2ZSBTdW1tYXJ5IiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiZG9uZSIsICJ0eXBlIjogImNvbnRleHQiLCAiaWQiOiAicHJvZHVjdC5zYWFzLnN1bW1hcnkiLCAibGFzdF9jaGVja2VkIjogIjIwMjYtMDEtMjNUMTM6NDc6MDcrMDE6MDAifSwgImNvbnRlbnQiOiAiKipUaGUgVmlzaW9uKio6IFRyYW5zZm9ybSBkYXRhIGludG8gZGVjaXNpb24uIFRoZSBwbGF0Zm9ybSBhbGxvd3MgY2xpZW50cyB0byBcImNoYXQgd2l0aCBkYXRhXCIgYW5kIG9wdGltaXplIG9wZXJhdGlvbnMgdXNpbmcgYSBjb252ZXJzYXRpb25hbCBpbnRlcmZhY2UgYmFja2VkIGJ5IHJpZ29yb3VzIGV4ZWN1dGlvbiBlbmdpbmVzLlxuLSAgICoqQW5hbHlzdCoqOiBcIldoeSBpcyB0aGlzIGhhcHBlbmluZz9cIiAtPiBDb2RlIEludGVycHJldGVyIGFuYWx5c2lzLlxuLSAgICoqQ29udHJvbGxlcioqOiBcIk9wdGltaXplIGZvciBlZmZpY2llbmN5LlwiIC0+IFJMIEFnZW50IGV4ZWN1dGlvbi4iLCAiY2hpbGRyZW4iOiBbXX0sIHsidGl0bGUiOiAiVmFsdWUgUHJvcG9zaXRpb25zIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiYWN0aXZlIiwgInR5cGUiOiAiY29udGV4dCIsICJpZCI6ICJwcm9kdWN0LnNhYXMudmFsdWVfcHJvcCIsICJsYXN0X2NoZWNrZWQiOiAiMjAyNi0wMS0yM1QxMzo0NzowNyswMTowMCJ9LCAiY29udGVudCI6ICIxLiAgKipSZXRhaWwvU01CcyAoVGhlIEFnZW50aWMgQW5hbHlzdCkqKjogRGVtb2NyYXRpemVkIERhdGEgU2NpZW5jZS4gSW5zdGFudCBhbnN3ZXJzIHRvIGNvbGxvcXVpYWwgcXVlc3Rpb25zIHdpdGhvdXQgYSBkYXRhIHRlYW0uXG4yLiAgKipMb2dpc3RpY3MgKEludmVudG9yeSBBdXRvLVBpbG90KSoqOiBDYXNoIGZsb3cgb3B0aW1pemF0aW9uLiBBdXRvbWF0ZWQgcmVvcmRlcmluZyB1c2luZyBSTCBhZ2VudHMgdG8gc29sdmUgdGhlIE5ld3N2ZW5kb3IgcHJvYmxlbSAobWluaW1pemUgaG9sZGluZyBjb3N0cyB2cy4gcHJldmVudCBzdG9ja291dHMpLiIsICJjaGlsZHJlbiI6IFtdfSwgeyJ0aXRsZSI6ICJUZWNobmljYWwgQXJjaGl0ZWN0dXJlIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiYWN0aXZlIiwgInR5cGUiOiAicGxhbiIsICJpZCI6ICJwcm9kdWN0LnNhYXMuYXJjaCIsICJsYXN0X2NoZWNrZWQiOiAiMjAyNi0wMS0yM1QxMzo0NzowNyswMTowMCJ9LCAiY29udGVudCI6ICJUaGUgc3lzdGVtIHNlcGFyYXRlcyBBbmFseXRpY2FsIFF1ZXJpZXMgKENvZGUgRXhlY3V0aW9uKSBmcm9tIENvbnRyb2wgVGFza3MgKE1vZGVsIEluZmVyZW5jZSkuIiwgImNoaWxkcmVuIjogW3sidGl0bGUiOiAiQ29yZSBDb21wb25lbnRzIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiYWN0aXZlIiwgInR5cGUiOiAiY29udGV4dCIsICJpZCI6ICJwcm9kdWN0LnNhYXMuYXJjaC5jb21wb25lbnRzIiwgImxhc3RfY2hlY2tlZCI6ICIyMDI2LTAxLTIzVDEzOjQ3OjA3KzAxOjAwIn0sICJjb250ZW50IjogIi0gICAqKk9yY2hlc3RyYXRvciAoVGhlIEJyYWluKSoqOiBWZXJ0ZXggQUkgKEdlbWluaSBQcm8pLiBSb3V0ZXMgcmVxdWVzdHMgdG8gQW5hbHlzaXMgb3IgQ29udHJvbC5cbi0gICAqKkFuYWx5c2lzIFNhbmRib3gqKjogRXBoZW1lcmFsIERvY2tlciBDb250YWluZXJzIChFMkIgLyBWZXJ0ZXggRXh0ZW5zaW9ucykgZm9yIHNhZmUgY29kZSBleGVjdXRpb24uIEludGVybmFsIGFjY2VzcyBvbmx5LlxuLSAgICoqQ29udHJvbCBGYWN0b3J5Kio6IFZlcnRleCBBSSBDdXN0b20gVHJhaW5pbmcgKyBSYXkvU3RhYmxlIEJhc2VsaW5lczMgZm9yIHRyYWluaW5nIFJMIHBvbGljaWVzLiIsICJjaGlsZHJlbiI6IFtdfSwgeyJ0aXRsZSI6ICJJbmZvcm1hdGlvbiBGbG93IChDb250cm9sIExvb3ApIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiYWN0aXZlIiwgInR5cGUiOiAiY29udGV4dCIsICJpZCI6ICJwcm9kdWN0LnNhYXMuYXJjaC5mbG93IiwgImxhc3RfY2hlY2tlZCI6ICIyMDI2LTAxLTIzVDEzOjQ3OjA3KzAxOjAwIn0sICJjb250ZW50IjogIjEuICAqKklucHV0Kio6IENsaWVudCBzdHJlYW1zIHRlbGVtZXRyeSAoJHNfdCQpIHRvIGAvdjEvdGVsZW1ldHJ5YC5cbjIuICAqKkluZmVyZW5jZSoqOiBQb2xpY3kgbmV0d29yayAkXFxwaShzX3QpJCBvciBXb3JsZCBNb2RlbCAkXFxoYXR7Zn0ocywgYSkkIHNlbGVjdHMgYWN0aW9uLlxuMy4gICoqQWN0aW9uKio6IEFQSSByZXR1cm5zIGFjdGlvbiAkYV90JC5cbjQuICAqKkZlZWRiYWNrKio6IENsaWVudCBzZW5kcyByZXdhcmQvbmV3IHN0YXRlIGR1cmluZyBvZmZsaW5lIHJldHJhaW5pbmcuIiwgImNoaWxkcmVuIjogW119XX0sIHsidGl0bGUiOiAiSW1wbGVtZW50YXRpb24gUm9hZG1hcCIsICJtZXRhZGF0YSI6IHsic3RhdHVzIjogImFjdGl2ZSIsICJ0eXBlIjogInBsYW4iLCAiaWQiOiAicHJvZHVjdC5zYWFzLnJvYWRtYXAiLCAibGFzdF9jaGVja2VkIjogIjIwMjYtMDEtMjNUMTM6NDc6MDcrMDE6MDAifSwgImNvbnRlbnQiOiAiIiwgImNoaWxkcmVuIjogW3sidGl0bGUiOiAiUGhhc2UgMTogVW5pZmllZCBEYXRhIEFQSSIsICJtZXRhZGF0YSI6IHsic3RhdHVzIjogInRvZG8iLCAidHlwZSI6ICJ0YXNrIiwgImlkIjogInByb2R1Y3Quc2Fhcy5yb2FkbWFwLnBoYXNlMSIsICJlc3RpbWF0ZSI6ICIydyIsICJsYXN0X2NoZWNrZWQiOiAiMjAyNi0wMS0yM1QxMzo0NzowNyswMTowMCJ9LCAiY29udGVudCI6ICIqKkdvYWwqKjogU2luZ2xlIEFQSSBzdXJmYWNlIGZvciB1cGxvYWRpbmcgYm90aCBFdmVudCBkYXRhIChSZWNzKSBhbmQgVGVsZW1ldHJ5IChDb250cm9sKS5cbioqRGVsaXZlcmFibGVzKio6XG4tICAgUm9idXN0IEluZ2VzdGlvbiBMYXllci5cbi0gICBTY2hlbWEgdmFsaWRhdGlvbiB2aWEgUHlkYW50aWMuXG4tICAgRW5kcG9pbnRzOiBgL3YxL2V2ZW50c2AgKHRvIEJpZ1F1ZXJ5KSBhbmQgYC92MS90ZWxlbWV0cnlgICh0byBCaWdRdWVyeS9CaWdUYWJsZSkuIiwgImNoaWxkcmVuIjogW119LCB7InRpdGxlIjogIlBoYXNlIDI6IFRoZSBBZ2VudGljIEFuYWx5c3QgKEdlbmVyYXRpdmUgVUkpIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAidG9kbyIsICJ0eXBlIjogInRhc2siLCAiaWQiOiAicHJvZHVjdC5zYWFzLnJvYWRtYXAucGhhc2UyIiwgImJsb2NrZWRfYnkiOiBbInByb2R1Y3Quc2Fhcy5yb2FkbWFwLnBoYXNlMSJdLCAiZXN0aW1hdGUiOiAiNHciLCAibGFzdF9jaGVja2VkIjogIjIwMjYtMDEtMjNUMTM6NDc6MDcrMDE6MDAifSwgImNvbnRlbnQiOiAiKipHb2FsKio6IEVuYWJsZSBcIkNoYXQgd2l0aCBEYXRhXCIgd2l0aCBpbnRlcmFjdGl2ZSBjb21wb25lbnRzIChSZWFjdCkuXG4qKkFjdGlvbnMqKjpcbi0gICAqKkZyb250ZW5kKio6IEJ1aWxkIENvbXBvbmVudCBSZWdpc3RyeSAoQ2hhcnRzLCBUYWJsZXMsIFNsaWRlcnMpLlxuLSAgICoqQmFja2VuZCoqOiBJbXBsZW1lbnQgdG9vbF9jYWxsIGxvZ2ljIGluIFZlcnRleCBBSSB0byBtYXAgcmVxdWVzdHMgdG8gVUkgSlNPTiBwYXlsb2Fkcy5cbi0gICAqKlByb21wdGluZyoqOiBUcmFpbiBtb2RlbCB0byBwcmVmZXIgcmV0dXJuaW5nIFVJIGNvbXBvbmVudHMgb3ZlciBkZW5zZSB0ZXh0LiIsICJjaGlsZHJlbiI6IFtdfSwgeyJ0aXRsZSI6ICJQaGFzZSAzOiBUaGUgQ29udHJvbCBMb29wIChNVlApIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAidG9kbyIsICJ0eXBlIjogInRhc2siLCAiaWQiOiAicHJvZHVjdC5zYWFzLnJvYWRtYXAucGhhc2UzIiwgImJsb2NrZWRfYnkiOiBbInByb2R1Y3Quc2Fhcy5yb2FkbWFwLnBoYXNlMiJdLCAiZXN0aW1hdGUiOiAiNnciLCAibGFzdF9jaGVja2VkIjogIjIwMjYtMDEtMjNUMTM6NDc6MDcrMDE6MDAifSwgImNvbnRlbnQiOiAiKipHb2FsKio6IEVuZC10by1lbmQgUkwgcGlwZWxpbmUuXG4qKkFjdGlvbnMqKjpcbi0gICBJbXBsZW1lbnQgc3RhbmRhcmQgYWxnb3JpdGhtIChlLmcuLCBQUE8pIG9uIFZlcnRleCBDdXN0b20gSm9icy5cbi0gICBUcmFpbiBvbiBhIHNpbXBsZSBpbnZlbnRvcnkgbWFuYWdlbWVudCBwcm9ibGVtIChFbnZpcm9ubWVudCkuIiwgImNoaWxkcmVuIjogW119XX0sIHsidGl0bGUiOiAiU2VjdXJpdHkgJiBTYWZldHkgQ2hlY2tzIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiYWN0aXZlIiwgInR5cGUiOiAiZ3VpZGVsaW5lIiwgImlkIjogInByb2R1Y3Quc2Fhcy5zZWN1cml0eSIsICJsYXN0X2NoZWNrZWQiOiAiMjAyNi0wMS0yM1QxMzo0NzowNyswMTowMCJ9LCAiY29udGVudCI6ICItICAgKipJbmRpcmVjdCBFeGVjdXRpb24qKjogQ2xpZW50cyBvbmx5IHN1Ym1pdCBuYXR1cmFsIGxhbmd1YWdlLCBuZXZlciBjb2RlLlxuLSAgICoqUmVwb3NpdG9yeSBTY29waW5nKio6IEdlbmVyYXRlZCBjb2RlIGNhbiBvbmx5IGltcG9ydCB3aGl0ZWxpc3RlZCBsaWJyYXJpZXMgKGBwYW5kYXNgLCBgbnVtcHlgLCBgbGliX2FuYWx5c2lzYCkuIE5vIGBvc2Agb3IgYHN5c2AuXG4tICAgKipTaW11bGF0aW9uIElzb2xhdGlvbioqOiBVc2VyLXByb3ZpZGVkIGxvZ2ljIHJ1bnMgaW4gYGdWaXNvcmAgc2FuZGJveGVzLlxuLSAgICoqQWN0aW9uIEJvdW5kaW5nKio6IERldGVybWluaXN0aWMgbG9naWMgbGF5ZXIgdmFsaWRhdGVzIGFjdGlvbnMgYWdhaW5zdCBzYWZldHkgY29uc3RyYWludHMgKGUuZy4sIGBNQVhfT1JERVJfTElNSVRgKSBiZWZvcmUgZXhlY3V0aW9uLiIsICJjaGlsZHJlbiI6IFtdfSwgeyJ0aXRsZSI6ICJSZXNlYXJjaCBEaXJlY3Rpb25zIiwgIm1ldGFkYXRhIjogeyJzdGF0dXMiOiAiYWN0aXZlIiwgInR5cGUiOiAicGxhbiIsICJpZCI6ICJwcm9kdWN0LnNhYXMucmVzZWFyY2giLCAibGFzdF9jaGVja2VkIjogIjIwMjYtMDEtMjNUMTM6NDc6MDcrMDE6MDAifSwgImNvbnRlbnQiOiAiLSAgICoqTUJSTCAoRHJlYW1lclYzKSoqOiBMZWFybmluZyBXb3JsZCBNb2RlbHMgZnJvbSB0ZWxlbWV0cnkgdG8gc2ltdWxhdGUgZW52aXJvbm1lbnRzLlxuLSAgICoqU2FmZSBSTCoqOiBDb25zdHJhaW5lZCBNRFBzIChMYWdyYW5naWFuIFJlbGF4YXRpb24pIHRvIGVuc3VyZSBzYWZldHkgZHVyaW5nIGV4cGxvcmF0aW9uLlxuLSAgICoqUmVmbGV4aW9uKio6IEFnZW50cyB0aGF0IGFuYWx5emUgdGhlaXIgb3duIHRyYWNlYmFja3MgdG8gaXRlcmF0aXZlbHkgZml4IGNvZGUuIiwgImNoaWxkcmVuIjogW119XX0sIHsidGl0bGUiOiAiUmVwb3NpdG9yeSBNYWludGVuYW5jZSIsICJtZXRhZGF0YSI6IHsic3RhdHVzIjogImFjdGl2ZSIsICJ0eXBlIjogInJlY3VycmluZyIsICJpZCI6ICJtZXRhLm1haW50ZW5hbmNlIiwgImxhc3RfY2hlY2tlZCI6ICIyMDI2LTAxLTIzVDEzOjQ3OjA3KzAxOjAwIn0sICJjb250ZW50IjogIlRvIHN5bmMgdGhpcyBwbGFuIHdpdGggb3RoZXIgcmVwb3NpdG9yaWVzLCBydW46XG5gcHl0aG9uMyBtYW5hZ2VyL3VwZGF0ZV9tYXN0ZXJfcGxhbi5weSAtLWFsbGAiLCAiY2hpbGRyZW4iOiBbXX1dfQ==";
+    if (rawData.startsWith("__DATA")) {
+        log("Error: Placeholder not replaced.");
+    } else {
+        const data = decodeData(rawData);
+        if (data && typeof d3 !== 'undefined') {
+            log("D3 loaded. Version: " + d3.version);
+            document.getElementById('loading').style.display = 'none';
+            initViz(data);
+        } else {
+            if (typeof d3 === 'undefined') {
+                handleScriptError();
+            } else {
+                log("Error: Data is null.");
+            }
+        }
+    }
+} catch (globalErr) {
+    log("Global Error: " + globalErr.message);
+}
 
-function collapse(d) {
+function initViz(data) {
+    log("Initializing Visualization...");
+    try {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        svg = d3.select("svg");
+        
+        // Clear previous if any
+        svg.selectAll("*").remove();
+        
+        g = svg.append("g");
+
+        zoom = d3.zoom()
+            .scaleExtent([0.1, 4])
+            .on("zoom", (event) => g.attr("transform", event.transform));
+
+        svg.call(zoom);
+
+        // Define tree layout params
+        // nodeSize depends on orientation. 
+        // For standard top-down: [width, height]
+        // For left-right (projecting y as x): [height, width]
+        tree = d3.tree().nodeSize([40, 300]); 
+
+        root = d3.hierarchy(data, d => d.children);
+        root.x0 = 0;
+        root.y0 = 0;
+
+        // Check if root has children
+        if (!root.children) {
+            log("Warning: Root has no children.");
+        } else {
+            log("Root children count: " + root.children.length);
+        }
+
+        // Collapse
+        if(root.children) {
+            root.children.forEach(collapseRecursive);
+        }
+
+        update(root);
+        
+        // Initial center
+        const initialTransform = d3.zoomIdentity.translate(100, height / 2).scale(1);
+        svg.call(zoom.transform, initialTransform);
+        
+        log("Viz Initialized.");
+
+    } catch (vizErr) {
+        log("Viz Error: " + vizErr.message);
+        log(vizErr.stack);
+    }
+}
+
+function collapseRecursive(d) {
   if(d.children) {
     d._children = d.children;
-    d.children.forEach(collapse);
+    d.children.forEach(collapseRecursive);
     d.children = null;
   }
 }
 
-function expand(d) {
-    if (d._children) {
-        d.children = d._children;
-        d.children.forEach(expand); // Recursive? maybe just one level
-        d._children = null;
-    }
-}
-
 function expandAll() {
-    // Helper to recursively expand
     function recurse(d) {
         if (d._children) {
             d.children = d._children;
@@ -127,19 +193,12 @@ function expandAll() {
 }
 
 function collapseAll() {
-    function recurse(d) {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        }
-        if (d._children) d._children.forEach(recurse);
-    }
-    // Don't collapse root's direct children so we see something
-    if (root.children) root.children.forEach(recurse);
+    if (root.children) root.children.forEach(collapseRecursive);
     update(root);
 }
 
 function resetZoom() {
+    const height = window.innerHeight;
     svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(100, height/2).scale(1));
 }
 
@@ -150,28 +209,24 @@ function update(source) {
   const nodes = treeData.descendants();
   const links = treeData.links();
 
-  // Normalize for fixed-depth.
-  nodes.forEach(d => { d.y = d.depth * 250; });
+  // Normalize for left-right tree
+  // Swap x and y for horizontal layout
+  nodes.forEach(d => { d.y = d.depth * 300; });
 
-  // ****************** Nodes section ***************************
-
-  // Update the nodes...
+  // ****************** Nodes ***************************
   const node = g.selectAll('g.node')
       .data(nodes, d => d.id || (d.id = ++i));
 
-  // Enter any new modes at the parent's previous position.
   const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
       .attr("transform", d => "translate(" + source.y0 + "," + source.x0 + ")")
-      .on('click', click)
-      .on('mouseover', function() { d3.select(this).select("text").attr("font-weight", "bold"); })
-      .on('mouseout', function() { d3.select(this).select("text").attr("font-weight", "normal"); });
+      .on('click', click);
 
   nodeEnter.append('circle')
       .attr('r', 1e-6)
       .attr('class', d => {
-          const status = d.data.metadata && d.data.metadata.status ? d.data.metadata.status : 'default';
-          return `status-${status}`;
+          const status = (d.data.metadata && d.data.metadata.status) || 'default';
+          return `status-${status.replace(' ', '-')}`;
       });
 
   nodeEnter.append('text')
@@ -180,95 +235,70 @@ function update(source) {
       .attr("text-anchor", d => d.children || d._children ? "end" : "start")
       .text(d => {
           let title = d.data.title;
-          return title.length > 25 ? title.substring(0, 25) + '...' : title;
+          return title.length > 30 ? title.substring(0, 30) + '...' : title;
       })
       .style('fill-opacity', 1e-6);
 
-  // UPDATE
   const nodeUpdate = nodeEnter.merge(node);
 
-  // Transition to the proper position for the node
   nodeUpdate.transition()
     .duration(duration)
     .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
 
-  // Update the circle attribute to match new data
   nodeUpdate.select('circle')
     .attr('r', 8)
-    .style("fill", d => d._children ? "#fff" : "") // White if collapsed
-    .attr('class', d => {
-          const status = d.data.metadata && d.data.metadata.status ? d.data.metadata.status : 'default';
-          return `status-${status}`;
-      });
+    .style("fill", d => d._children ? "#fff" : "") 
+    .attr('class', d => `status-${((d.data.metadata && d.data.metadata.status) || 'default').replace(' ', '-')}`);
 
-  nodeUpdate.select('text')
-    .style("fill-opacity", 1);
+  nodeUpdate.select('text').style("fill-opacity", 1);
 
-  // Exit any old nodes.
   const nodeExit = node.exit().transition()
       .duration(duration)
-      .attr("transform", d => "translate(" + source.y + "," + source.x + ")") # Target parent position? No, source usually
+      .attr("transform", d => "translate(" + source.y + "," + source.x + ")")
       .remove();
 
-  nodeExit.select('circle')
-    .attr('r', 1e-6);
+  nodeExit.select('circle').attr('r', 1e-6);
+  nodeExit.select('text').style('fill-opacity', 1e-6);
 
-  nodeExit.select('text')
-    .style('fill-opacity', 1e-6);
-
-  // ****************** Links section ***************************
-
-  // Update the links...
+  // ****************** Links ***************************
   const link = g.selectAll('path.link')
       .data(links, d => d.target.id);
 
-  // Enter any new links at the parent's previous position.
   const linkEnter = link.enter().insert('path', "g")
       .attr("class", "link")
       .attr('d', d => {
-        const o = {x: source.x0, y: source.y0}
-        return diagonal(o, o)
+        const o = {x: source.x0, y: source.y0};
+        return diagonal(o, o);
       });
 
-  // UPDATE
   const linkUpdate = linkEnter.merge(link);
 
-  // Transition back to the parent element position
   linkUpdate.transition()
       .duration(duration)
       .attr('d', d => diagonal(d.source, d.target));
 
-  // Remove any exiting links
-  const linkExit = link.exit().transition()
+  link.exit().transition()
       .duration(duration)
       .attr('d', d => {
-        const o = {x: source.x, y: source.y}
-        return diagonal(o, o)
+        const o = {x: source.x, y: source.y};
+        return diagonal(o, o);
       })
       .remove();
 
-  // Store the old positions for transition.
   nodes.forEach(d => {
     d.x0 = d.x;
     d.y0 = d.y;
   });
 
-  // Creates a curved (diagonal) path from parent to the child nodes
   function diagonal(s, d) {
-    path = `M ${s.y} ${s.x}
+    return `M ${s.y} ${s.x}
             C ${(s.y + d.y) / 2} ${s.x},
               ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`
-    return path
+              ${d.y} ${d.x}`;
   }
 
-  // Toggle children on click or show details
   function click(event, d) {
-    // If clicked on circle (target is circle), toggle collapse
-    // If clicked on text, show details
-    // But simplified: Click toggles collapse AND shows details
     showDetails(d.data);
-    
     if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -285,35 +315,26 @@ function showDetails(data) {
     const container = document.getElementById('details');
     sidebar.style.display = 'block';
 
-    const status = data.metadata.status || 'todo';
-    const cleanStatus = status.replace('-', '');
+    const status = (data.metadata.status || 'todo').replace(' ', '-');
     
     let metaHtml = '';
     for (const [key, value] of Object.entries(data.metadata)) {
         if (key === 'status') continue;
-        metaHtml += `<div><strong>${key}:</strong> ${JSON.stringify(value)}</div>`;
+        metaHtml += `<div><strong>${key}:</strong> ${JSON.stringify(value).replace(/"/g, '')}</div>`;
     }
 
-    // Convert markdown (simple) to html
-    // Just escaping mostly or basic replacement since we don't have a parser here
-    // For simplicity, we just use pre-wrap
-    
     container.innerHTML = `
-        <span class="meta-tag tag-${status}">${status.toUpperCase()}</span>
+        <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
         <h2>${data.title}</h2>
         <div style="margin-bottom: 20px; font-size: 0.9em; color: #7f8c8d;">
             ${metaHtml}
         </div>
         <hr style="border: 0; border-top: 1px solid #eee;"/>
         <div class="content-block">
-            <pre style="background:none; padding:0;">${data.content || "No content."}</pre>
+            <pre style="background:none; padding:0; white-space: pre-wrap; font-family: inherit;">${data.content || "No content."}</pre>
         </div>
     `;
 }
-
-// Initial center
-d3.select("svg").call(zoom.transform, d3.zoomIdentity.translate(100, height/2));
-
 </script>
 </body>
 </html>

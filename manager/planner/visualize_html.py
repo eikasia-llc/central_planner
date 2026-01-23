@@ -3,6 +3,8 @@ import sys
 import os
 import json
 import webbrowser
+import base64
+import urllib.request
 
 # Setup path to find 'language' module
 current_file_path = os.path.abspath(__file__)
@@ -20,38 +22,50 @@ except ImportError as e:
     print(f"Error: Could not import md_parser from {language_dir}. {e}")
     sys.exit(1)
 
-# HTML Template with D3.js
+# Ensure D3 is available locally
+D3_URL = "https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"
+D3_PATH = os.path.join(planner_dir, "d3.min.js")
+
+def ensure_d3():
+    if not os.path.exists(D3_PATH):
+        print(f"Downloading D3.js from {D3_URL}...")
+        try:
+            urllib.request.urlretrieve(D3_URL, D3_PATH)
+            print("D3.js downloaded successfully.")
+        except Exception as e:
+            print(f"Error downloading D3.js: {e}")
+            print("Visualization may fail if offline.")
+
 HTML_TEMPLATE = """
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Master Plan Visualization</title>
-  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="d3.min.js" onerror="handleScriptError()"></script>
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; overflow: hidden; background: #f8f9fa; }
     #container { width: 100vw; height: 100vh; display: flex; }
     #viz { flex-grow: 1; height: 100%; position: relative; }
     #sidebar { width: 400px; height: 100vh; background: white; border-left: 1px solid #ddd; padding: 20px; box-sizing: border-box; overflow-y: auto; display: none; box-shadow: -2px 0 5px rgba(0,0,0,0.05); z-index: 10; transform: translateX(0); transition: transform 0.3s ease; }
-    #sidebar.hidden { transform: translateX(100%); display: block; }
     
     .node circle { fill: #fff; stroke: steelblue; stroke-width: 2px; cursor: pointer; transition: all 0.3s; }
     .node circle:hover { stroke-width: 4px; }
-    .node text { font: 12px sans-serif; cursor: pointer; }
+    .node text { font: 12px sans-serif; cursor: pointer; text-shadow: 0 1px 0 #fff, 1px 0 0 #fff, 0 -1px 0 #fff, -1px 0 0 #fff; }
     
     .link { fill: none; stroke: #ccc; stroke-width: 1.5px; transition: all 0.5s; stroke-opacity: 0.6; }
 
     /* Metadata Colors */
-    .status-done { stroke: #2ecc71 !important; fill: #e8f8f5 !important; }
-    .status-active { stroke: #3498db !important; fill: #ebf5fb !important; }
-    .status-todo { stroke: #bdc3c7 !important; fill: #fbfcfc !important; }
-    .status-blocked { stroke: #e74c3c !important; fill: #fdedec !important; }
+    .status-done { stroke: #2ecc71 !important; fill: #e8f8f5; }
+    .status-active, .status-in-progress { stroke: #3498db !important; fill: #ebf5fb; }
+    .status-todo { stroke: #bdc3c7 !important; fill: #fbfcfc; }
+    .status-blocked { stroke: #e74c3c !important; fill: #fdedec; }
     
     h2 { margin-top: 0; font-size: 1.5em; color: #2c3e50; }
     .meta-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-right: 5px; margin-bottom: 5px; color: white; font-weight: 500;}
     
     .tag-todo { background: #95a5a6; }
-    .tag-active { background: #3498db; }
+    .tag-active, .tag-in-progress { background: #3498db; }
     .tag-done { background: #2ecc71; }
     .tag-blocked { background: #e74c3c; }
     .tag-default { background: #7f8c8d; }
@@ -60,18 +74,19 @@ HTML_TEMPLATE = """
     .content-block { line-height: 1.6; color: #34495e; font-size: 0.95em; }
 
     .control-panel { position: absolute; top: 20px; left: 20px; background: rgba(255, 255, 255, 0.9); padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-    button { background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+    button { background: #3498db; color: white; border: none; padding: 5px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; margin-right: 5px; }
     button:hover { background: #2980b9; }
 
-    /* Markdown styling specifics */
-    .content-block h1, .content-block h2, .content-block h3 { margin-top: 1.2em; color: #2c3e50; }
-    .content-block code { background: #eee; padding: 2px 4px; border-radius: 3px; font-family: monospace; }
+    #debug-log { position: absolute; bottom: 10px; left: 10px; font-family: monospace; font-size: 10px; color: #aaa; pointer-events: none; z-index: 100; max-height: 200px; overflow: hidden; }
+    #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5em; color: #666; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
   </style>
 </head>
 <body>
 
 <div id="container">
   <div id="viz">
+    <div id="loading">Initializing...</div>
+    <div id="debug-log"></div>
     <svg width="100%" height="100%"></svg>
     <div class="control-panel">
         <button onclick="expandAll()">Expand All</button>
@@ -87,57 +102,123 @@ HTML_TEMPLATE = """
 </div>
 
 <script>
-const data = __DATA_PLACEHOLDER__;
-
-const width = window.innerWidth;
-const height = window.innerHeight;
-
-const svg = d3.select("svg")
-    .attr("width", width)
-    .attr("height", height);
-
-const g = svg.append("g");
-
-const zoom = d3.zoom()
-    .scaleExtent([0.1, 4])
-    .on("zoom", (event) => g.attr("transform", event.transform));
-
-svg.call(zoom);
-
+// Global Variables - Must be declared before use
+let root, svg, g, zoom, tree;
 let i = 0;
 let duration = 500;
-let root;
 
-// Tree Layout
-const tree = d3.tree().nodeSize([30, 250]); // Height, Width between levels
+function log(msg) {
+    console.log(msg);
+    const logDiv = document.getElementById('debug-log');
+    if (logDiv) logDiv.innerHTML += msg + "<br>";
+}
 
-root = d3.hierarchy(data, d => d.children);
-root.x0 = height / 2;
-root.y0 = 0;
+function handleScriptError() {
+    log("ERROR: Failed to load D3.js. Check if d3.min.js exists in the same folder.");
+    document.getElementById('loading').innerHTML = "Error: D3.js missing.<br><small>Ensure d3.min.js is in the folder.</small>";
+}
 
-// Collapse after level 2 by default
-root.children.forEach(collapse);
+// Base64 Decode
+function decodeData(enc) {
+    try {
+        log("Decoding data...");
+        const jsonStr = new TextDecoder().decode(Uint8Array.from(atob(enc), c => c.charCodeAt(0)));
+        log("Data decoded. Length: " + jsonStr.length);
+        return JSON.parse(jsonStr);
+    } catch(e) {
+        log("Decoding error: " + e.message);
+        document.getElementById('loading').innerText = "Error decoding data";
+        return null;
+    }
+}
 
-update(root);
+// Data Injection
+try {
+    const rawData = "__DATA_PLACEHOLDER__";
+    if (rawData.startsWith("__DATA")) {
+        log("Error: Placeholder not replaced.");
+    } else {
+        const data = decodeData(rawData);
+        if (data && typeof d3 !== 'undefined') {
+            log("D3 loaded. Version: " + d3.version);
+            document.getElementById('loading').style.display = 'none';
+            initViz(data);
+        } else {
+            if (typeof d3 === 'undefined') {
+                handleScriptError();
+            } else {
+                log("Error: Data is null.");
+            }
+        }
+    }
+} catch (globalErr) {
+    log("Global Error: " + globalErr.message);
+}
 
-function collapse(d) {
+function initViz(data) {
+    log("Initializing Visualization...");
+    try {
+        const width = window.innerWidth;
+        const height = window.innerHeight;
+
+        svg = d3.select("svg");
+        
+        // Clear previous if any
+        svg.selectAll("*").remove();
+        
+        g = svg.append("g");
+
+        zoom = d3.zoom()
+            .scaleExtent([0.1, 4])
+            .on("zoom", (event) => g.attr("transform", event.transform));
+
+        svg.call(zoom);
+
+        // Define tree layout params
+        // nodeSize depends on orientation. 
+        // For standard top-down: [width, height]
+        // For left-right (projecting y as x): [height, width]
+        tree = d3.tree().nodeSize([40, 300]); 
+
+        root = d3.hierarchy(data, d => d.children);
+        root.x0 = 0;
+        root.y0 = 0;
+
+        // Check if root has children
+        if (!root.children) {
+            log("Warning: Root has no children.");
+        } else {
+            log("Root children count: " + root.children.length);
+        }
+
+        // Collapse
+        if(root.children) {
+            root.children.forEach(collapseRecursive);
+        }
+
+        update(root);
+        
+        // Initial center
+        const initialTransform = d3.zoomIdentity.translate(100, height / 2).scale(1);
+        svg.call(zoom.transform, initialTransform);
+        
+        log("Viz Initialized.");
+
+    } catch (vizErr) {
+        log("Viz Error: " + vizErr.message);
+        log(vizErr.stack);
+    }
+}
+
+function collapseRecursive(d) {
   if(d.children) {
     d._children = d.children;
-    d.children.forEach(collapse);
+    d.children.forEach(collapseRecursive);
     d.children = null;
   }
 }
 
-function expand(d) {
-    if (d._children) {
-        d.children = d._children;
-        d.children.forEach(expand); // Recursive? maybe just one level
-        d._children = null;
-    }
-}
-
 function expandAll() {
-    // Helper to recursively expand
     function recurse(d) {
         if (d._children) {
             d.children = d._children;
@@ -150,19 +231,12 @@ function expandAll() {
 }
 
 function collapseAll() {
-    function recurse(d) {
-        if (d.children) {
-            d._children = d.children;
-            d.children = null;
-        }
-        if (d._children) d._children.forEach(recurse);
-    }
-    // Don't collapse root's direct children so we see something
-    if (root.children) root.children.forEach(recurse);
+    if (root.children) root.children.forEach(collapseRecursive);
     update(root);
 }
 
 function resetZoom() {
+    const height = window.innerHeight;
     svg.transition().duration(750).call(zoom.transform, d3.zoomIdentity.translate(100, height/2).scale(1));
 }
 
@@ -173,28 +247,24 @@ function update(source) {
   const nodes = treeData.descendants();
   const links = treeData.links();
 
-  // Normalize for fixed-depth.
-  nodes.forEach(d => { d.y = d.depth * 250; });
+  // Normalize for left-right tree
+  // Swap x and y for horizontal layout
+  nodes.forEach(d => { d.y = d.depth * 300; });
 
-  // ****************** Nodes section ***************************
-
-  // Update the nodes...
+  // ****************** Nodes ***************************
   const node = g.selectAll('g.node')
       .data(nodes, d => d.id || (d.id = ++i));
 
-  // Enter any new modes at the parent's previous position.
   const nodeEnter = node.enter().append('g')
       .attr('class', 'node')
       .attr("transform", d => "translate(" + source.y0 + "," + source.x0 + ")")
-      .on('click', click)
-      .on('mouseover', function() { d3.select(this).select("text").attr("font-weight", "bold"); })
-      .on('mouseout', function() { d3.select(this).select("text").attr("font-weight", "normal"); });
+      .on('click', click);
 
   nodeEnter.append('circle')
       .attr('r', 1e-6)
       .attr('class', d => {
-          const status = d.data.metadata && d.data.metadata.status ? d.data.metadata.status : 'default';
-          return `status-${status}`;
+          const status = (d.data.metadata && d.data.metadata.status) || 'default';
+          return `status-${status.replace(' ', '-')}`;
       });
 
   nodeEnter.append('text')
@@ -203,95 +273,70 @@ function update(source) {
       .attr("text-anchor", d => d.children || d._children ? "end" : "start")
       .text(d => {
           let title = d.data.title;
-          return title.length > 25 ? title.substring(0, 25) + '...' : title;
+          return title.length > 30 ? title.substring(0, 30) + '...' : title;
       })
       .style('fill-opacity', 1e-6);
 
-  // UPDATE
   const nodeUpdate = nodeEnter.merge(node);
 
-  // Transition to the proper position for the node
   nodeUpdate.transition()
     .duration(duration)
     .attr("transform", d => "translate(" + d.y + "," + d.x + ")");
 
-  // Update the circle attribute to match new data
   nodeUpdate.select('circle')
     .attr('r', 8)
-    .style("fill", d => d._children ? "#fff" : "") // White if collapsed
-    .attr('class', d => {
-          const status = d.data.metadata && d.data.metadata.status ? d.data.metadata.status : 'default';
-          return `status-${status}`;
-      });
+    .style("fill", d => d._children ? "#fff" : "") 
+    .attr('class', d => `status-${((d.data.metadata && d.data.metadata.status) || 'default').replace(' ', '-')}`);
 
-  nodeUpdate.select('text')
-    .style("fill-opacity", 1);
+  nodeUpdate.select('text').style("fill-opacity", 1);
 
-  // Exit any old nodes.
   const nodeExit = node.exit().transition()
       .duration(duration)
-      .attr("transform", d => "translate(" + source.y + "," + source.x + ")") # Target parent position? No, source usually
+      .attr("transform", d => "translate(" + source.y + "," + source.x + ")")
       .remove();
 
-  nodeExit.select('circle')
-    .attr('r', 1e-6);
+  nodeExit.select('circle').attr('r', 1e-6);
+  nodeExit.select('text').style('fill-opacity', 1e-6);
 
-  nodeExit.select('text')
-    .style('fill-opacity', 1e-6);
-
-  // ****************** Links section ***************************
-
-  // Update the links...
+  // ****************** Links ***************************
   const link = g.selectAll('path.link')
       .data(links, d => d.target.id);
 
-  // Enter any new links at the parent's previous position.
   const linkEnter = link.enter().insert('path', "g")
       .attr("class", "link")
       .attr('d', d => {
-        const o = {x: source.x0, y: source.y0}
-        return diagonal(o, o)
+        const o = {x: source.x0, y: source.y0};
+        return diagonal(o, o);
       });
 
-  // UPDATE
   const linkUpdate = linkEnter.merge(link);
 
-  // Transition back to the parent element position
   linkUpdate.transition()
       .duration(duration)
       .attr('d', d => diagonal(d.source, d.target));
 
-  // Remove any exiting links
-  const linkExit = link.exit().transition()
+  link.exit().transition()
       .duration(duration)
       .attr('d', d => {
-        const o = {x: source.x, y: source.y}
-        return diagonal(o, o)
+        const o = {x: source.x, y: source.y};
+        return diagonal(o, o);
       })
       .remove();
 
-  // Store the old positions for transition.
   nodes.forEach(d => {
     d.x0 = d.x;
     d.y0 = d.y;
   });
 
-  // Creates a curved (diagonal) path from parent to the child nodes
   function diagonal(s, d) {
-    path = `M ${s.y} ${s.x}
+    return `M ${s.y} ${s.x}
             C ${(s.y + d.y) / 2} ${s.x},
               ${(s.y + d.y) / 2} ${d.x},
-              ${d.y} ${d.x}`
-    return path
+              ${d.y} ${d.x}`;
   }
 
-  // Toggle children on click or show details
   function click(event, d) {
-    // If clicked on circle (target is circle), toggle collapse
-    // If clicked on text, show details
-    // But simplified: Click toggles collapse AND shows details
     showDetails(d.data);
-    
     if (d.children) {
         d._children = d.children;
         d.children = null;
@@ -308,42 +353,32 @@ function showDetails(data) {
     const container = document.getElementById('details');
     sidebar.style.display = 'block';
 
-    const status = data.metadata.status || 'todo';
-    const cleanStatus = status.replace('-', '');
+    const status = (data.metadata.status || 'todo').replace(' ', '-');
     
     let metaHtml = '';
     for (const [key, value] of Object.entries(data.metadata)) {
         if (key === 'status') continue;
-        metaHtml += `<div><strong>${key}:</strong> ${JSON.stringify(value)}</div>`;
+        metaHtml += `<div><strong>${key}:</strong> ${JSON.stringify(value).replace(/"/g, '')}</div>`;
     }
 
-    // Convert markdown (simple) to html
-    // Just escaping mostly or basic replacement since we don't have a parser here
-    // For simplicity, we just use pre-wrap
-    
     container.innerHTML = `
-        <span class="meta-tag tag-${status}">${status.toUpperCase()}</span>
+        <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
         <h2>${data.title}</h2>
         <div style="margin-bottom: 20px; font-size: 0.9em; color: #7f8c8d;">
             ${metaHtml}
         </div>
         <hr style="border: 0; border-top: 1px solid #eee;"/>
         <div class="content-block">
-            <pre style="background:none; padding:0;">${data.content || "No content."}</pre>
+            <pre style="background:none; padding:0; white-space: pre-wrap; font-family: inherit;">${data.content || "No content."}</pre>
         </div>
     `;
 }
-
-// Initial center
-d3.select("svg").call(zoom.transform, d3.zoomIdentity.translate(100, height/2));
-
 </script>
 </body>
 </html>
 """
 
 def node_to_dict(node):
-    # Flatten children to simplify D3 digestion
     return {
         "title": node.title,
         "metadata": node.metadata,
@@ -357,29 +392,26 @@ def main():
         print("MASTER_PLAN.md not found")
         sys.exit(1)
 
+    print("Checking dependencies...")
+    ensure_d3()
+
     print(f"Parsing {target_file}...")
     parser = MarkdownParser()
     root_node = parser.parse_file(target_file)
-    
-    # Check if root has children, if not something is wrong or empty
-    if not root_node.children and not root_node.content and root_node.title == "Root":
-        # Sometimes root is artificial container, check first level
-        pass
 
-    # Convert to JSON dict
-    # If root is artificial "Root", we might want to skip it if it has only one child which is real document title
-    # But safe to keep it.
-    
-    # We prefer the visual root to be the Doc Title
+    # Adjust root logic
     if root_node.title == "Root" and len(root_node.children) == 1:
         data = node_to_dict(root_node.children[0])
+    elif root_node.title == "Root" and len(root_node.children) > 1:
+        data = node_to_dict(root_node)
+        data["title"] = "Central Planner"
     else:
         data = node_to_dict(root_node)
         
-    json_data = json.dumps(data)
+    json_str = json.dumps(data)
+    b64_data = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
     
-    # Inject into HTML
-    html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", json_data)
+    html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)
     
     output_path = os.path.join(planner_dir, "master_plan_interactive.html")
     with open(output_path, 'w') as f:
@@ -387,7 +419,6 @@ def main():
         
     print(f"Visualization saved to: {output_path}")
     
-    # Try to open
     try:
         webbrowser.open('file://' + os.path.abspath(output_path))
     except Exception as e:
