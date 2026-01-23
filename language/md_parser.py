@@ -166,6 +166,12 @@ class MarkdownParser:
                 # For now just ignore or append to root content if needed
                 i += 1
         
+        # Check if we should unwrap the root
+        # If there is exactly one top-level child, and the Root node itself has no content or metadata,
+        # return the child directly.
+        if len(root.children) == 1 and not root.content and not root.metadata:
+             return root.children[0]
+             
         return root
 
     def validate(self, node):

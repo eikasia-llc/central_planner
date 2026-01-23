@@ -36,11 +36,37 @@ The system separates Analytical Queries (Code Execution) from Control Tasks (Mod
 - id: product.saas.arch.components
 - last_checked: 2026-01-23T13:47:07+01:00
 <!-- content -->
--   **Chatbot Assistant App**: Interface with the user, operating also as a data warehouse.
--   **Internal Ecosystem of AI-Assistants**: Background agents performing different tasks, well orchestrated (internal access only).
--   **BigQuery Database**: Google BigQuery (or alternative) for data storage.
--   **Cloud Compute**: Google Cloud or other platform for computation.
--   **Internal Algorithms Repository**: Data processing and control algorithms, leveraging Vertex AI for data science and optimization.
+#### Chatbot Assistant App
+- status: active
+- type: context
+- id: product.saas.arch.components.chatbot
+- last_checked: 2026-01-23T19:47:31+01:00
+<!-- content -->
+Serves as the primary interface for users, functioning simultaneously as a mechanism for interaction and a local data warehouse. It facilitates data collection and user intent capture.
+
+#### Internal Ecosystem of AI-Assistants
+- status: active
+- type: context
+- id: product.saas.arch.components.ecosystem
+- last_checked: 2026-01-23T19:47:31+01:00
+<!-- content -->
+A background orchestration layer where multiple specialized AI agents collaborate. These agents are internal-only and handle specific sub-tasks to ensure seamless system operation.
+
+#### Cloud Infrastructure (BigQuery & Compute)
+- status: active
+- type: context
+- id: product.saas.arch.components.cloud
+- last_checked: 2026-01-23T19:47:31+01:00
+<!-- content -->
+The scalable backbone of the platform. It includes **Google BigQuery** for massive data warehousing and **Google Cloud Compute** for performant processing, ensuring reliability and speed.
+
+#### Internal Algorithms Repository
+- status: active
+- type: context
+- id: product.saas.arch.components.algorithms
+- last_checked: 2026-01-23T19:47:31+01:00
+<!-- content -->
+The central library of data processing and control algorithms. This leverages **Vertex AI** for advanced data science modeling and optimization tasks, representing the core intellectual property of the analysis engine.
 
 ### Information Flow
 - status: active
@@ -73,6 +99,38 @@ This high-frequency loop handles the autonomous optimization system:
 2.  **State Estimation**: Processing algorithms convert raw telemetry into state vectors ($s_t$) suitable for model input.
 3.  **Decision**: The Policy network ($\pi$) or Planer selects the optimal action ($a_t$) based on the current state.
 4.  **Execution & Feedback**: The action is sent to the Controller for execution, and the outcome is recorded for offline re-training and refinement.
+
+#### Human-AI Interaction
+- status: active
+- type: context
+- id: product.saas.arch.flow.human_ai
+- last_checked: 2026-01-23T19:51:07+01:00
+<!-- content -->
+Defines the protocols for how humans interact with the AI agents.
+
+##### Developer-AI Interaction
+- status: active
+- type: protocol
+- id: product.saas.arch.flow.human_ai.developer
+- last_checked: 2026-01-23T19:51:07+01:00
+<!-- content -->
+Protocol for developers to configure, train, and debug agents. Involves direct access to internal logs, model weights, and the 'Analysis Sandbox' for safe code testing.
+
+##### Client-AI Interaction
+- status: active
+- type: protocol
+- id: product.saas.arch.flow.human_ai.client
+- last_checked: 2026-01-23T19:51:07+01:00
+<!-- content -->
+Protocol for end-users. Restricted to natural language via the Chatbot App. No direct code execution allowed. Intent is parsed by the Orchestrator.
+
+#### AI-Tools Protocols
+- status: active
+- type: protocol
+- id: product.saas.arch.flow.tools
+- last_checked: 2026-01-23T19:51:07+01:00
+<!-- content -->
+Protocols for how AI agents utilize external software and APIs. Adheres to the **Model Context Protocol (MCP)** to standardize tool definition, discovery, and execution.
 
 ## Implementation Roadmap
 - status: active
