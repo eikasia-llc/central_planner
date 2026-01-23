@@ -3,13 +3,13 @@
 
 ## Project Overview
 - status: active
+<!-- content -->
+This repository serves as a **meta-project** to organize and coordinate multiple different repositories and workflows using AI agents. It implements a **Markdown-JSON Hybrid Schema** to define detailed implementation plans that are readable by both humans and AI agents, and losslessly convertible to JSON for programmatic manipulation.
 
-This repository serves as a **meta-project** to organize and coordinate multiple different repositories and workflows using AI agents. It implements a **Markdown-METADATA Hybrid Schema** to define detailed implementation plans that are readable by both humans and AI agents.
-
-## The Markdown-METADATA Protocol
+## The Markdown-JSON Protocol
 - status: active
-
-The project uses a strict **Markdown-METADATA Hybrid Schema** to treat documentation as a computable graph.
+<!-- content -->
+The project uses a strict **Markdown-JSON Hybrid Schema** to treat documentation as a computable graph. Every Markdown file following this schema can be losslessly converted to JSON and back.
 
 ### Structure & Hierarchy
 - status: active

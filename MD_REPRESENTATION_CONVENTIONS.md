@@ -1,12 +1,17 @@
-# Markdown-METADATA Hybrid Schema Conventions
+# Markdown-JSON Hybrid Schema Conventions
 - status: active
+<!-- content -->
+This document defines the strict conventions for the **Markdown-JSON Hybrid Schema** used in this project for hierarchical task coordination and agentic planning.
 
-This document defines the strict conventions for the Markdown-METADATA Hybrid Schema used in this project for hierarchical task coordination and agentic planning.
+The key insight is that every Markdown file following this schema can be **losslessly converted to JSON** and back. This enables:
+- Clear, abstract protocol definitions
+- Programmatic manipulation via JSON  
+- Human-readable documentation via Markdown
 
 ## Core Principle
 - status: active
-
-The system uses a **Markdown headers** to define the structural hierarchy (the nodes) and **METADATA Frontmatter-style blocks** (immediately following the header) to define structured metadata.
+<!-- content -->
+The system uses **Markdown headers** to define the structural hierarchy (the nodes) and **YAML-style metadata blocks** (immediately following the header) to define structured attributes. The entire tree can be serialized to JSON with a `content` field preserving the prose.
 
 ## Schema Rules
 - status: active
@@ -132,9 +137,15 @@ The following Python scripts are available in `language/` to interact with this 
 
 ### 1. `language/md_parser.py`
 - status: active
-
-- **Purpose**: Parses `.md` files into a Python object tree and validates schema compliance.
-- **Usage**: `python3 language/md_parser.py <file.md>`
+<!-- content -->
+- **Purpose**: The core parser enabling **bidirectional MD ↔ JSON** transformation.
+- **Key Classes**:
+    - `MarkdownParser`: Parses `.md` files into a `Node` tree
+    - `Node`: Tree node with `to_dict()`, `from_dict()`, and `to_markdown()` methods
+- **Transformations**:
+    - **MD → JSON**: `parser.parse_file("file.md")` → `root.to_dict()` → `json.dumps()`
+    - **JSON → MD**: `json.loads()` → `Node.from_dict(data)` → `root.to_markdown()`
+- **CLI Usage**: `python3 language/md_parser.py <file.md>`
 - **Output**: JSON representation of the tree or validation errors.
 
 ### 2. `language/visualization.py`

@@ -20,6 +20,7 @@ class Node:
         self.children = []
 
     def to_dict(self):
+        """Convert Node tree to JSON-serializable dictionary."""
         return {
             "level": self.level,
             "title": self.title,
@@ -27,6 +28,19 @@ class Node:
             "content": self.content,
             "children": [child.to_dict() for child in self.children]
         }
+
+    @classmethod
+    def from_dict(cls, data):
+        """Create Node tree from JSON-serializable dictionary (inverse of to_dict)."""
+        node = cls(
+            level=data.get("level", 0),
+            title=data.get("title", ""),
+            metadata=data.get("metadata", {}),
+            content=data.get("content", "")
+        )
+        for child_data in data.get("children", []):
+            node.children.append(cls.from_dict(child_data))
+        return node
 
     def to_markdown(self):
         md_lines = []
