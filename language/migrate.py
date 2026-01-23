@@ -2,6 +2,8 @@ import sys
 import os
 import re
 import argparse
+from datetime import date
+import unicodedata
 
 # Simple migration script
 # Logic:
@@ -34,6 +36,16 @@ def has_meta_block(lines, header_index):
         
     return False
 
+def slugify(value):
+    """
+    Normalizes string, converts to lowercase, removes non-alpha characters,
+    and converts spaces to hyphens.
+    """
+    value = str(value)
+    value = unicodedata.normalize('NFKD', value).encode('ascii', 'ignore').decode('ascii')
+    value = re.sub(r'[^\w\s-]', '', value).strip().lower()
+    return re.sub(r'[-\s]+', '_', value)
+
 def migrate_file(file_path):
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -41,12 +53,27 @@ def migrate_file(file_path):
     new_lines = []
     
     header_pattern = re.compile(r'^(#+)\s+(.*)')
+    header_stack = [] # List of (level, slug) tuples
     
     i = 0
     while i < len(lines):
         line = lines[i]
         header_match = header_pattern.match(line)
         
+        if header_match:
+            level = len(header_match.group(1))
+            title = header_match.group(2)
+            current_slug = slugify(title)
+            
+            # Update stack
+            # Pop headers that are at the same level or deeper (higher number of # is deeper, but sibling is same level)
+            # Standard markdown: ## is level 2. 
+            # If we are at level 2, we pop anything level 2 or greater from the stack top.
+            while header_stack and header_stack[-1][0] >= level:
+                header_stack.pop()
+            
+            header_stack.append((level, current_slug))
+            
         new_lines.append(line)
         
         if header_match:
@@ -56,7 +83,14 @@ def migrate_file(file_path):
                 # Infer status if possible, otherwise default to "active" or "documented"
                 # For AGENTS files, "active" seems appropriate.
                 # Convention update: add a blank line after metadata
-                default_meta = "- status: active\n\n"
+
+                # Update logic: Generate ID and last_checked
+                
+                # Reconstruct full ID from stack
+                full_id = ".".join([item[1] for item in header_stack])
+                current_date = date.today().isoformat()
+                
+                default_meta = f"- id: {full_id}\n- status: active\n- last_checked: {current_date}\n\n"
                 
                 # If there's a newline after header, we can insert before it or after it?
                 # Usually we want Header\nMETADATA.
