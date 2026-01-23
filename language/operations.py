@@ -98,7 +98,7 @@ def extend_tree(target_file, source_file, output_file=None):
     print(f"Successfully extended {target_file} with {source_file}. Saved to {dest}.")
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Operations on Markdown-METADATA trees.")
+    parser = argparse.ArgumentParser(description="Operations on Markdown-JSON trees.")
     subparsers = parser.add_subparsers(dest="command", help="Command to execute", required=True)
 
     # Merge command

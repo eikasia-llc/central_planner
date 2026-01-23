@@ -67,7 +67,7 @@ class TreeVisualizer:
             self.visualize(child, child_prefix, is_last_child, is_root=False)
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Visualize Markdown-METADATA tree.")
+    parser = argparse.ArgumentParser(description="Visualize Markdown-JSON tree.")
     add_standard_arguments(parser, multi_file=False)
     parser.add_argument('args', nargs='*', help='Input file (and optional output file)')
 
