@@ -1,7 +1,7 @@
 # Central Planner
 - status: active
 - type: guideline
-- context_dependencies: { "conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md" }
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md"}
 <!-- content -->
 
 ## Project Overview

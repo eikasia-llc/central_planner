@@ -3,7 +3,7 @@
 - type: agent_skill
 - id: agent.cleaner
 - owner: central-planner
-- context_dependencies: { "conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md" }
+- context_dependencies: {"conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md"}
 <!-- content -->
 You are the **Cleaner Agent**. Your primary responsibility is to maintain the hygiene of external data entering the Central Planner system. You act as the "Immune System" or "Customs Officer" for the project.
 
@@ -42,8 +42,11 @@ When asked to "Clean Repos" or "Import Data", follow this strict sequence:
     - *Outcome*: Files populate in `temprepo_cleaning`.
 3.  **Verify Structure**: Check a few files in `temprepo_cleaning` to ensure they have metadata blocks.
 4.  **Enforce Schema**: Run `apply_types.py` to ensure all new files have the `<!-- content -->` separator and valid `type` field.
-5.  **Report**: Summarize the number of files imported and confirm their schema compliance.
-6.  **Log**: Update `manager/cleaner/CLEANING_LOGS.md` with:
+5.  **Refine Context**: Manually or heuristically review the ingested files to add **natural context dependencies**.
+    - The automated scripts only insert defaults (e.g., `AGENTS.md`).
+    - You must verify if an agent (e.g., `CONTROL_AGENT`) implements a specific guideline (e.g., `RL_GUIDELINES.md`) and add that dependency manually to the metadata: `"rl_guidelines": "RL_GUIDELINES.md"`.
+6.  **Report**: Summarize the number of files imported and confirm their schema compliance.
+7.  **Log**: Update `manager/cleaner/CLEANING_LOGS.md` with:
     - Date and Time
     - Repository URL and Branch
     - Number of files processed

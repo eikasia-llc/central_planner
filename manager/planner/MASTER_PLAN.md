@@ -4,7 +4,7 @@
 - id: master_plan.saas
 - owner: product-manager
 - priority: critical
-- context_dependencies: { "manager": "MANAGER_AGENT.md", "conventions": "../../MD_CONVENTIONS.md" }
+- context_dependencies: {"manager": "MANAGER_AGENT.md", "conventions": "../../MD_CONVENTIONS.md"}
 - last_checked: 2026-01-23T15:14:25+01:00
 <!-- content -->
 This document serves as the central strategic plan for the **Intelligent Control & Analysis Platform**. It is a dual-engine AI system functioning as both a **Business Analyst** and an **Autonomous Operator** for SMBs and industrial clients. It combines LLM reasoning (Analysis) with RL control (Optimization).
@@ -42,6 +42,7 @@ The system separates Analytical Queries (Code Execution) from Control Tasks (Mod
 - id: product.saas.arch.components
 - last_checked: 2026-01-23T13:47:07+01:00
 <!-- content -->
+
 #### Chatbot Assistant App
 - status: active
 - type: context
@@ -137,7 +138,6 @@ Protocol for end-users. Restricted to natural language via the Chatbot App. No d
 - last_checked: 2026-01-23T19:51:07+01:00
 <!-- content -->
 Protocols for how AI agents utilize external software and APIs. Adheres to the **Model Context Protocol (MCP)** to standardize tool definition, discovery, and execution.
-
 
 ### Knowledge Bases
 - status: active
@@ -341,6 +341,7 @@ Establish comprehensive testing to ensure reliability before packaging.
 - status: todo
 - type: task
 - id: implementation.phase1.testing.unit
+<!-- content -->
 - <!-- content -->
 - **Framework**: `pytest`
 - **Coverage**:
@@ -352,6 +353,7 @@ Establish comprehensive testing to ensure reliability before packaging.
 - type: task
 - id: implementation.phase1.testing.integration
 - blocked_by: [implementation.phase1.testing.unit]
+<!-- content -->
 - <!-- content -->
 - **Flow**: Simulate a full user flow: User uploads CSV -> Ingestion -> stored in DB -> Query retrieves it.
 
@@ -369,6 +371,7 @@ Prepare the application for easy local deployment.
 - status: todo
 - type: task
 - id: implementation.phase1.packaging.deps
+<!-- content -->
 - <!-- content -->
 - Create `requirements.txt` with locked versions.
 - Create `environment.yml` for Conda users.
@@ -377,6 +380,7 @@ Prepare the application for easy local deployment.
 - status: todo
 - type: task
 - id: implementation.phase1.packaging.scripts
+<!-- content -->
 - <!-- content -->
 - Create `run_app.sh` (Mac/Linux) and `run_app.bat` (Windows) to set up the environment and launch `streamlit run src/app.py`.
 

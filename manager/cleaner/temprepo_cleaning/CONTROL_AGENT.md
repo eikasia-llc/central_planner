@@ -1,14 +1,20 @@
 # Control Agent Instructions
+- id: control_agent_instructions
 - status: active
-- context_dependencies: { "conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md" }- type: agent_skill
-- type: agent_skill
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md", "rl_guidelines": "Reinforcement Learning Project Guideline.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Role:** You are the **Control Agent**, a specialist in classical and modern control theory implementation.
 
 **Goal:** Implement and integrate control-theoretic methods (PID, LQR, MPC, etc.) into the Ab Initio RL Simulation System, providing baseline controllers and hybrid RL-control approaches for the existing environments.
 
 ## Background: Control Theory in RL Environments
+- id: control_agent_instructions.background_control_theory_in_rl_environments
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 The simulation system contains three environments that are fundamentally **control problems**:
 
@@ -24,7 +30,11 @@ These environments have well-understood dynamics that make them amenable to mode
 3. **Educational value** demonstrating when control vs. RL excels
 
 ## Core Constraints (Strict)
+- id: control_agent_instructions.core_constraints_strict
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 1. **Immutable Core Files:** You **MUST NOT** modify `agents.py`, `model.py`, or `simulation_functions.py` (legacy constraint from AGENTS.md).
 2. **Interface Compliance:** All controllers must implement the `BaseAgent` interface from `src/agents/base.py`.
@@ -33,15 +43,27 @@ These environments have well-understood dynamics that make them amenable to mode
 5. **Documentation:** Update `AGENTS_LOG.md` after significant implementations.
 
 ## Control Methods to Implement
+- id: control_agent_instructions.control_methods_to_implement
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Phase 1: Classical Controllers
+- id: control_agent_instructions.control_methods_to_implement.phase_1_classical_controllers
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 #### 1.1 PID Controller (`src/agents/pid.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_1_classical_controllers.11_pid_controller_srcagentspidpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Target Environment:** Homeostasis (glucose regulation)
 
@@ -52,7 +74,6 @@ class PIDAgent(BaseAgent):
 
     For Homeostasis:
     - Setpoint: Target glucose (G_target = 100 mg/dL)
-
     - Process Variable: Current glucose
     - Control Output: Insulin infusion rate
     """
@@ -65,7 +86,6 @@ class PIDAgent(BaseAgent):
         Kd: float,           # Derivative gain
         output_limits: Tuple[float, float],  # (min, max) output
         anti_windup: bool = True,
-
     ):
         pass
 ```
@@ -82,7 +102,11 @@ class PIDAgent(BaseAgent):
 - Manual specification
 
 #### 1.2 Threshold/Heuristic Controller (`src/agents/threshold.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_1_classical_controllers.12_thresholdheuristic_controller_srcagentsthresholdpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Target Environment:** Server Load (queue routing)
 
@@ -108,11 +132,19 @@ class ThresholdAgent(BaseAgent):
 ```
 
 ### Phase 2: Optimal Control
+- id: control_agent_instructions.control_methods_to_implement.phase_2_optimal_control
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 #### 2.1 LQR Controller (`src/agents/lqr.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_2_optimal_control.21_lqr_controller_srcagentslqrpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Target Environment:** Smart Grid (linearized around equilibrium)
 
@@ -123,7 +155,6 @@ class LQRAgent(BaseAgent):
 
     Requires linearized system dynamics: x_{t+1} = Ax_t + Bu_t
     Minimizes: J = sum(x'Qx + u'Ru)
-
     """
 
     def __init__(
@@ -134,7 +165,6 @@ class LQRAgent(BaseAgent):
         R: np.ndarray,       # Control cost matrix
         state_dim: int,
         action_dim: int,
-
     ):
         pass
 
@@ -157,7 +187,6 @@ def linearize_dynamics(
     x0: np.ndarray,        # Operating point state
     u0: np.ndarray,        # Operating point control
     delta: float = 1e-5,   # Finite difference step
-
 ) -> Tuple[np.ndarray, np.ndarray]:
     """
     Numerically linearize environment dynamics around (x0, u0).
@@ -167,7 +196,11 @@ def linearize_dynamics(
 ```
 
 #### 2.2 Model Predictive Control (`src/agents/mpc.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_2_optimal_control.22_model_predictive_control_srcagentsmpcpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Target Environments:** Homeostasis, Smart Grid
 
@@ -193,7 +226,6 @@ class MPCAgent(BaseAgent):
         action_bounds: Tuple[np.ndarray, np.ndarray],
         state_constraints: Optional[Callable] = None,
         solver: str = "scipy",   # or "cvxpy", "casadi"
-
     ):
         pass
 
@@ -214,11 +246,19 @@ class MPCAgent(BaseAgent):
 - Objective: minimize |G - G_target|^2 + λ * u^2
 
 ### Phase 3: Hybrid Control-RL Methods
+- id: control_agent_instructions.control_methods_to_implement.phase_3_hybrid_control_rl_methods
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 #### 3.1 Residual Policy Learning (`src/agents/residual_rl.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_3_hybrid_control_rl_methods.31_residual_policy_learning_srcagentsresidual_rlpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 class ResidualPolicyAgent(BaseAgent):
@@ -235,13 +275,16 @@ class ResidualPolicyAgent(BaseAgent):
         base_controller: BaseAgent,  # e.g., PID or LQR
         residual_agent: BaseAgent,   # e.g., PPO or DQN
         residual_scale: float = 0.1, # Limit residual magnitude
-
     ):
         pass
 ```
 
 #### 3.2 Gain-Scheduled Controller (`src/agents/gain_scheduled.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_3_hybrid_control_rl_methods.32_gain_scheduled_controller_srcagentsgain_scheduledpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 class GainScheduledAgent(BaseAgent):
@@ -256,7 +299,11 @@ class GainScheduledAgent(BaseAgent):
 ```
 
 #### 3.3 Safe RL with Control Barrier Functions (`src/agents/cbf_rl.py`)
+- id: control_agent_instructions.control_methods_to_implement.phase_3_hybrid_control_rl_methods.33_safe_rl_with_control_barrier_functions_srcagentscbf_rlpy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 class CBFSafeAgent(BaseAgent):
@@ -272,17 +319,24 @@ class CBFSafeAgent(BaseAgent):
         rl_agent: BaseAgent,
         barrier_fn: Callable,    # h(x) >= 0 defines safe set
         alpha: float = 1.0,      # CBF class-K function parameter
-
     ):
         pass
 ```
 
 ## Environment-Specific Guidance
+- id: control_agent_instructions.environment_specific_guidance
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Homeostasis Environment
+- id: control_agent_instructions.environment_specific_guidance.homeostasis_environment
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Dynamics:** Bergman Minimal Model (3 ODEs)
 ```
@@ -298,14 +352,17 @@ dI/dt = -n*I + gamma*(G - h)^+ + u(t)
 
 2. **MPC:** Use full nonlinear model
    - Horizon: 30-60 minutes (10-20 steps at dt_control=3min)
-
    - Terminal cost: distance to basal equilibrium
    - Hard constraint: G >= 50 mg/dL
 
 3. **Safety:** CBF with h(x) = G - G_hypo
 
 ### Smart Grid Environment
+- id: control_agent_instructions.environment_specific_guidance.smart_grid_environment
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Dynamics:** BESS with efficiency losses, OU price process
 ```
@@ -325,7 +382,11 @@ Price follows: dP = θ(μ - P)dt + σdW
 3. **Threshold:** Charge when price < μ - k*σ, discharge when price > μ + k*σ
 
 ### Server Load Environment
+- id: control_agent_instructions.environment_specific_guidance.server_load_environment
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Dynamics:** M/M/k queueing with Discrete Event Simulation
 
@@ -336,14 +397,17 @@ Price follows: dP = θ(μ - P)dt + σdW
 4. **Threshold with Hysteresis:** Avoid oscillations
 
 ## Utility Functions (`src/utils/control_utils.py`)
+- id: control_agent_instructions.utility_functions_srcutilscontrol_utilspy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 def discretize_continuous_system(
     A_c: np.ndarray,
     B_c: np.ndarray,
     dt: float
-
 ) -> Tuple[np.ndarray, np.ndarray]:
     """Convert continuous A, B to discrete time."""
     pass
@@ -351,7 +415,6 @@ def discretize_continuous_system(
 def compute_controllability_matrix(
     A: np.ndarray,
     B: np.ndarray
-
 ) -> np.ndarray:
     """Return [B, AB, A^2B, ..., A^{n-1}B]."""
     pass
@@ -363,7 +426,6 @@ def check_controllability(A: np.ndarray, B: np.ndarray) -> bool:
 def compute_observability_matrix(
     A: np.ndarray,
     C: np.ndarray
-
 ) -> np.ndarray:
     """Return [C; CA; CA^2; ...; CA^{n-1}]."""
     pass
@@ -372,18 +434,25 @@ def pole_placement(
     A: np.ndarray,
     B: np.ndarray,
     poles: np.ndarray
-
 ) -> np.ndarray:
     """Compute state feedback gain K for desired poles."""
     pass
 ```
 
 ## Testing Strategy
+- id: control_agent_instructions.testing_strategy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Unit Tests (`tests/test_control_agents.py`)
+- id: control_agent_instructions.testing_strategy.unit_tests_teststest_control_agentspy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 class TestPIDAgent:
@@ -419,7 +488,11 @@ class TestMPCAgent:
 ```
 
 ### Integration Tests
+- id: control_agent_instructions.testing_strategy.integration_tests
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 def test_pid_on_homeostasis():
@@ -439,7 +512,11 @@ def test_jsq_on_server_load():
 ```
 
 ### Benchmark Tests
+- id: control_agent_instructions.testing_strategy.benchmark_tests
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 Compare control baselines against RL agents:
 
@@ -457,11 +534,19 @@ def benchmark_homeostasis_controllers():
 ```
 
 ## Implementation Checklist
+- id: control_agent_instructions.implementation_checklist
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Phase 1: Classical Controllers
+- id: control_agent_instructions.implementation_checklist.phase_1_classical_controllers
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - [ ] Implement `PIDAgent` with anti-windup
 - [ ] Implement `ShortestQueueAgent` and `PowerOfTwoChoices`
@@ -469,7 +554,11 @@ def benchmark_homeostasis_controllers():
 - [ ] Tune PID for Homeostasis, document gains
 
 ### Phase 2: Optimal Control
+- id: control_agent_instructions.implementation_checklist.phase_2_optimal_control
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - [ ] Implement `linearize_dynamics` utility
 - [ ] Implement `LQRAgent` with DARE solver
@@ -478,21 +567,33 @@ def benchmark_homeostasis_controllers():
 - [ ] Test LQR on linearized Smart Grid
 
 ### Phase 3: Hybrid Methods
+- id: control_agent_instructions.implementation_checklist.phase_3_hybrid_methods
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - [ ] Implement `ResidualPolicyAgent`
 - [ ] Implement `CBFSafeAgent` for Homeostasis
 - [ ] Benchmark hybrid vs. pure RL
 
 ### Documentation
+- id: control_agent_instructions.implementation_checklist.documentation
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - [ ] Update `AGENTS.md` with control agent descriptions
 - [ ] Add control theory references to `docs/`
 - [ ] Log all implementations in `AGENTS_LOG.md`
 
 ## References & Resources
+- id: control_agent_instructions.references_resources
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Textbooks (add to `docs/` for context fine-tuning):**
 - Astrom & Murray, "Feedback Systems" (PID, stability)
@@ -504,12 +605,20 @@ def benchmark_homeostasis_controllers():
 - Ames et al., "Control Barrier Functions" (safety guarantees)
 
 ## Agent Log Entry Template
+- id: control_agent_instructions.agent_log_entry_template
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```markdown
 
 ### [DATE] - Control Agent Implementation (Control Agent)
+- id: control_agent_instructions.agent_log_entry_template.date_control_agent_implementation_control_agent
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 *   **Task:** [Specific controller implemented]
 *   **Actions:**

@@ -1,6 +1,7 @@
 # Linearize Agent Instructions
 - status: active
 - context_dependencies: { "conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md" }- type: agent_skill
+- type: agent_skill
 <!-- content -->
 **Role:** You are the **Linearize Agent**, a specialist in numerical computing and optimization.
 **Goal:** Drastically improve the performance of the simulation by "linearizing" or "vectorizing" the logic—replacing explicit Python loops (iterating over agent objects) with efficient NumPy matrix operations.

@@ -1,7 +1,7 @@
 # AGENTS.md
 - status: active
 - type: guideline
-- context_dependencies: { "conventions": "MD_CONVENTIONS.md", "project_root": "README.md" }
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "project_root": "README.md"}
 <!-- content -->
 
 ## SHORT ADVICE

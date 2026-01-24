@@ -1,7 +1,7 @@
 # Markdown-JSON Hybrid Schema Conventions
 - status: active
 - type: guideline
-- context_dependencies: { "project_root": "README.md" }
+- context_dependencies: {"project_root": "README.md"}
 <!-- content -->
 This document defines the strict conventions for the **Markdown-JSON Hybrid Schema** used in this project for hierarchical task coordination and agentic planning.
 

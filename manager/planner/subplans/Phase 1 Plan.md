@@ -4,7 +4,7 @@
 - id: implementation.phase1
 - owner: user
 - priority: critical
-- context_dependencies: { "master_plan": "../MASTER_PLAN.md", "conventions": "../../../MD_CONVENTIONS.md" }
+- context_dependencies: {"master_plan": "../MASTER_PLAN.md", "conventions": "../../../MD_CONVENTIONS.md"}
 - last_checked: 2026-01-24T11:54:00+01:00
 <!-- content -->
 This document outlines the tactical execution plan for building the **Local Nexus**, the client-side application of the Intelligent Control SaaS.
@@ -153,6 +153,7 @@ Establish comprehensive testing to ensure reliability before packaging.
 - status: todo
 - type: task
 - id: implementation.phase1.testing.unit
+<!-- content -->
 - <!-- content -->
 - **Framework**: `pytest`
 - **Coverage**:

@@ -1,44 +1,92 @@
 # Housekeeping Protocol
+- id: housekeeping_protocol
 - status: active
-- type: recurring
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 1. Read the AGENTS.md file.
 2. Look at the dependency network of the project, namely which script refers to which one.
 3. Proceed doing different sanity checks and unit tests from root scripts to leaves.
-4. Compile all errors and tests results into a report. Make sure that the report uses the proper syntax protocol as defined in MD_REPRESENTATION_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
-6. Print that report in the Latest Report subsection below, overwriting previous reports.
-7. Add that report to the AGENTS_LOG.md.
+4. Compile all errors and tests results into a report. Include the author of the report (Claude, Jules, etc). And print that report in the Latest Report subsection below, overwriting previous reports.
+5. Add that report to the AGENTS_LOG.md.
 
 # Current Project Housekeeping
+- id: current_project_housekeeping
 - status: active
-- type: recurring
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ## Dependency Network
+- id: current_project_housekeeping.dependency_network
 - status: active
-- type: task
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-Based on post-React integration analysis:
-- **Core Modules:** `src/net_epistemology/core/` (`agents.py`, `model.py`, `vectorized_model.py`)
-- **Advanced Modules:** `src/net_epistemology/analysis/` (`mc_analysis.py`)
-- **Engine Module:** `src/net_epistemology/simulation/`
-- **Tests:** `tests/` (`unit_tests.py`, `test_vectorization.py`, `test_mc_analysis.py`)
-- **Notebooks:** `notebooks/`
+**Status: VERIFIED**
+The dependency network is mapped and all imports are valid.
+
+**Dependency Tree:**
+- `src/main.py`
+  - `src/config.py`
+  - `src/envs/__init__.py`
+    - `src/envs/base.py`
+    - `src/envs/server_load.py`
+    - `src/envs/smart_grid.py`
+    - `src/envs/homeostasis.py`
+  - `src/agents/__init__.py`
+    - `src/agents/base.py`
+    - `src/agents/bandit.py`
+    - `src/agents/dqn.py`
+    - `src/agents/mcts.py`
+    - `src/agents/ppo.py`
+  - `src/utils/logger.py`
+  - `src/utils/seeding.py`
+- `src/controllers/__init__.py`
+  - `src/controllers/base.py` -> `src/agents/base.py`
+  - `src/controllers/pid.py`
+  - `src/controllers/lqr.py`
+  - `src/controllers/mpc.py`
+- `src/envs/homeostasis.py` -> `src/utils/math_ops.py`
+- `src/agents/bandit.py` -> `src/utils/math_ops.py`
 
 ## Latest Report
+- id: current_project_housekeeping.latest_report
 - status: active
-- type: task
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-**Execution Date:** 2026-01-23
+**Author:** Claude (Claude Code CLI - Opus 4.5)
+**Execution Date:** 2026-01-21
 
 **Test Results:**
-1.  `tests/unit_tests.py`: **Passed** (8 tests).
-2.  `tests/test_vectorization.py`: **Passed** (4 tests).
-3.  `tests/test_mc_analysis.py`: **Passed** (12 tests).
-4.  `tests/vectorized_basic_model_testing_script.py`: **Passed** (Conclusion: 0.94/0.90).
-5.  `tests/basic_model_testing_script.py`: **Passed Phase 1** (Conclusion: 0.99). Phase 2 (Bayes) interrupted but functioning.
+- `python -m pytest tests/ -v`: **PASSED** (87/87 passed in 4.33s)
 
-**Total: 24/24 unit tests passed.**
+**Code Verification:**
+- **File Existence:** All 23 source files verified present.
+  - `src/`: 18 files (envs: 5, agents: 6, controllers: 5, utils: 4, root: 3)
+  - `tests/`: 5 files (test_agents, test_envs, test_math_ops, test_controllers, __init__)
+- **Imports:** All dependencies properly structured.
+- **Dependency Network:** Verified - all imports resolve correctly.
+  - `src/main.py` → `config.py`, `envs/`, `agents/`, `utils/`
+  - `src/envs/homeostasis.py` → `utils/math_ops.py`
+  - `src/agents/bandit.py` → `utils/math_ops.py`
+  - `src/controllers/base.py` → `agents/base.py` (extends BaseAgent)
+- **Environment:**
+  - `numpy`: 1.23.5
+  - `torch`: 2.2.2
+  - `pytest`: 7.1.2
+  - `scipy`: 1.11.4
+
+**New Since Last Report:**
+- Added `src/controllers/` module with PID, LQR, and MPC implementations
+- Added `tests/test_controllers.py` with 30 unit tests
+- Updated `AGENTS.md` with controllers documentation
+- Created `AI_AGENTS/CONTROL_AGENT.md` instruction file
 
 **Summary:**
-All unit tests and vectorization verifications passed. The system is stable.
+Codebase is **HEALTHY**. All 87 unit tests pass (57 original + 30 new). Dependency network verified.

@@ -1,22 +1,30 @@
 # AGENTS.md
+- id: agentsmd
 - status: active
-- type: guideline
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ## SHORT ADVICE
+- id: agentsmd.short_advice
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - The whole trick is providing the AI Assistants with context, and this is done using the *.md files (AGENTS.md, AGENTS_LOG.md, and the AI_AGENTS folder)
-- Make sure that when writing *.md files, you use the proper syntax protocol as defined in MD_REPRESENTATION_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
 - Learn how to work the Github, explained below.
 - Keep logs of changes in AGENTS_LOG.md
-- Make sure to execute the HOUSEKEEPING.md protocol often.
 - Always ask several forms of verification, so because the self-loop of the chain of thought improves performance.
 - Impose restrictions and constraints explicitly in the context.
--
 
 ## HUMAN-ASSISTANT WORKFLOW
+- id: agentsmd.human_assistant_workflow
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 1. Open the assistant and load the ai-agents-branch into their local repositories. Do this by commanding them to first of all read the AGENTS.md file.
 2. Work on the ASSISTANT, making requests, modifying code, etc.
@@ -30,7 +38,11 @@
 4. Enjoy!
 
 ## WORKFLOW & TOOLING
+- id: agentsmd.workflow_tooling
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 *   **PostToolUse Hook (Code Formatting):**
     *   **Context:** A "hook" is configured to run automatically after specific events.
@@ -48,7 +60,11 @@
     *   **Action:** Append a new entry under the "Intervention History" section summarizing the task, the changes made, and the date.
 
 ## DEVELOPMENT RULES & CONSTRAINTS
+- id: agentsmd.development_rules_constraints
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 1.  **Immutable Core Files:** Do not modify `agents.py`, `model.py`, or `simulation_functions.py`.
     *   If you need to change the logic of an agent or the model, you must create a **new version** (e.g., a subclass or a new file) rather than modifying the existing classes in place.
@@ -56,7 +72,11 @@
 3.  **Coding Conventions:** Always keep the coding conventions pristine.
 
 ## CONTEXT FINE-TUNING
+- id: agentsmd.context_fine_tuning
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 You cannot "fine-tune" an AI agent (change its underlying neural network weights) with files in this repository. **However**, you **CAN** achieve a similar result using **Context**.
 
@@ -76,143 +96,205 @@ If you want to teach an agent a new language (like JAX) or technique:
 3.  Ask the agent to "Refactor the code using the techniques in [File X]".
 
 ## LOCAL PROJECT DESCRIPTION
+- id: agentsmd.local_project_description
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Project Overview
+- id: agentsmd.local_project_description.project_overview
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-This project is a simulation framework for agent-based models on various network structures, specifically focusing on network epistemology and theory choice using Bandit problems.
+**Ab Initio Reinforcement Learning Simulation System**
+
+A from-scratch RL ecosystem implementing 3 simulation environments and 4 agent architectures without high-level RL libraries (no Gymnasium, Stable Baselines). All state transitions, gradient updates, and stochastic processes are explicitly defined for maximum transparency and educational value.
+
+**Philosophy**: Explicit State-Space Orchestration — every mathematical bound, transition dynamic, and reward manifold is explicitly coded.
+
+**Tech Stack**: Python, NumPy, PyTorch (for neural network agents)
 
 ### Setup & Testing
+- id: agentsmd.local_project_description.setup_testing
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-*   **Install Dependencies:** `pip install -r requirements.txt` (or manually install `numpy`, `scipy`, `pandas`, `networkx`, `tqdm`, `matplotlib`, `seaborn`, `dill`).
-*   **Run Tests:** `python -m unittest unit_tests.py`
+```bash
+
+# Install dependencies
+- id: install_dependencies
+- status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
+<!-- content -->
+pip install numpy torch pytest
+
+# Run all tests
+- id: run_all_tests
+- status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
+<!-- content -->
+python -m pytest tests/ -v
+
+# Run specific environment/agent training
+- id: run_specific_environmentagent_training
+- status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
+<!-- content -->
+python -m src.main --env server_load --agent dqn --episodes 100
+```
 
 ### Key Architecture & Logic
+- id: run_specific_environmentagent_training.key_architecture_logic
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
-#### 1. Directed Graphs & Information Flow
+#### 1. Environments (`src/envs/`)
+- id: run_specific_environmentagent_training.key_architecture_logic.1_environments_srcenvs
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-*   The simulation uses **NetworkX** graphs.
-*   **Directionality:** The graph is treated as **Directed** (`nx.DiGraph`).
-*   **Interpretation of Edges (`A -> B`):**
-    *   In NetworkX, an edge `(u, v)` means `u` points to `v`.
-    *   **Information Flow:** In this simulation, an edge from A to B means **A listens to B**.
-    *   **Code Implication:** When Agent A updates their belief, they check their **neighbors**.
-    *   If using `G.neighbors(A)` in a DiGraph, it returns successors (nodes A points to).
-    *   If using `G.predecessors(A)`, it returns nodes pointing to A.
-    *   **Convention:** The code typically iterates over `G.predecessors(agent.id)` (or neighbors if undirected) to find the agents that the current agent "observes".
-    *   **Summary:** If A observes B, the graph should have an edge `A -> B` (A is the source, B is the target, but information flows B -> A in terms of observation).
+| Environment | Dynamics | State Vector | Action Space |
+|-------------|----------|--------------|--------------|
+| **Server Load** (`server_load.py`) | M/M/k queueing, Discrete Event Simulation | Queue lengths, server status, arrival rate, recent latency | Discrete (route to server k) |
+| **Smart Grid** (`smart_grid.py`) | BESS with efficiency losses, OU price process | SoC, load, generation, price, price forecast | Continuous (charge/discharge power) |
+| **Homeostasis** (`homeostasis.py`) | Bergman minimal model (3 ODEs), RK4 integration | Glucose, Remote Insulin, Plasma Insulin | Continuous (insulin infusion rate) |
 
-#### 2. Agents
+#### 2. Agents (`src/agents/`)
+- id: run_specific_environmentagent_training.key_architecture_logic.2_agents_srcagents
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-*   **`Bandit`:** The environment. Returns success/failure based on probabilities.
-*   **`BetaAgent`:** Uses Beta distributions to model beliefs about two theories (0 and 1).
-    *   `alphas_betas`: Stores `[alpha, beta]` for both theories.
-    *   `credences`: Mean of the beta distribution.
-    *   `choice`: Epsilon-greedy.
+| Agent | Algorithm | Action Type | Key Components |
+|-------|-----------|-------------|----------------|
+| **LinUCB** (`bandit.py`) | Disjoint Contextual Bandit | Discrete | Sherman-Morrison O(d²) updates, UCB selection |
+| **DQN** (`dqn.py`) | Deep Q-Network | Discrete | Replay Buffer, Target Network, Huber Loss, Double DQN |
+| **MCTS** (`mcts.py`) | Monte Carlo Tree Search | Discrete | PUCT selection, Rollout policy, Backpropagation |
+| **PPO** (`ppo.py`) | Proximal Policy Optimization | Continuous | Actor-Critic, GAE, Clipped surrogate objective |
 
-#### 3. Simulation Loop (`Model` class)
+#### 3. Controllers (`src/controllers/`)
+- id: run_specific_environmentagent_training.key_architecture_logic.3_controllers_srccontrollers
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-*   **Step:**
-    1.  **Experiment:** Every agent chooses a theory and runs an experiment (getting success/failure).
-    2.  **Update:** Every agent observes the results of their **predecessors** (neighbors who point to them).
-    3.  **Bayesian Update:** Agents update their Alpha/Beta parameters based on their own *and* their neighbors' results.
+Classical and optimal control methods that implement the `BaseAgent` interface for fair comparison with RL agents.
+
+| Controller | Algorithm | Action Type | Key Components |
+|------------|-----------|-------------|----------------|
+| **PID** (`pid.py`) | Proportional-Integral-Derivative | Continuous | Anti-windup, derivative filtering, ZN/Cohen-Coon tuning |
+| **LQR** (`lqr.py`) | Linear Quadratic Regulator | Continuous | DARE solver, controllability checks, finite-horizon variant |
+| **MPC** (`mpc.py`) | Model Predictive Control | Continuous | Receding horizon, state/control constraints, warm-starting |
+
+**Use Cases:**
+- **PID**: Homeostasis glucose regulation (setpoint tracking)
+- **LQR**: Smart Grid SoC regulation (linearized optimal control)
+- **MPC**: Both environments (constrained nonlinear optimization)
+
+See `AI_AGENTS/CONTROL_AGENT.md` for detailed implementation guidance.
+
+#### 5. Utilities (`src/utils/`)
+- id: run_specific_environmentagent_training.key_architecture_logic.5_utilities_srcutils
+- status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
+<!-- content -->
+- `math_ops.py`: RK4 integration, Sherman-Morrison formula, Online Normalizer (Welford)
+- `seeding.py`: Global and per-environment RNG management
+- `logger.py`: CSV/TensorBoard logging
 
 ### Key Files and Directories
+- id: run_specific_environmentagent_training.key_files_and_directories
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 #### Directory Structure
+- id: run_specific_environmentagent_training.key_files_and_directories.directory_structure
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```
-e_network_inequality/
-├── AGENTS.md                    # This file - AI agent context
-├── AGENTS_LOG.md                # Log of AI interventions
-├── HOUSEKEEPING.md              # Housekeeping protocol & reports
-├── README.md                    # Project readme
-├── requirements.txt             # Python dependencies
-├── setup.py                     # Package installation
-│
-├── AI_AGENTS/                   # Context files for specialized AI agents
-│   ├── LINEARIZE_AGENT.md       # Vectorization specialist instructions
-│   ├── MC_AGENT.md              # Markov Chain analysis agent instructions
-│   └── README.md
-│
-├── src/net_epistemology/        # Main source package
-│   ├── core/                    # Core simulation classes
-│   │   ├── agents.py            # Legacy agent classes (immutable)
-│   │   ├── model.py             # Legacy Model class (immutable)
-│   │   ├── vectorized_agents.py # Vectorized bandit
-│   │   └── vectorized_model.py  # Fast vectorized simulation
-│   ├── simulation/              # Simulation runners
-│   │   ├── simulation_functions.py
-│   │   └── vectorized_simulation_functions.py
-│   ├── utils/                   # Utilities
-│   │   ├── imports.py           # Central imports
-│   │   ├── network_generation.py
-│   │   └── network_utils.py
-│   └── analysis/                # Analysis tools (NEW)
-│       └── mc_analysis.py       # Markov Chain analysis utilities
-│
-├── notebooks/                   # Jupyter notebooks (organized by topic)
-│   ├── basic_testing/           # Basic model verification
-│   │   ├── basic_model_testing.ipynb
-│   │   └── vectorized_basic_model_testing.ipynb
-│   ├── convergence_analysis/    # Convergence & root influence studies
-│   │   ├── convergence_studies.py
-│   │   ├── root_influence_analysis.py
-│   │   └── Colab_*.ipynb        # Google Colab versions
-│   └── simulation_variations/   # Variation method experiments
-│
-├── tests/                       # Unit tests
-│   ├── unit_tests.py            # Core agent tests
-│   ├── test_vectorization.py    # Vectorized vs legacy equivalence
-│   └── test_mc_analysis.py      # Markov Chain analysis tests
-│
-└── data/                        # Data files
-    └── empirical_networks/      # Real-world network data (JSON)
+control_algorithms/
+├── src/
+│   ├── envs/           # Simulation environments
+│   │   ├── base.py     # SimulationEnvironment protocol
+│   │   ├── server_load.py
+│   │   ├── smart_grid.py
+│   │   └── homeostasis.py
+│   ├── agents/         # RL agents
+│   │   ├── base.py     # BaseAgent interface
+│   │   ├── bandit.py   # LinUCB
+│   │   ├── dqn.py
+│   │   ├── mcts.py
+│   │   └── ppo.py
+│   ├── controllers/    # Classical/optimal control
+│   │   ├── base.py     # BaseController (extends BaseAgent)
+│   │   ├── pid.py      # PID with anti-windup
+│   │   ├── lqr.py      # LQR with DARE solver
+│   │   └── mpc.py      # Model Predictive Control
+│   ├── utils/          # Shared utilities
+│   │   ├── math_ops.py
+│   │   ├── seeding.py
+│   │   └── logger.py
+│   ├── config.py       # Hyperparameter configs
+│   └── main.py         # Training orchestrator
+├── tests/              # Unit and integration tests
+└── AI_AGENTS/          # Agent instruction files
+    ├── LINEARIZE_AGENT.md
+    ├── MC_AGENT.md
+    └── CONTROL_AGENT.md
 ```
 
 #### File Dependencies & Logic
+- id: run_specific_environmentagent_training.key_files_and_directories.file_dependencies_logic
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
-The project relies on a central imports file to manage dependencies across modules.
-*   **`imports.py`**: Imports all necessary external libraries (`numpy`, `scipy`, `networkx`, `pandas`, etc.) and sets up seeds. It is imported by `agents.py`, `model.py`, and simulation scripts.
+```
+main.py
+├── config.py (hyperparameters)
+├── envs/base.py → server_load.py, smart_grid.py, homeostasis.py
+├── agents/base.py → bandit.py, dqn.py, mcts.py, ppo.py
+├── controllers/base.py → pid.py, lqr.py, mpc.py
+└── utils/ (math_ops.py, seeding.py, logger.py)
+```
 
-**Legacy/Reference Implementation (Immutable):**
-*   **`agents.py`**: Defines the object-oriented agent classes:
-    *   `Bandit`: The environment returning experiment results.
-    *   `BetaAgent`: Bayesian learner using Beta distributions.
-    *   `BayesAgent`: Simplified Bayesian learner.
-*   **`model.py`**: Defines the `Model` class. It manages the graph (`self.network`), the list of agents, and the time loop (`run_simulation`). It handles the interaction between agents (observing neighbors).
-*   **`simulation_functions.py`**: Wrappers to initialize parameters (generating networks) and run the `Model`. Used for parallel execution.
-
-**Vectorized Implementation (Fast):**
-*   **`vectorized_model.py`**: The high-performance, matrix-based replacement for `Model`. It stores agent states in NumPy arrays `(N, 2, 2)` instead of objects. Includes convergence tracking and root analysis.
-*   **`vectorized_agents.py`**: Contains `VectorizedBandit` for batch processing of experiments.
-*   **`vectorized_simulation_functions.py`**: Wrappers for running `VectorizedModel`.
-
-**Analysis Tools:**
-*   **`analysis/mc_analysis.py`**: Markov Chain analysis utilities including:
-    *   `MarkovChainAnalyzer`: Main class for trajectory analysis
-    *   `StateSnapshot`: Immutable state records with fingerprinting
-    *   Convergence diagnostics, mixing time estimation, absorption analysis
-
-**Network Handling:**
-*   **`network_generation.py`**: Functions to generate synthetic networks (e.g., `barabasi_albert_directed`, `directed_watts_strogatz`).
-*   **`network_utils.py`**: Helper functions for calculating network statistics and metrics.
+**Immutable Dependencies**: `utils/math_ops.py` provides core algorithms used by multiple modules (RK4 for homeostasis, Sherman-Morrison for LinUCB, Normalizer for PPO).
 
 **Testing & Verification:**
-*   **`tests/unit_tests.py`**: Unit tests for the reference implementation (`agents.py`, `model.py`).
-*   **`tests/test_vectorization.py`**: Regression tests ensuring `VectorizedModel` matches `Model`.
-*   **`tests/test_mc_analysis.py`**: Unit tests for Markov Chain analysis utilities.
-*   **`notebooks/basic_testing/`**: Visual verification notebooks for both model implementations.
-*   **`notebooks/convergence_analysis/`**: Convergence studies and root influence analysis scripts.
+
+| Test Suite | File | Verifies |
+|------------|------|----------|
+| Math Operations | `tests/test_math_ops.py` | RK4 accuracy, Sherman-Morrison correctness, Normalizer convergence |
+| Environments | `tests/test_envs.py` | reset/step contracts, state shapes, reward bounds, seed reproducibility |
+| Agents | `tests/test_agents.py` | Interface compliance, action selection, buffer ops, update mechanics |
+| Controllers | `tests/test_controllers.py` | PID response, LQR stability, MPC constraints, DARE solver |
+
+**Integration Tests**: Each agent-environment pair runs 10-episode smoke tests via `main.py`.

@@ -4,7 +4,7 @@
 - id: implementation.phase2
 - owner: user
 - priority: critical
-- context_dependencies: { "master_plan": "../MASTER_PLAN.md", "conventions": "../../../MD_CONVENTIONS.md" }
+- context_dependencies: {"master_plan": "../MASTER_PLAN.md", "conventions": "../../../MD_CONVENTIONS.md"}
 - last_checked: 2026-01-24T08:50:00+01:00
 - blocked_by: [implementation.phase1]
 <!-- content -->

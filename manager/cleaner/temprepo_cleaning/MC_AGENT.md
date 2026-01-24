@@ -1,24 +1,39 @@
 # Markov Chain Analysis Agent Instructions
+- id: markov_chain_analysis_agent_instructions
 - status: active
-- type: agent_skill
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md", "rl_guidelines": "Reinforcement Learning Project Guideline.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Role:** You are the **MC Agent** (Markov Chain Agent), a specialist in stochastic processes and long-term behavior analysis.
 
 **Goal:** Ensure the simulation codebase properly tracks and exposes the fundamental Markov Chain properties of the learning dynamics, enabling rigorous analysis of convergence, equilibrium, and information flow.
 
 ## Background: The Simulation as a Markov Chain
+- id: markov_chain_analysis_agent_instructions.background_the_simulation_as_a_markov_chain
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 The network epistemology simulation is fundamentally a **Markov Chain** where:
 
 ### State Space
+- id: markov_chain_analysis_agent_instructions.background_the_simulation_as_a_markov_chain.state_space
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - **Beta Agent:** The state is the collection of all agents' credence pairs: $S_t = \{(\alpha_i^{(0)}, \beta_i^{(0)}, \alpha_i^{(1)}, \beta_i^{(1)})\}_{i=1}^N$. Since these are continuous parameters updated via Bayesian learning, the state space is a subset of $\mathbb{R}^{4N}$.
 - **Bayes Agent:** The state is the collection of all agents' scalar credences: $S_t = \{c_i\}_{i=1}^N \in [0,1]^N$.
 
 ### Transition Dynamics
+- id: markov_chain_analysis_agent_instructions.background_the_simulation_as_a_markov_chain.transition_dynamics
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 At each time step:
 1. **Experiment Phase:** Each agent $i$ chooses a theory based on current credences and runs $n$ experiments, getting outcomes drawn from $\text{Binomial}(n, p_{\text{theory}})$.
@@ -32,7 +47,11 @@ The randomness comes from:
 - Optionally: sampling from posterior for credences
 
 ### Key Markov Properties to Track
+- id: markov_chain_analysis_agent_instructions.background_the_simulation_as_a_markov_chain.key_markov_properties_to_track
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 1. **Absorbing States / Consensus States**
    - States where all agents have converged to extreme beliefs
@@ -57,11 +76,19 @@ The randomness comes from:
    - This is already tracked via `compute_root_analysis`
 
 ## Core Responsibilities
+- id: markov_chain_analysis_agent_instructions.core_responsibilities
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### 1. Verify Markov Property Preservation
+- id: markov_chain_analysis_agent_instructions.core_responsibilities.1_verify_markov_property_preservation
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 The simulation MUST maintain the Markov property: the future state depends only on the current state, not on the history of how we got there.
 
@@ -71,7 +98,11 @@ The simulation MUST maintain the Markov property: the future state depends only 
 - [ ] Confirm that belief updates depend only on current beliefs + new evidence
 
 ### 2. State Space Tracking
+- id: markov_chain_analysis_agent_instructions.core_responsibilities.2_state_space_tracking
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 Ensure the codebase exposes sufficient information to reconstruct the full state at any time step.
 
@@ -86,7 +117,11 @@ Ensure the codebase exposes sufficient information to reconstruct the full state
 - [ ] **Return Time Tracking**: Steps to return to similar states (if applicable)
 
 ### 3. Convergence Analysis Infrastructure
+- id: markov_chain_analysis_agent_instructions.core_responsibilities.3_convergence_analysis_infrastructure
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 Build on existing convergence tracking to provide deeper MC insights.
 
@@ -101,7 +136,11 @@ Build on existing convergence tracking to provide deeper MC insights.
 - [ ] **Coupling Time Estimation**: When two chains started from different states merge
 
 ### 4. Root Influence as Markov Structure
+- id: markov_chain_analysis_agent_instructions.core_responsibilities.4_root_influence_as_markov_structure
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 The root node analysis reveals structural properties of the Markov Chain.
 
@@ -120,11 +159,19 @@ In DAGs with root nodes, the long-run behavior is determined by:
 - [ ] **Root Influence Decomposition**: Per-root contribution to final outcome
 
 ## Implementation Plan
+- id: markov_chain_analysis_agent_instructions.implementation_plan
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Phase 1: State Space Utilities (New File: `mc_analysis.py`)
+- id: markov_chain_analysis_agent_instructions.implementation_plan.phase_1_state_space_utilities_new_file_mc_analysispy
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 Create `src/net_epistemology/analysis/mc_analysis.py` with:
 
@@ -155,7 +202,11 @@ class MarkovChainAnalyzer:
 ```
 
 ### Phase 2: Convergence Diagnostics
+- id: markov_chain_analysis_agent_instructions.implementation_plan.phase_2_convergence_diagnostics
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 Add to `VectorizedModel` or create separate analyzer:
 
@@ -177,7 +228,11 @@ def compute_spectral_gap(self):
 ```
 
 ### Phase 3: Absorption Analysis
+- id: markov_chain_analysis_agent_instructions.implementation_plan.phase_3_absorption_analysis
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 ```python
 def estimate_absorption_probabilities(self, n_simulations=100):
@@ -195,7 +250,11 @@ def mean_hitting_time_to_consensus(self, n_simulations=100):
 ```
 
 ## Verification Checklist
+- id: markov_chain_analysis_agent_instructions.verification_checklist
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 Before any MC analysis code is complete, verify:
 
@@ -205,7 +264,11 @@ Before any MC analysis code is complete, verify:
 - [ ] **Root Influence Test**: Predictions from root analysis match long-run outcomes
 
 ## Related Files
+- id: markov_chain_analysis_agent_instructions.related_files
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 - `notebooks/convergence_analysis/convergence_studies.py`: Existing convergence tracking
 - `notebooks/convergence_analysis/root_influence_analysis.py`: Root node influence studies
@@ -213,11 +276,19 @@ Before any MC analysis code is complete, verify:
 - `AI_AGENTS/LINEARIZE_AGENT.md`: Vectorization details
 
 ## Mathematical Notes
+- id: markov_chain_analysis_agent_instructions.mathematical_notes
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 
 ### Belief Update as Markov Transition
+- id: markov_chain_analysis_agent_instructions.mathematical_notes.belief_update_as_markov_transition
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 For **Beta agents**, the transition is:
 $$
@@ -231,7 +302,11 @@ The randomness enters through:
 3. The aggregation over the network
 
 ### Long-Run Behavior Theorem (Informal)
+- id: markov_chain_analysis_agent_instructions.mathematical_notes.long_run_behavior_theorem_informal
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 **Claim:** In a DAG with root nodes, if we run the simulation long enough:
 - All descendants of roots that converge to truth will converge to truth
@@ -241,14 +316,22 @@ The randomness enters through:
 This is empirically verified in `root_influence_analysis.py`.
 
 ## Agent Log Entry Template
+- id: markov_chain_analysis_agent_instructions.agent_log_entry_template
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 When implementing MC analysis features, log in `AGENTS_LOG.md`:
 
 ```markdown
 
 ### [DATE] - Markov Chain Analysis Implementation (MC Agent)
+- id: markov_chain_analysis_agent_instructions.agent_log_entry_template.date_markov_chain_analysis_implementation_mc_agent
 - status: active
+- type: context
+- context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
+- last_checked: 2026-01-24
 <!-- content -->
 *   **Task:** [Specific MC feature implemented]
 *   **Actions:**
