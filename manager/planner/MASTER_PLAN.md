@@ -201,7 +201,12 @@ This document outlines the tactical execution plan for building the **Local Nexu
 * **Language**: Python 3.10+
 * **Frontend**: Streamlit (Chosen for rapid iteration and native data support).
 * **Database**: DuckDB (Embedded OLAP, zero-dependency, SQL compatible).
+**Tech Stack Selection**:
+* **Language**: Python 3.10+
+* **Frontend**: Streamlit (Chosen for rapid iteration and native data support).
+* **Database**: DuckDB (Embedded OLAP, zero-dependency, SQL compatible).
 * **Data Processing**: Pandas / Polars.
+* **Agent Framework**: **Google ADK (Local Mode)**. Even in Phase 1, we will structure "Mock tools" using the ADK pattern (Python functions + type hints) to make the transition to Phase 3 seamless.
 
 #### Project Initialization & Structure
 - status: todo
@@ -314,9 +319,10 @@ Implement the Streamlit frontend.
 Since the Cloud Agents (Phase 3) are not ready, build a **Local Loopback** for testing.
 
 1. **Input**: User types "Show me the last 5 rows of sales".
-2. **Mock Processor**:
-   * Regex or Keyword matching (e.g., if "show" and "sales" in text -> `SELECT * FROM sales LIMIT 5`).
-   * *Goal*: Prove the UI can render a DataFrame returned by DuckDB.
+2. **Mock Processor (ADK Pattern)**:
+   * Instead of random regex, define a class `LocalAnalyst` with methods like `get_sales_data(limit: int)`.
+   * Use **Pydantic** to define the input schema for these methods, mirroring how ADK handles tool arguments.
+   * This allows us to "swap" this Mock Processor for a real `adk.Agent` in Phase 3 without rewriting the frontend.
 3. **Rendering**:
    * If response is Text: `st.markdown()`.
    * If response is Data: `st.dataframe()` or `st.bar_chart()`.
@@ -541,7 +547,9 @@ For raw files (CSV/Excel) that are too large for JSON payloads.
 <!-- content -->
 *   **Schema Mapping**: Map DuckDB types to BigQuery types.
 *   **Validation**: Check incoming schema against existing BigQuery schema to reject breaking changes (Schema Drift defense).
+*   **Validation**: Check incoming schema against existing BigQuery schema to reject breaking changes (Schema Drift defense).
 *   **Trigger**: When a file lands in GCS, a Cloud Event triggers a "Loader" function (or the API itself) to load the CSV into BigQuery.
+*   **ADK Compatibility**: Ensure the BigQuery dataset labels and descriptions are verbose. ADK's `BigQueryTool` uses these schema descriptions to understand how to query the data.
 
 ### Phase 3: The Cloud Agents
 - status: todo
