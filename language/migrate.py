@@ -15,7 +15,7 @@ import unicodedata
 
 ALLOWED_FIELDS = {
     'status', 'type', 'owner', 'estimate', 'blocked_by', 
-    'priority', 'id', 'last_checked'
+    'priority', 'id', 'last_checked', 'context_dependencies'
 }
 
 # Content separator constant
@@ -93,7 +93,8 @@ def migrate_file(file_path):
                 full_id = ".".join([item[1] for item in header_stack])
                 current_date = date.today().isoformat()
                 
-                default_meta = f"- id: {full_id}\n- status: active\n- type: context\n- last_checked: {current_date}\n{CONTENT_SEPARATOR}\n"
+                default_context = '{ "conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md" }'
+                default_meta = f"- id: {full_id}\n- status: active\n- type: context\n- context_dependencies: {default_context}\n- last_checked: {current_date}\n{CONTENT_SEPARATOR}\n"
                 
                 # If there's a newline after header, we can insert before it or after it?
                 # Usually we want Header\nMETADATA.
