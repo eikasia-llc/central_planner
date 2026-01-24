@@ -143,4 +143,6 @@ For raw files (CSV/Excel) that are too large for JSON payloads.
 <!-- content -->
 *   **Schema Mapping**: Map DuckDB types to BigQuery types.
 *   **Validation**: Check incoming schema against existing BigQuery schema to reject breaking changes (Schema Drift defense).
+*   **Validation**: Check incoming schema against existing BigQuery schema to reject breaking changes (Schema Drift defense).
+*   **ADK Compatibility**: Ensure the BigQuery dataset labels and descriptions are verbose. ADK's `BigQueryTool` uses these to understand how to query the data.
 *   **Trigger**: When a file lands in GCS, a Cloud Event triggers a "Loader" function (or the API itself) to load the CSV into BigQuery.

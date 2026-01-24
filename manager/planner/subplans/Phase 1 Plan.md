@@ -18,6 +18,7 @@ This document outlines the tactical execution plan for building the **Local Nexu
 * **Frontend**: Streamlit (Chosen for rapid iteration and native data support).
 * **Database**: DuckDB (Embedded OLAP, zero-dependency, SQL compatible).
 * **Data Processing**: Pandas / Polars.
+* **Agent Framework**: **Google ADK (Local Mode)**. Use the ADK pattern (Python functions + type hints) for "Mock tools" to ensure seamless transition to Phase 3.
 
 ## Project Initialization & Structure
 - status: todo
@@ -130,9 +131,10 @@ Implement the Streamlit frontend.
 Since the Cloud Agents (Phase 3) are not ready, build a **Local Loopback** for testing.
 
 1. **Input**: User types "Show me the last 5 rows of sales".
-2. **Mock Processor**:
-   * Regex or Keyword matching (e.g., if "show" and "sales" in text -> `SELECT * FROM sales LIMIT 5`).
-   * *Goal*: Prove the UI can render a DataFrame returned by DuckDB.
+2. **Mock Processor (ADK Pattern)**:
+   * Instead of regex, define a class `LocalAnalyst` with methods like `get_sales_data(limit: int)`.
+   * Use **Pydantic** inputs to mirror ADK tool arguments.
+   * *Goal*: Swap this Mock for a real `adk.Agent` in Phase 3 without frontend rewrites.
 3. **Rendering**:
    * If response is Text: `st.markdown()`.
    * If response is Data: `st.dataframe()` or `st.bar_chart()`.
