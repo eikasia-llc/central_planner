@@ -14,7 +14,7 @@ def get_file_type(filename, path):
     basename = os.path.basename(filename)
     
     # Guideline
-    if basename in ['README.md', 'MD_REPRESENTATION_CONVENTIONS.md', 'AGENTS.md']:
+    if basename in ['README.md', 'MD_CONVENTIONS.md', 'AGENTS.md']:
         return 'guideline'
     
     # Log

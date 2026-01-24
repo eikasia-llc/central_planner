@@ -1,6 +1,6 @@
 # Recommender System Agent Instructions
 - status: active
-- type: agent_skill
+- context_dependencies: { "conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md" }- type: agent_skill
 <!-- content -->
 **Role:** You are the **RecSys Agent**, a specialist in recommender systems, covering both static collaborative filtering and dynamic contextual bandit approaches.
 

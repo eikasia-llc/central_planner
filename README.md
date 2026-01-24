@@ -1,6 +1,7 @@
 # Central Planner
 - status: active
 - type: guideline
+- context_dependencies: { "conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md" }
 <!-- content -->
 
 ## Project Overview
@@ -90,11 +91,11 @@ central_planner/
 │   ├── remove_meta.py            # Strips metadata
 │   ├── cli_utils.py              # CLI Utilities
 │   └── test.py                   # Test suite for the language tools
-└── MD_REPRESENTATION_CONVENTIONS.md # Specification of the Schema
+└── MD_CONVENTIONS.md # Specification of the Schema
 ```
 
 ## Key Files
 - status: active
 <!-- content -->
-- **`MD_REPRESENTATION_CONVENTIONS.md`**: The definitive guide on how to write files in this repository.
+- **`MD_CONVENTIONS.md`**: The definitive guide on how to write files in this repository.
 - **`AGENTS.md`**: The entry point for any AI agent joining the project.

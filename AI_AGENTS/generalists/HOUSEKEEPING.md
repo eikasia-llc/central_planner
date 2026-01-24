@@ -1,11 +1,12 @@
 # Housekeeping Protocol
 - status: active
 - type: recurring
+- context_dependencies: { "conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md" }
 <!-- content -->
 1. Read the AGENTS.md file.
 2. Look at the dependency network of the project, namely which script refers to which one.
 3. Proceed doing different sanity checks and unit tests from root scripts to leaves.
-4. Compile all errors and tests results into a report. Make sure that the report uses the proper syntax protocol as defined in MD_REPRESENTATION_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
+4. Compile all errors and tests results into a report. Make sure that the report uses the proper syntax protocol as defined in MD_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
 6. Print that report in the Latest Report subsection below, overwriting previous reports.
 7. Add that report to the AGENTS_LOG.md.
 

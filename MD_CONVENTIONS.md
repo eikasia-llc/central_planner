@@ -1,6 +1,7 @@
 # Markdown-JSON Hybrid Schema Conventions
 - status: active
 - type: guideline
+- context_dependencies: { "project_root": "README.md" }
 <!-- content -->
 This document defines the strict conventions for the **Markdown-JSON Hybrid Schema** used in this project for hierarchical task coordination and agentic planning.
 
@@ -69,6 +70,7 @@ The following fields are standard, but the schema allows extensibility.
 | `blocked_by`| `list` | List of explicit dependencies (IDs or relative paths) |
 | `priority` | `enum` | `low`, `medium`, `high`, `critical` (Optional) |
 | `id` | `string` | Unique identifier for the node (e.g., `project.component.task`). Used for robust merging and dependency tracking. |
+| `context_dependencies` | `dict` | map of semantic aliases to file paths (e.g., `{ "guideline": "CONVENTIONS.md" }`). Defines required reading for this node. |
 | `last_checked` | `string` | This is the date of the last time this node was modified, including change of status. |
 
 ### Type Definitions
@@ -86,7 +88,21 @@ For extended fields consider:
  - The key has no spaces (words are separated with dash or underscore)
  - The value is single line
 
-### 4. Context & Description
+### 4. Context Dependencies
+- status: active
+<!-- content -->
+A node may define a `context_dependencies` map to declare external files required to understand or execute it.
+
+**Structure**: A JSON-style dictionary where:
+- **Key**: A semantic alias (e.g., `role`, `guideline`, `schema`) describing *why* the file is needed.
+- **Value**: Relative path to the dependency.
+
+**Resolution Protocol (Recursive)**:
+1.  **Depth-First**: Agents must resolve dependencies recursively. If File A depends on B, and B depends on C, the agent reads C, then B, then A.
+2.  **Flat Definition**: Avoid defining the entire tree in one file. Each file should only declare its immediate dependencies.
+3.  **Aliases**: Use consistent keys (e.g., `manager_agent`, `conventions`) to help the LLM categorize the context.
+
+### 5. Context & Description
 - status: active
 <!-- content -->
 - Any text following the metadata block is considered "Context" or "Description".

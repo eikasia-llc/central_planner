@@ -50,6 +50,9 @@ class Node:
                 if isinstance(value, list):
                     val_str = f"[{', '.join(str(v) for v in value)}]"
                     md_lines.append(f"- {key}: {val_str}")
+                elif isinstance(value, dict):
+                    val_str = json.dumps(value)
+                    md_lines.append(f"- {key}: {val_str}")
                 else:
                     md_lines.append(f"- {key}: {value}")
             if self.metadata:
@@ -125,6 +128,12 @@ class MarkdownParser:
                                 value = [x.strip() for x in inner.split(',')]
                             else:
                                 value = []
+                        elif value_str.startswith('{') and value_str.endswith('}'):
+                            try:
+                                value = json.loads(value_str)
+                            except json.JSONDecodeError:
+                                # If invalid JSON, treat as string
+                                value = value_str
                         else:
                             value = value_str
                             

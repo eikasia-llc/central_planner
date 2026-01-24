@@ -1,13 +1,14 @@
 # AGENTS.md
 - status: active
 - type: guideline
+- context_dependencies: { "conventions": "MD_CONVENTIONS.md", "project_root": "README.md" }
 <!-- content -->
 
 ## SHORT ADVICE
 - status: active
 <!-- content -->
 - The whole trick is providing the AI Assistants with context, and this is done using the *.md files (AGENTS.md, AGENTS_LOG.md, and the AI_AGENTS folder)
-- Make sure that when writing *.md files, you use the proper syntax protocol as defined in MD_REPRESENTATION_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
+- Make sure that when writing *.md files, you use the proper syntax protocol as defined in MD_CONVENTIONS.md. If necessary, you can always use the scripts in the language folder to help you with this.
 - Learn how to work the Github, explained below.
 - Keep logs of changes in AGENTS_LOG.md
 - Make sure to execute the HOUSEKEEPING.md protocol often.
@@ -61,6 +62,6 @@ If you add textbooks or guides to the repository (preferably as Markdown `.md` o
 **Recommendation:**
 If you want to teach an agent a new language (like JAX) or technique:
 1.  Add the relevant chapters as **text/markdown** files.
-    *   **Best Practice:** Organize these files using the **Markdown-JSON Hybrid Schema** (see `MD_REPRESENTATION_CONVENTIONS.md`). This allows agents to understand the hierarchy of the concepts and metadata like `difficulty` or `topic`, and enables programmatic manipulation via JSON.
+    *   **Best Practice:** Organize these files using the **Markdown-JSON Hybrid Schema** (see `MD_CONVENTIONS.md`). This allows agents to understand the hierarchy of the concepts and metadata like `difficulty` or `topic`, and enables programmatic manipulation via JSON.
 2.  Update the agent's instruction file (e.g., `AI_AGENTS/LINEARIZE_AGENT.md`) to reference them.
 3.  Ask the agent to "Refactor the code using the techniques in [File X]".

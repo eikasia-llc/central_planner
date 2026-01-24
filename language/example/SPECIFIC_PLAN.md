@@ -1,6 +1,6 @@
 # detailed_implementation
 - status: proposed
-- type: expansion
+- context_dependencies: { "conventions": "../../MD_CONVENTIONS.md" }- type: expansion
 <!-- content -->
 
 ## Setup Database

@@ -1,6 +1,6 @@
 # React Assistant Guide
 - status: active
-- type: agent_skill
+- context_dependencies: { "conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md" }- type: agent_skill
 <!-- content -->
 > **Purpose:** This document provides AI assistants with guidelines for setting up simulation games as React + FastAPI monorepo projects. Follow this structure to create consistent, maintainable web-based simulations.
 
