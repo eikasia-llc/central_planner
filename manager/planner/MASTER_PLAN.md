@@ -721,6 +721,80 @@ This section outlines the strategy for monetization, user acquisition, and marke
     *   **Organic**: SEO, GitHub (Open Source core?).
     *   **Paid**: Targeted ads on niche industry forums (later stage).
 
+## Legals & Admin
+- status: todo
+- type: plan
+- id: legal
+- last_checked: 2026-01-24T09:57:25+01:00
+<!-- content -->
+This section details the administrative and legal infrastructure, divided by jurisdiction.
+
+### US Branch (Headquarters)
+- status: active
+- type: plan
+- id: legal.us
+- owner: user
+<!-- content -->
+**Role**: Global Revenue Collection, Cloud Services Contracting, Intellectual Property Holder.
+
+#### Banking & Cloud Accounting
+- status: todo
+- type: task
+- id: legal.us.banking
+- estimate: 1w
+<!-- content -->
+**Objective**: Establish the financial hub.
+*   **Banking**:
+    *   **Mercury**: Recommended (Zero fees, high yield).
+    *   **Backup**: Novo / Grasshopper.
+    *   **Action**: Apply with EIN and Articles of Organization.
+*   **Accounting**:
+    *   **QuickBooks Online**: Connect to Mercury.
+    *   **Revenue**: Stripe / App Store payouts land here.
+    *   **Expenses**: Pay Google Cloud (GCP/Workspace), GitHub, and EOR/Contractor fees from this account.
+
+### Argentina Branch (Talent Hub)
+- status: todo
+- type: plan
+- id: legal.ar
+- owner: user
+<!-- content -->
+**Role**: Talent Acquisition, Software Development Center.
+
+#### Entity Setup: S.R.L. (Sociedad de Responsabilidad Limitada)
+- status: todo
+- type: task
+- id: legal.ar.setup
+- estimate: 4w
+<!-- content -->
+**Objective**: Establish a local entity to hire full-time employees without EOR markup.
+*   **Structure**:
+    *   **Partners**: Requires 2 partners. Options:
+        *   **Option A (Corporate Link)**: You 95% + US LLC 5% (*Requires US LLC IGJ registration*).
+        *   **Option B (Fast Route)**: You 95% + Trusted Individual 5% (*Avoids US LLC paperwork*).
+    *   **Capital**: ~ARS 100,000 (Symbolic). 25% paid at signing.
+    *   **Manager**: Must have domicile in Argentina. (You can serve as Manager using your Argentine DNI/Passport if you maintain a local address).
+*   **Process**:
+    1.  **Name Reservation**: Check availability with IGJ.
+    2.  **Bylaws (Contrato Social)**: Drafted by a local Notary Public (*Escribano*).
+    3.  **Registration**: File with IGJ (Inspección General de Justicia).
+    4.  **Tax ID**: Obtain CUIT from AFIP.
+*   **US LLC Requirement**: To be a partner, the US LLC must register with IGJ under "Article 123" (Simplified in 2024, no longer need to prove assets abroad).
+
+#### Hiring & Payroll
+- status: todo
+- type: task
+- id: legal.ar.hiring
+- blocked_by: [legal.ar.setup]
+<!-- content -->
+**Objective**: Hire local developers legally.
+*   **Payroll**:
+    *   **Registration**: Register as Employer (*Alta de Empleador*) with AFIP.
+    *   **Service**: Use a local accounting firm (Estudio Contable) to process monthly payslips (*Recibos de Sueldo*) and F931 (Social Security).
+*   **Benefits**:
+    *   **Mandatory**: 13th Salary (*Aguinaldo*), Vacation (14 days), Health Insurance (*Obra Social*).
+    *   **Perks**: USD Split-payment (part of salary paid abroad) is common for retention, but requires careful tax structuring (*consult local CPA*).
+
 ## Security & Safety Checks
 - status: active
 - type: guideline
