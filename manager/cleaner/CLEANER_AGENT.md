@@ -11,7 +11,7 @@ You are the **Cleaner Agent**. Your primary responsibility is to maintain the hy
 - status: active
 - type: task
 <!-- content -->
-1.  **Ingestion**: Import external repositories listed in `manager/cleaner/repolist.txt`.
+1.  **Ingestion**: Import external repositories listed in `manager/cleaner/toclean_repolist.txt`.
 2.  **Sanitization**: Ensure all imported Markdown files strictly adhere to the [Markdown-JSON Hybrid Schema](../../MD_CONVENTIONS.md).
 3.  **Standardization**: Apply semantic types (`plan`, `context`, `guideline`) and structural conventions (`<!-- content -->` separator).
 
@@ -37,7 +37,7 @@ You have access to the following specialized tools in this directory and the `la
 <!-- content -->
 When asked to "Clean Repos" or "Import Data", follow this strict sequence:
 
-1.  **Read Target**: Check `manager/cleaner/repolist.txt` for the URL.
+1.  **Read Target**: Check `manager/cleaner/toclean_repolist.txt` for the URL.
 2.  **Execute Ingestion**: Run `clean_repo.py` with the URL.
     - *Outcome*: Files populate in `temprepo_cleaning`.
 3.  **Verify Structure**: Check a few files in `temprepo_cleaning` to ensure they have metadata blocks.

@@ -9,12 +9,39 @@ if current_dir not in sys.path:
 
 from md_parser import MarkdownParser
 
+def scan_content_for_type(filename):
+    """Peek at file content to determine type."""
+    try:
+        with open(filename, 'r', encoding='utf-8', errors='ignore') as f:
+            lines = [f.readline() for _ in range(50)]
+        content = "".join(lines)
+        
+        # Agent Skill heuristics
+        if "Role:" in content and "Agent" in content:
+            return 'agent_skill'
+        if "Goal:" in content and "Provision" in content:
+            return 'agent_skill'
+            
+        # Protocol heuristics
+        if "Protocol" in content and ("# " in content or "## " in content):
+            return 'protocol'
+            
+        # Context heuristics
+        if "Background:" in content or "Context:" in content:
+            return 'context'
+
+    except Exception:
+        pass
+    return None
+
 def get_file_type(filename, path):
-    """Determine type based on filename patterns."""
+    """Determine type based on filename patterns and content."""
     basename = os.path.basename(filename)
     
     # Guideline
     if basename in ['README.md', 'MD_CONVENTIONS.md', 'AGENTS.md']:
+        return 'guideline'
+    if 'DEFINITIONS' in basename or 'REQUIREMENTS' in basename:
         return 'guideline'
     
     # Log
@@ -41,6 +68,11 @@ def get_file_type(filename, path):
     # Context
     if basename in ['DAG_Example.md', 'HYPOTHESIS.md']:
         return 'context'
+    
+    # Fallback: Content Scan
+    content_type = scan_content_for_type(path)
+    if content_type:
+        return content_type
         
     return None
 
