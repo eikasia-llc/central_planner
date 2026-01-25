@@ -491,13 +491,11 @@ def collect_dependencies(node, dependencies_list=None):
         
     return dependencies_list
 
-def main():
-    target_file = os.path.join(planner_dir, "MASTER_PLAN.md")
+def generate_html(target_file):
     if not os.path.exists(target_file):
-        print("MASTER_PLAN.md not found")
-        sys.exit(1)
+        raise FileNotFoundError(f"Target file not found: {target_file}")
 
-    print("Checking dependencies...")
+    # Ensure D3 (though check if relevant for stream usage)
     ensure_d3()
 
     print(f"Parsing {target_file}...")
@@ -525,6 +523,19 @@ def main():
     b64_data = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
     
     html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)
+    return html_content
+
+def main():
+    target_file = os.path.join(planner_dir, "MASTER_PLAN.md")
+    
+    try:
+        html_content = generate_html(target_file)
+    except FileNotFoundError:
+        print("MASTER_PLAN.md not found")
+        sys.exit(1)
+    except Exception as e:
+        print(f"Error generating HTML: {e}")
+        sys.exit(1)
     
     output_path = os.path.join(planner_dir, "master_plan_interactive.html")
     with open(output_path, 'w') as f:
