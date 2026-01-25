@@ -39,3 +39,28 @@ This file tracks the execution history of the cleaning process, recording import
     - Ran `clean_repo.py`.
     - Ran `apply_types.py`.
     - Manually refined metadata for: `INFRASTRUCTURE_DEFINITIONS.md`, `INFRASTRUCTURE_AGENT.md`, `INFRASTRUCTURE_PLAN.md`, `AGENTS_ARTIFACTS.md` (updated types and IDs).
+
+### 2026-01-25: Import multiagentrecommendation
+- **Action**: Cleaned/Imported `IgnacioOQ/multiagentrecommendation` (branch `project-reorganization`)
+- **Repo URL**: `https://github.com/IgnacioOQ/multiagentrecommendation/tree/project-reorganization`
+- **Status**: Success
+- **Files Processed**: 9
+- **Modifications**:
+    - Ran `clean_repo.py`.
+    - Ran `apply_types.py`.
+    - Manually refined context dependencies for `RECSYS_AGENT.md`, `LINEARIZE_AGENT.md`, `MC_AGENT.md`.
+    - Manually fixed `TODOS.md` (type: task) and `MD_REPRESENTATION_CONVENTIONS.md` (type: guideline).
+
+### 2026-01-25: Re-import control_tower
+- **Action**: Cleaned/Imported `eikasia-llc/control_tower` (default branch) via updated repolist.
+- **Repo URL**: `https://github.com/eikasia-llc/control_tower`
+- **Status**: Success
+- **Files Processed**: 7
+- **Modifications**:
+    - Ran `clean_repo.py`.
+    - Ran `apply_types.py`.
+    - Manually corrected types for:
+        - `INFRASTRUCTURE_AGENT.md` (context -> agent_skill)
+        - `AGENTS_ARTIFACTS.md` (agent_skill -> guideline)
+        - `INFRASTRUCTURE_PLAN.md` (context -> plan)
+        - `2026-01-25_001_research-basic-game_plan.md` (context -> plan)

@@ -1,5 +1,5 @@
 # Infrastructure to Implement
-- id: infrastructure.plan
+- id: infrastructure_to_implement
 - status: active
 - type: plan
 - context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}

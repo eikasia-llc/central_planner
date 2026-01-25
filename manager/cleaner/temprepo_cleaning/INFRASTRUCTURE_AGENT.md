@@ -1,5 +1,5 @@
 # Infrastructure Agent Context
-- id: agent.infrastructure
+- id: infrastructure_agent_context
 - status: active
 - type: agent_skill
 - context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}

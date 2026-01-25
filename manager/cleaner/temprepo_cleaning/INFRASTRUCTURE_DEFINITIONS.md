@@ -1,7 +1,7 @@
 # Infrastructure Definitions and Requirements
-- id: infrastructure_definitions
+- id: infrastructure_definitions_and_requirements
 - status: active
-- type: guideline
+- type: context
 - context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
 - last_checked: 2026-01-25
 <!-- content -->

@@ -1,7 +1,7 @@
 # Plan: Research Basic Game Repository
 - id: plan_research_basic_game_repository
 - status: active
-- type: context
+- type: plan
 - context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md", "project_root": "README.md"}
 - last_checked: 2026-01-25
 <!-- content -->
