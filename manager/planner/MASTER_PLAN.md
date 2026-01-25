@@ -28,7 +28,7 @@ This document serves as the central strategic plan for the **Intelligent Control
 *   **Operational Excellence**: Transitioning clients from *reactive* fire-fighting to *proactive*, mathematically optimal inventory management.
 *   **Hybrid Architecture**: A privacy-conscious Local Nexus for daily work, connected to a scalable Cloud Brain for heavy computation.
 
-## [Meeting Notes](MEETING_NOTES.md)
+## Meeting Notes
 - status: active
 - type: log
 - id: planner.meeting_notes.top
