@@ -54,6 +54,7 @@ This file contains the historical log of meetings with colleagues and collaborat
 - hablamos la fase 3, acordamos que viene despues de las primeras dos fases.
 - Volvio el tema seguridad, pero lo dejamos para adelante en la fase 2.
 - Agregamos cosas a status.
+- No olvidar que se puede usar Claude en VSCode.
 
 **Action Items:**
 - Que Fran avance con Phase 2: The Cloud Bridge todo lo que pueda. En particular, poder jugar al snake desde nuestros servers en la nube.
