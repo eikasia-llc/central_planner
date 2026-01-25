@@ -28,6 +28,14 @@ This document serves as the central strategic plan for the **Intelligent Control
 *   **Operational Excellence**: Transitioning clients from *reactive* fire-fighting to *proactive*, mathematically optimal inventory management.
 *   **Hybrid Architecture**: A privacy-conscious Local Nexus for daily work, connected to a scalable Cloud Brain for heavy computation.
 
+## [MEETING_NOTES](MEETING_NOTES.md)
+- status: active
+- type: log
+- id: planner.meeting_notes.top
+- last_checked: 2026-01-25T17:41:00+01:00
+<!-- content -->
+Historical log of meetings and coordination with colleagues.
+
 ## Technical Architecture
 - status: active
 - type: plan
@@ -174,13 +182,7 @@ Repository resources categorized by their function.
 - [AGENTS](../../AGENTS.md)
 - [AGENTS_LOG](../../AGENTS_LOG.md)
 - [DAG_Example](../../language/example/DAG_Example.md)
-##### [MEETING_NOTES](MEETING_NOTES.md)
-- status: active
-- type: log
-- id: planner.meeting_notes.node
-- last_checked: 2026-01-25T17:40:00+01:00
-<!-- content -->
-Historical log of meetings and coordination.
+
 
 ## Implementation Roadmap
 - status: active
