@@ -45,7 +45,7 @@ This file contains the historical log of meetings with colleagues and collaborat
 - Next steps
 
 **Discussion:**
-- 
+- hola fran esta en linea
 
 **Action Items:**
 - [ ] 
