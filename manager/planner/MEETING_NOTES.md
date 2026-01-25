@@ -57,3 +57,4 @@ This file contains the historical log of meetings with colleagues and collaborat
 **Action Items:**
 - Que Fran avance con Phase 2: The Cloud Bridge todo lo que pueda. En particular, poder jugar al snake desde nuestros servers en la nube.
 - Que Ignacio avance con Phase 1: Local Nexus todo lo que pueda.
+- Agregamos a status: 

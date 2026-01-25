@@ -1,6 +1,6 @@
 # Housekeeping Protocol
-- status: active
-- type: recurring
+- status: recurring
+- type: guideline
 - context_dependencies: {"conventions": "../../MD_CONVENTIONS.md", "agents": "../../AGENTS.md"}
 <!-- content -->
 1. Read the AGENTS.md file.
