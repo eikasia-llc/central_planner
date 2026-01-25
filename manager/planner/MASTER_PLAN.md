@@ -161,6 +161,7 @@ Repository resources categorized by their function.
 - [UI_DESIG_ASSISTANT](../../AI_AGENTS/specialists/UI_DESIG_ASSISTANT.md)
 - [LINEARIZE_AGENT](../../AI_AGENTS/specialists/LINEARIZE_AGENT.md)
 - [MC_AGENT](../../AI_AGENTS/specialists/MC_AGENT.md)
+- [CLOUD_SCHEDULER_AGENT](../../AI_AGENTS/specialists/CLOUD_SCHEDULER_AGENT.md)
 
 #### Knowledge
 - status: active
