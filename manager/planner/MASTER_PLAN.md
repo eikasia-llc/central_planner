@@ -32,9 +32,23 @@ This document serves as the central strategic plan for the **Intelligent Control
 - status: active
 - type: log
 - id: planner.meeting_notes.top
-- last_checked: 2026-01-25T17:41:00+01:00
+- last_checked: 2026-01-25T17:47:00+01:00
 <!-- content -->
 Historical log of meetings and coordination with colleagues.
+
+### 2026-01-25 - Setting the Intelligent Control SaaS Roadmap
+- status: todo
+- type: log
+- id: planner.meeting.20260125.roadmap
+- participants: ["Ignacio", "Fran"]
+- last_checked: 2026-01-25T17:47:00+01:00
+<!-- content -->
+**Agenda:**
+- Understand Planning Tools and Master Plan
+- Cloud Situation: is snake up?
+- Gitaccess?
+- React vs Python
+- Next steps
 
 ## Technical Architecture
 - status: active
