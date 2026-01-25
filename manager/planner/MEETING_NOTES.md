@@ -45,7 +45,13 @@ This file contains the historical log of meetings with colleagues and collaborat
 - Next steps
 
 **Discussion:**
-- hola fran esta en linea
+- Tema centralizacion: Upstream vs Downstream
+- Fran se hace cargo del nodo Phase 2 del Master Plan.
+- Hace scipt que mapee las dependencias.
+- Vamos a usar React.
+- Darle acceso a los repositorios de git.
+
+
 
 **Action Items:**
 - [ ] 
