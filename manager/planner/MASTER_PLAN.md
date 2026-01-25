@@ -912,58 +912,13 @@ The paper argues that the Cooperative Principle isn't encoded in payoff matrices
 - status: todo
 - type: plan
 - id: product.saas.research.clawdbot
-- last_checked: 2026-01-25T12:48:17+01:00
+- last_checked: 2026-01-25T13:40:40+01:00
 <!-- content -->
 A research direction inspired by the [Clawdbot project](https://github.com/clawdbot/clawdbot) to create a "Personal AI Assistant" that runs locally on a Mac mini but interacts via chat apps (Telegram/iMessage).
 
-#### Local Agent Architecture
-- status: todo
-- type: task
-- id: product.saas.research.clawdbot.arch
-<!-- content -->
-- **Host**: Runs on a dedicated M4 Mac mini (Always-on server).
-- **Shell Access**: The agent has `exec` permissions to run terminal commands, manage files, and install dependencies.
-- **Local Nexus**: Keeps settings, memories, and instructions as literal folders and Markdown documents on the local machine.
-
-#### Gateway Interface
-- status: todo
-- type: task
-- id: product.saas.research.clawdbot.gateway
-<!-- content -->
-- **Mechanism**: A "Gateway" daemon that bridges the local agent to external messaging platforms.
-- **Channels**:
-    - **Telegram**: Supports text, audio messages, and images.
-    - **iMessage**: Native Apple ecosystem integration.
-- **Benefit**: "Chat with your server" from anywhere without exposing a web UI.
-
-#### Memory System
-- status: todo
-- type: task
-- id: product.saas.research.clawdbot.memory
-<!-- content -->
-- **Format**: Daily notes in Markdown (e.g., `2026-01-25.md`).
-- **Log**: Interactions, thoughts, and executed commands are logged for future context.
-- **Integration**: Can be indexed by Obsidian or Raycast for human retrieval.
-
-#### Recursive Self-Improvement
-- status: todo
-- type: task
-- id: product.saas.research.clawdbot.self_improvement
-<!-- content -->
-- **Concept**: The agent can modify its own tools and "Skills".
-- **Workflow**:
-    1. User asks for a new capability (e.g., "Transcribe audio").
-    2. Agent researches the tool (e.g., Whisper).
-    3. Agent writes a new Python script/MCP server.
-    4. Agent installs it into its own `src/skills` directory.
-    5. Agent restarts/reloads and now "knows" how to transcribe.
-
-#### Integrations & Media
-- status: todo
-- type: task
-- id: product.saas.research.clawdbot.integrations
-<!-- content -->
-- **Home Control**: Philips Hue, Sonos (via local network APIs).
-- **Productivity**: Notion, Todoist, Gmail (via MCP).
-- **Voice**: ElevenLabs TTS for responding with audio messages to user voice notes.
-- **Vision**: Generate images (Nano Banana/Gemini) to visualize data or "self-image".
+**Key Implementation Features**:
+*   **Architecture**: Hosted on an always-on M4 Mac mini with direct shell access for executing commands, managing files, and installing dependencies.
+*   **Gateway Interface**: A daemon bridging the local agent to Telegram/iMessage, allowing "Chat with your server" functionality without a web UI.
+*   **Memory System**: Uses daily Markdown notes indexed by tools like Obsidian or Raycast for long-term context and human retrieval.
+*   **Recursive Self-Improvement**: The agent can research, write, and install its own "Skills" (MCP servers/scripts) to dynamically expand its capabilities.
+*   **Integrations**: Planned support for Home Control (Hue/Sonos), Productivity (Notion/Gmail), and Voice/Vision (ElevenLabs/Nano Banana).
