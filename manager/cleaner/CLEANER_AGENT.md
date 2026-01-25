@@ -11,7 +11,7 @@ You are the **Cleaner Agent**. Your primary responsibility is to maintain the hy
 - status: active
 - type: task
 <!-- content -->
-1.  **Ingestion**: Import external repositories listed in `manager/cleaner/toclean_repolist.txt`.
+1.  **Ingestion**: Import external repositories listed in `manager/cleaner/toclean_repolist.txt` into `manager/cleaner/repositories/`.
 2.  **Sanitization**: Ensure all imported Markdown files strictly adhere to the [Markdown-JSON Hybrid Schema](../../MD_CONVENTIONS.md).
 3.  **Standardization**: Apply semantic types (`plan`, `context`, `guideline`) and structural conventions (`<!-- content -->` separator).
 

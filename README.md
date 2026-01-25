@@ -71,27 +71,21 @@ The `manager/` directory contains tools for coordinating multiple external repos
 ```
 central_planner/
 ├── AGENTS.md                     # General Agent Guidelines & Workflow
+├── AGENTS_LOG.md                 # Project-wide agent activity log
 ├── README.md                     # Project Documentation (This File)
-├── AI_AGENTS/                    # Agent Instructions
-│   ├── specialists/              # Specialized Agent Protocols (e.g., React, RecSys)
+├── MD_CONVENTIONS.md             # Specification of the Schema
+├── AI_AGENTS/                    # Agent Instructions & Protocols
+│   ├── specialists/              # Specialized Agent Protocols (React, RecSys, etc.)
 │   └── generalists/              # General Project Protocols (Setup, Housekeeping)
-├── manager/                      # Repository Management Tools
-│   ├── MANAGER_PROTOCOL.md       # Manager Agent Protocol & Responsibilities
-│   ├── MASTER_PLAN.md            # Aggregated plan from all repositories
-│   ├── clean_repo.py             # Harvests and cleans external repos
-│   ├── update_master_plan.py     # Integrates external plans
-│   └── repolist.txt              # List of target repositories
-├── language/                     # Tooling for the Communication System
-│   ├── md_parser.py              # Parses & Validates MD/METADATA files
-│   ├── visualization.py          # Visualizes task trees
-│   ├── visualize_dag.py          # Visualizes task DAGs (Text/Mermaid)
-│   ├── operations.py             # Merges and Extends task trees
-│   ├── migrate.py                # Heuristic migration tool
-│   ├── importer.py               # Imports legacy docs (.docx, .pdf)
-│   ├── remove_meta.py            # Strips metadata
-│   ├── cli_utils.py              # CLI Utilities
-│   └── test.py                   # Test suite for the language tools
-└── MD_CONVENTIONS.md # Specification of the Schema
+├── manager/                      # Repository Management & Planning
+│   ├── cleaner/                  # Tools for harvesting and cleaning external repos
+│   └── planner/                  # Central Planning and Master Plan management
+├── language/                     # Tooling for the Markdown-JSON Protocol
+│   ├── example/                  # Usage examples and demos
+│   └── (scripts)                 # Core parsing, viz, and migration tools
+├── bin/                          # Binary/Executable wrappers for tools
+├── util/                         # Miscellaneous utility scripts
+└── AGENTS_ARTIFACTS/             # Generated artifacts and plans from agents
 ```
 
 ## Key Files
