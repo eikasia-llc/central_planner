@@ -63,7 +63,7 @@ The following fields are standard, but the schema allows extensibility.
 
 | Field | Type | Description |
 | :--- | :--- | :--- |
-| `status` | `enum` | `todo`, `in-progress`, `done`, `blocked`, `recurring` |
+| `status` | `enum` | `todo`, `in-progress`, `done`, `blocked`, `recurring`, `active`|
 | `type` | `enum` | **Core**: `plan`, `task` <br>**Agentic**: `agent_skill`, `protocol`<br>**Knowledge**: `guideline`, `log`, `context` |
 | `owner` | `string` | The agent or user assigned to this (e.g., `dev-1`, `claude`) |
 | `estimate` | `string` | Time estimate (e.g., `1d`, `4h`) |
