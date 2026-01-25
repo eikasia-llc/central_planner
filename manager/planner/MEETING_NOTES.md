@@ -53,8 +53,10 @@ This file contains the historical log of meetings with colleagues and collaborat
 - En los project setup guidelines, aclararle al agente que incluya un .gitignore tipico a los lenguajes que se manajen.
 - hablamos la fase 3, acordamos que viene despues de las primeras dos fases.
 - Volvio el tema seguridad, pero lo dejamos para adelante en la fase 2.
+- Agregamos cosas a status.
 
 **Action Items:**
 - Que Fran avance con Phase 2: The Cloud Bridge todo lo que pueda. En particular, poder jugar al snake desde nuestros servers en la nube.
 - Que Ignacio avance con Phase 1: Local Nexus todo lo que pueda.
-- Agregamos cosas a status.
+- En los project setup guidelines, aclararle al agente que incluya un .gitignore tipico a los lenguajes que se manajen.
+- Hacer scipt que mapee las dependencias.
