@@ -39,16 +39,33 @@ Historical log of meetings and coordination with colleagues.
 ### 2026-01-25 - Setting the Intelligent Control SaaS Roadmap
 - status: todo
 - type: log
-- id: planner.meeting.20260125.roadmap
 - participants: ["Ignacio", "Fran"]
-- last_checked: 2026-01-25T17:47:00+01:00
+- id: planner.meeting.20260125.roadmap
+- last_checked: 2026-01-25T17:45:00+01:00
 <!-- content -->
+
 **Agenda:**
 - Understand Planning Tools and Master Plan
 - Cloud Situation: is snake up?
 - Gitaccess?
 - React vs Python
 - Next steps
+
+**Discussion:**
+- Tema centralizacion: Upstream vs Downstream
+- Fran se hace cargo del nodo Phase 2 del Master Plan.
+- Hacer scipt que mapee las dependencias.
+- Vamos a usar React.
+- Darle acceso a los repositorios de git.
+- En los project setup guidelines, aclararle al agente que incluya un .gitignore tipico a los lenguajes que se manajen.
+- hablamos la fase 3, acordamos que viene despues de las primeras dos fases.
+- Volvio el tema seguridad, pero lo dejamos para adelante en la fase 2.
+
+**Action Items:**
+- Que Fran avance con Phase 2: The Cloud Bridge todo lo que pueda. En particular, poder jugar al snake desde nuestros servers en la nube.
+- Que Ignacio avance con Phase 1: Local Nexus todo lo que pueda.
+- Agregamos cosas a status.
+
 
 ## Technical Architecture
 - status: active
