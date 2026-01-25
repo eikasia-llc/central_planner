@@ -12,14 +12,19 @@ This file contains the historical log of meetings with colleagues and collaborat
 - status: active
 - type: guideline
 <!-- content -->
-### [YYYY-MM-DD] - [Meeting Title]
+### [2026-01-25] - [Setting the Intelligent Control SaaS Roadmap]
 - status: todo
 - type: log
-- participants: []
+- participants: ["Ignacio", "Fran"]
+- last_checked: 2026-01-25T17:45:00+01:00
 <!-- content -->
 
 **Agenda:**
-- 
+- Understand Planning Tools and Master Plan
+- Cloud Situation: is snake up?
+- Gitaccess?
+- React vs Python
+- Next steps
 
 **Discussion:**
 - 
