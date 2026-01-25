@@ -174,6 +174,7 @@ Repository resources categorized by their function.
 - [AGENTS](../../AGENTS.md)
 - [AGENTS_LOG](../../AGENTS_LOG.md)
 - [DAG_Example](../../language/example/DAG_Example.md)
+- [MEETING_NOTES](MEETING_NOTES.md)
 
 ## Implementation Roadmap
 - status: active
