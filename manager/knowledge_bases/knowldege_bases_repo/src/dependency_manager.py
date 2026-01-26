@@ -17,8 +17,15 @@ from pathlib import Path
 from datetime import date
 from typing import Dict, List, Set, Optional, Tuple
 
-# Local import since we are in the same package/directory in the standalone repo
-from .md_parser import MarkdownParser
+# Local import
+try:
+    from .md_parser import MarkdownParser
+except ImportError:
+    from md_parser import MarkdownParser
+
+SCRIPT_DIR = Path(__file__).parent.resolve()
+# In the standalone repo, the project root is the parent of src/
+PROJECT_ROOT = SCRIPT_DIR.parent
 
 
 class DependencyManager:
