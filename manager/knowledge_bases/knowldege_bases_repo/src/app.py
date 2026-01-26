@@ -135,12 +135,12 @@ if selected_files:
         elif output_format == "List":
             content = "\n".join(f"- {f}" for f in all_resolved_paths)
         else: # Instruction
-            content = "You must read the following files in order to build your context.\n\nYou may find them in different folders, but you can do a grep search through the project:\n\n"
+            content = "The following files are required dependencies. They may be distributed across the codebase, so please **search for these specific filenames** to locate and read them:\n\n"
             for i, f in enumerate(all_resolved_paths, 1):
                 filename = os.path.basename(f)
                 content += f"{i}. Read {filename}\n"
                 
-        st.code(content, language="xml" if output_format == "XML" else "text")
+        st.text_area("Prompt Content", value=content, height=400, help="Copy this content into your prompt.")
         
         st.info(f"Selected {len(selected_files)} files resolved to {len(all_resolved_paths)} required readings (including hidden dependencies).")
 else:
