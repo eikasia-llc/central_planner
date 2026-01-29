@@ -166,54 +166,7 @@ owner: dev-2
 ## Tooling Reference
 - status: active
 <!-- content -->
-The following Python scripts are available in `language/` to interact with this schema:
-
-### 1. `language/md_parser.py`
-- status: active
-<!-- content -->
-- **Purpose**: The core parser enabling **bidirectional MD ↔ JSON** transformation.
-- **Key Classes**:
-    - `MarkdownParser`: Parses `.md` files into a `Node` tree
-    - `Node`: Tree node with `to_dict()`, `from_dict()`, and `to_markdown()` methods
-- **Transformations**:
-    - **MD → JSON**: `parser.parse_file("file.md")` → `root.to_dict()` → `json.dumps()`
-    - **JSON → MD**: `json.loads()` → `Node.from_dict(data)` → `root.to_markdown()`
-- **CLI Usage**: `python3 language/md_parser.py <file.md>`
-- **Output**: JSON representation of the tree or validation errors.
-
-### 2. `language/visualization.py`
-- status: active
-<!-- content -->
-- **Purpose**: Visualizes the task tree in the terminal with metadata.
-- **Usage**: `python3 language/visualization.py <file.md>`
-- **Output**: Unicode tree visualization.
-
-### 3. `language/operations.py`
-- status: active
-<!-- content -->
-- **Purpose**: Manipulate task trees (merge, extend).
-- **Usage**:
-    - **Merge**: `python3 language/operations.py merge <target.md> <source.md> "<Target Node Title>" [--output <out.md>]`
-        - Inserts the source tree as children of the specified target node.
-    - **Extend**: `python3 language/operations.py extend <target.md> <source.md> [--output <out.md>]`
-        - Appends the source tree's top-level items to the target tree's top level.
-
-### 4. `language/migrate.py`
-- status: active
-<!-- content -->
-- **Purpose**: Heuristically adds default metadata to standard Markdown headers to make them schema-compliant.
-- **Usage**: `python3 language/migrate.py <file.md> [file2.md ...]`
-- **Effect**: Modifies files in-place by injecting `- status: active` after headers that lack metadata.
-
-### 5. `language/importer.py`
-- status: active
-<!-- content -->
-- **Purpose**: Converts legacy documents (`.docx`, `.pdf`, `.doc`) into Markdown and auto-applies the Protocol.
-- **Usage**: `python3 language/importer.py <file.docx> [file.pdf ...]`
-- **Capabilities**:
-    - **DOCX**: Preserves headers (Heading 1-3) if `python-docx` is installed. Fallbacks to text extraction.
-    - **PDF**: Extracts text if `pypdf` or `pdftotext` is available.
-    - **DOC**: Uses MacOS `textutil` for text extraction.
+The Python scripts that implement this schema (parser, migration, visualization) are located in `manager/planner/lib/` and are primarily used by the Central Planner system.
 
 ## Migration Guidelines
 - status: active

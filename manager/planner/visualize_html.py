@@ -9,17 +9,17 @@ import urllib.request
 # Setup path to find 'language' module
 current_file_path = os.path.abspath(__file__)
 planner_dir = os.path.dirname(current_file_path)
-manager_dir = os.path.dirname(planner_dir)
-root_dir = os.path.dirname(manager_dir)
-language_dir = os.path.join(root_dir, 'language')
+# manager_dir = os.path.dirname(planner_dir)
+# root_dir = os.path.dirname(manager_dir)
+# language_dir = os.path.join(root_dir, 'language')
 
-if language_dir not in sys.path:
-    sys.path.append(language_dir)
+# if language_dir not in sys.path:
+#     sys.path.append(language_dir)
 
 try:
-    from md_parser import MarkdownParser
+    from lib.md_parser import MarkdownParser
 except ImportError as e:
-    print(f"Error: Could not import md_parser from {language_dir}. {e}")
+    print(f"Error: Could not import md_parser from {planner_dir}/lib. {e}")
     sys.exit(1)
 
 # Ensure D3 is available locally

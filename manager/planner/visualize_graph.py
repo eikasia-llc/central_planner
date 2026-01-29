@@ -8,17 +8,18 @@ import matplotlib.patches as mpatches
 # Setup path to find 'language' module
 current_file_path = os.path.abspath(__file__)
 planner_dir = os.path.dirname(current_file_path)
-manager_dir = os.path.dirname(planner_dir)
-root_dir = os.path.dirname(manager_dir)
-language_dir = os.path.join(root_dir, 'language')
 
-if language_dir not in sys.path:
-    sys.path.append(language_dir)
+# manager_dir = os.path.dirname(planner_dir)
+# root_dir = os.path.dirname(manager_dir)
+# language_dir = os.path.join(root_dir, 'language')
+
+# if language_dir not in sys.path:
+#     sys.path.append(language_dir)
 
 try:
-    from md_parser import MarkdownParser
+    from lib.md_parser import MarkdownParser
 except ImportError as e:
-    print(f"Error: Could not import md_parser from {language_dir}. {e}")
+    print(f"Error: Could not import md_parser from {planner_dir}/lib. {e}")
     sys.exit(1)
 
 def hierarchy_pos(G, root=None, width=1., vert_gap = 0.2, vert_loc = 0, xcenter = 0.5):

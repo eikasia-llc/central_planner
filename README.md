@@ -43,26 +43,17 @@ Description of the login feature implementation...
 ### The Language System (Tooling)
 - status: active
 <!-- content -->
-A suite of Python scripts in the `language/` directory allows agents and humans to interact with this protocol programmatically:
+A suite of Python scripts in `manager/planner/lib/` (previously `language/`) allows the planner to interact with this protocol programmatically:
 
 - **Parsing**: `md_parser.py` converts raw Markdown into structured Python objects, validating schema compliance.
-- **Visualization**: 
-    - `visualization.py`: Renders the hierarchical task tree in the terminal.
-    - `visualize_dag.py`: Visualizes task dependencies (DAG) either as a **text report** (`--format text`) or **Mermaid syntax** (`--format mermaid`).
-- **Standardization**: `migrate.py` automatically converts standard Markdown files into the Protocol format by injecting default metadata.
-- **Import**: `importer.py` converts legacy documents (`.docx`, `.pdf`) into Protocol-compliant Markdown.
-- **Operations**: `operations.py` allows for complex tree manipulations, such as merging subtrees or extending plans.
-- **Maintenance**:
-    - `remove_meta.py`: Strips metadata from files for clean reading or export.
-    - `cli_utils.py`: Shared utilities for CLI argument parsing and file handling.
-- **Testing**: `test.py` validates the functionality of the language tools.
+- **Visualization**: `visualize_graph.py` generates a visualization of the Master Plan.
+- **Migration**: `migrate.py` standardizes Markdown files.
 
 ## Repository Manager
 - status: active
 <!-- content -->
 The `manager/` directory contains tools for coordinating multiple external repositories:
 
-- **Cleaning**: `clean_repo.py` clones an external repository, extracts relevant Markdown files, and standardizes them using `migrate.py`. It supports standard Git URLs and branch URLs (e.g., `/tree/branch-name`).
 - **Integration**: `update_master_plan.py` integrates these external plans into the central `MASTER_PLAN.md`.
 
 ## Directory Structure
@@ -74,18 +65,9 @@ central_planner/
 ├── AGENTS_LOG.md                 # Project-wide agent activity log
 ├── README.md                     # Project Documentation (This File)
 ├── MD_CONVENTIONS.md             # Specification of the Schema
-├── AI_AGENTS/                    # Agent Instructions & Protocols
-│   ├── specialists/              # Specialized Agent Protocols (React, RecSys, etc.)
-│   └── generalists/              # General Project Protocols (Setup, Housekeeping)
 ├── manager/                      # Repository Management & Planning
-│   ├── cleaner/                  # Tools for harvesting and cleaning external repos
 │   └── planner/                  # Central Planning and Master Plan management
-├── language/                     # Tooling for the Markdown-JSON Protocol
-│   ├── example/                  # Usage examples and demos
-│   └── (scripts)                 # Core parsing, viz, and migration tools
-├── bin/                          # Binary/Executable wrappers for tools
-├── util/                         # Miscellaneous utility scripts
-└── AGENTS_ARTIFACTS/             # Generated artifacts and plans from agents
+└── bin/                          # Binary/Executable wrappers for tools
 ```
 
 ## Key Files
