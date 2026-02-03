@@ -61,3 +61,44 @@ This file contains the historical log of meetings with colleagues and collaborat
 - Que Ignacio avance con Phase 1: Local Nexus todo lo que pueda.
 - En los project setup guidelines, aclararle al agente que incluya un .gitignore tipico a los lenguajes que se manajen.
 - Hacer scipt que mapee las dependencias.
+
+---
+
+## 2026-02-03 - Status Update & Planning
+- status: done
+- type: log
+- participants: ["Fran", "Nacho"]
+- id: planner.meeting.20260203.status_update
+- last_checked: 2026-02-03T20:26:00+01:00
+<!-- content -->
+
+**Agenda:**
+- Knowledge Base & Central Planner Migration
+- Infrastructure & Deployment
+- Local Nexus & Next Steps
+
+**Discussion:**
+
+**Fran:**
+- Mirar el knowledge base xq ya esta andando.
+- Despues migrar el central planner.
+- Streamlit de ambos al google cloud.
+- Tiene via libre para mejorar el mergeador de knowledge base (usar el generador de prompt).
+- Documentar todo en markdowns inclusive funcionamiento de infraestructura subyacente.
+
+**Nacho:**
+- Tener el central planner andando cuanto antes.
+- Actualizar el central planner con el nodo del snake.
+- Agregar la migracion de knowledge base et al como un nodo.
+- Seguir trabajando en el local nexus.
+
+**Action Items:**
+- [ ] Mirar el knowledge base (Fran).
+- [ ] Migrar el central planner (Fran).
+- [ ] Deploy Streamlit de ambos al google cloud (Fran).
+- [ ] Mejorar el mergeador de knowledge base usando prompt generator (Fran).
+- [ ] Documentar infraestructura subyacente en markdown (Fran).
+- [ ] Tener el central planner andando cuanto antes (Nacho).
+- [ ] Actualizar el central planner con el nodo del snake (Nacho).
+- [ ] Agregar la migracion de knowledge base como un nodo (Nacho).
+- [ ] Seguir trabajando en el local nexus (Nacho).
