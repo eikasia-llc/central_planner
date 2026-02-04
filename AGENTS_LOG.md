@@ -9,6 +9,20 @@ Most recent event comes first
 - status: active
 <!-- content -->
 
+### Feature: Dockerization & Cloud Run Deployment
+- status: active
+<!-- content -->
+**Date:** 2026-02-04
+**AI Assistant:** Antigravity
+**Summary:** Refactored the project structure to match the `knowledge_base` pattern and prepared the application for deployment to Google Cloud Run.
+- **Goal:** Dockerize the application and enable Git-based persistence in a serverless environment.
+- **Implementation:**
+    - **Structure Refactor:** Moved source code to `src/`, logic to `src/planner_lib/`, and planning files to `content/planner/`.
+    - **Streamlit Enhancement:** Added "Git Pull/Push" buttons and integrated `GitManager` for ephemeral storage synchronization.
+    - **Cloud Preparation:** Created `Dockerfile`, `.dockerignore`, and `INFRASTRUCTURE.md`.
+    - **Deployment:** Setup Artifact Registry and deployed to Cloud Run.
+- **Files Modified:** `src/*`, `content/planner/*`, `Dockerfile`, `INFRASTRUCTURE.md`, `README.md`.
+
 ### Feature: Restructure Master Plan & Streamlit Fixes
 - status: active
 <!-- content -->

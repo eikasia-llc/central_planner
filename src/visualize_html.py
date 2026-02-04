@@ -4,19 +4,19 @@ import os
 import json
 import base64
 
-# Setup path to find 'language' module
+# Setup path to find 'planner_lib' module
 current_file_path = os.path.abspath(__file__)
-planner_dir = os.path.dirname(current_file_path)
+src_dir = os.path.dirname(current_file_path)
 
-# Ensure planner_dir is in sys.path so we can import 'lib'
-if planner_dir not in sys.path:
-    sys.path.append(planner_dir)
+# Ensure src_dir is in sys.path
+if src_dir not in sys.path:
+    sys.path.append(src_dir)
 
 try:
     from planner_lib.md_parser import MarkdownParser
 except ImportError as e:
     # Do not exit here, just print error. Let main or caller handle failure.
-    print(f"Error: Could not import md_parser from {planner_dir}/planner_lib. {e}")
+    print(f"Error: Could not import md_parser from {src_dir}/planner_lib. {e}")
     MarkdownParser = None # Prevent NameError later
 
 # Ensure D3 is available locally

@@ -4,17 +4,21 @@ import argparse
 import tempfile
 import shutil
 import subprocess
+from pathlib import Path
 
-# Add language directory to sys.path to allow imports
-current_dir = os.path.dirname(os.path.abspath(__file__))
-# parent_dir = os.path.dirname(current_dir)
-# grandparent_dir = os.path.dirname(parent_dir)
-# language_dir = os.path.join(grandparent_dir, 'language')
-# sys.path.append(language_dir)
+# Setup paths relative to this script
+current_dir = Path(__file__).parent.resolve()
+repo_root = current_dir.parent.parent
+src_dir = repo_root / "src"
+content_dir = repo_root / "content" / "planner"
+
+# Add src to sys.path to allow imports from planner_lib
+if str(src_dir) not in sys.path:
+    sys.path.append(str(src_dir))
 
 try:
-    from lib.md_parser import MarkdownParser, Node
-    from lib import migrate
+    from planner_lib.md_parser import MarkdownParser, Node
+    from planner_lib import migrate
 except ImportError as e:
     print(f"Error importing language tools: {e}")
     sys.exit(1)
@@ -63,7 +67,7 @@ def build_master_plan(repo_url, master_plan_path):
         
         if os.path.exists(master_plan_path):
             print(f"Reading existing Master Plan: {master_plan_path}")
-            master_root = parser.parse_file(master_plan_path)
+            master_root = parser.parse_file(str(master_plan_path))
         else:
             print(f"Creating new Master Plan: {master_plan_path}")
             master_root = Node(0, "Root")
@@ -102,13 +106,6 @@ def build_master_plan(repo_url, master_plan_path):
             main_node.children.append(repo_node)
 
         # 4. Merging Files
-        # We append all files found in the repo under the repo_node
-        # To avoid chaos, let's just append them.
-        # Future improvement: Reconstruct directory structure?
-        # For now, flattened list of files or structure preserved?
-        # The prompt says: "merge them into a MASTER_PLAN.md files which contains a general all encompasing abstraction"
-        # Flattening is simplest for now.
-        
         # Base level for children of repo_node (Level 2) is 3.
         target_base_level = repo_node.level + 1
 
@@ -120,13 +117,10 @@ def build_master_plan(repo_url, master_plan_path):
                 # We append source_root.children to repo_node
                 for child in source_root.children:
                     # Calculate level shift
-                    # child.level should become target_base_level ?
-                    # If child.level is 1 (# Title), it becomes 3 (### Title)
                     increment = target_base_level - child.level
                     adjust_level(child, increment)
                     
                     # Add filename context if useful? 
-                    # Maybe add a "source_file" metadata?
                     rel_path = os.path.relpath(md_file, temp_dir)
                     child.metadata['file_path'] = rel_path
                     
@@ -160,17 +154,19 @@ def update_all(repolist_path, master_plan_path):
         build_master_plan(repo_url, master_plan_path)
 
 if __name__ == "__main__":
+    default_plan = content_dir / "MASTER_PLAN.md"
+    default_repolist = content_dir / "repolist.txt"
+    
     parser = argparse.ArgumentParser(description="Audit and Merge remote repository markdown files into Master Plan.")
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument("--repo", help="GitHub Repository URL to process")
-    group.add_argument("--all", action="store_true", help="Update all repositories listed in manager/repolist.txt")
+    group.add_argument("--all", action="store_true", help="Update all repositories listed in repolist.txt")
     
-    parser.add_argument("--master-plan", default="MASTER_PLAN.md", help="Path to Master Plan file (default: MASTER_PLAN.md)")
+    parser.add_argument("--master-plan", default=str(default_plan), help=f"Path to Master Plan file (default: {default_plan})")
     
     args = parser.parse_args()
     
     if args.all:
-        repolist = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'repolist.txt')
-        update_all(repolist, args.master_plan)
+        update_all(str(default_repolist), args.master_plan)
     else:
         build_master_plan(args.repo, args.master_plan)
