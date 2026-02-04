@@ -42,12 +42,8 @@ HTML_TEMPLATE = """
 <head>
   <meta charset="UTF-8">
   <title>Master Plan Visualization</title>
-  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
-  <script>
-    if (typeof d3 === 'undefined') {
-        document.write('<script src="d3.min.js" onerror="handleScriptError()"><\/script>');
-    }
-  </script>
+  <title>Master Plan Visualization</title>
+  <!-- D3_LOADER_PLACEHOLDER -->
   <style>
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; margin: 0; overflow: hidden; background: #f8f9fa; }
     #container { width: 100vw; height: 100vh; display: flex; }
@@ -522,34 +518,28 @@ def generate_html(target_file, embed_d3=False):
     json_str = json.dumps(full_data)
     b64_data = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
     
-    html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)
-
+    
+    # D3 Loader Logic
+    d3_loader = """
+  <script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>
+  <script>
+    if (typeof d3 === 'undefined') {
+        document.write('<script src="d3.min.js" onerror="handleScriptError()"><\/script>');
+    }
+  </script>
+    """
+    
     if embed_d3 and os.path.exists(D3_PATH):
         try:
             with open(D3_PATH, 'r', encoding='utf-8') as f:
                 d3_script = f.read()
-            # Replace the CDN/Fallback block with the embedded script
-            script_block = f"""
-            <script>
-                {d3_script}
-            </script>
-            """
-            # We look for the marker, or just replace the head script tags?
-            # The template has specific lines. Let's do a replace on the first script tag 
-            # and remove the specific d3.min.js fallback logic.
-            
-            # Naive replacement for robustness:
-            # Remove the existing D3 tags
-            html_content = html_content.replace('<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>', '')
-            html_content = html_content.replace("if (typeof d3 === 'undefined') {", "/* Embedded D3 */")
-            html_content = html_content.replace("document.write('<script src=\"d3.min.js\" onerror=\"handleScriptError()\"><\/script>');", "")
-            html_content = html_content.replace("}", "")
-            
-            # Inject embedded script before the closing head
-            html_content = html_content.replace('</head>', script_block + '</head>')
-                
+            d3_loader = f"<script>{d3_script}</script>"
         except Exception as e:
             print(f"Failed to embed D3: {e}")
+            # Fallback to default loader
+            
+    html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)
+    html_content = html_content.replace("<!-- D3_LOADER_PLACEHOLDER -->", d3_loader)
 
     return html_content
 
