@@ -20,7 +20,7 @@ graph TD
 | Component | Service | Purpose |
 | :--- | :--- | :--- |
 | **Compute** | **Google Cloud Run** | Hosts the Streamlit application as a serverless container. Scalable and only runs when requests are active. |
-| **Registry** | **Artifact Registry** | Stores the Docker container images for the application. Repo: `central-planner-repo` |
+| **Registry** | **Artifact Registry** | Stores the Docker container images for the application. Repo: `central-planner-app` |
 | **Secret Management** | **Secret Manager** | Securely stores the GitHub Personal Access Token (`GITHUB_TOKEN`) used for repository synchronization. |
 | **Persistence** | **Git / GitHub** | Acts as the source of truth for planning files. The app pulls content from GitHub to ephemeral storage on startup. |
 | **Storage (Ephemeral)** | **In-memory / `/tmp`** | Stores the cloned repository during the container's lifetime. Note that this is cleared when the instance shuts down. |
@@ -29,13 +29,13 @@ graph TD
 
 ### Build Image
 ```bash
-gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner:latest .
+gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest .
 ```
 
 ### Deploy to Cloud Run
 ```bash
 gcloud run deploy central-planner \
-    --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner:latest \
+    --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest \
     --region us-central1 \
     --platform managed \
     --set-env-vars="REPO_MOUNT_POINT=/tmp/central_planner_repo,GITHUB_REPO_URL=https://github.com/eikasia-llc/central_planner.git" \
