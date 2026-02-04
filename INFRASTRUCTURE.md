@@ -30,18 +30,27 @@ graph TD
 
 ### Build Image
 ```bash
-gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest .
+gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest .
 ```
 
 ### Deploy to Cloud Run
 ```bash
-gcloud run deploy central-planner \
-    --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest \
+gcloud run deploy central-planner-app \
+    --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest \
     --region us-central1 \
     --platform managed \
     --set-env-vars="REPO_MOUNT_POINT=/tmp/central_planner_repo,GITHUB_REPO_URL=https://github.com/eikasia-llc/central_planner.git" \
     --set-secrets="GITHUB_TOKEN=GITHUB_TOKEN:latest"
 ```
+
+### Initiating IAP Configuration
+
+Setting up Identity-Aware Proxy (IAP): The first step involves enabling IAP on the Cloud Run service. After that, the IAM permissions are next
+
+Internet Access: to expose the service securely to the internet without the cost of a Load Balancer, I enabled Identity-Aware Proxy (IAP) directly on the Cloud Run service.
+
+Managed Authentication: Users are now required to sign in with their Google accounts before reaching the application.
+Verification: I verified that the service URL correctly intercepts requests and identifies the user session.
 
 ### On Ephemeral Storage
 
