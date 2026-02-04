@@ -72,6 +72,7 @@ Use the gcloud beta run services update --iap command to enable Direct IAP for t
 gcloud run services enable-iap central-planner-app --region us-central1 --project eikasia-ops 2>&1
 
 gcloud beta run deploy central-planner-app \
+       --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest \
        --region us-central1 \
        --project eikasia-ops \
        --iap \
