@@ -21,17 +21,30 @@ except ImportError as e:
     st.stop()
 
 # Generate HTML
+st.write("DEBUG: Starting generation...")
 target_file = os.path.join(planner_dir, "MASTER_PLAN.md")
+
 if not os.path.exists(target_file):
     st.error(f"MASTER_PLAN.md not found at {target_file}")
     st.stop()
 
-with st.spinner("Generating Visualization..."):
+st.write(f"DEBUG: Target file found at {target_file}")
+
+# with st.spinner("Generating Visualization..."):
+try:
     html_content = visualize_html.generate_html(target_file, embed_d3=True)
+    st.write(f"DEBUG: Generated HTML. Length: {len(html_content)}")
+except Exception as e:
+    st.error(f"Error generating HTML: {e}")
+    st.stop()
 
 # Render HTML
 # We set a large height to accommodate the d3 tree
-components.html(html_content, height=1000, scrolling=True)
+try:
+    components.html(html_content, height=1000, scrolling=True)
+    st.write("DEBUG: Component rendered.")
+except Exception as e:
+    st.error(f"Error rendering component: {e}")
 
 st.sidebar.markdown("### Info")
 st.sidebar.info("This view provides a live, interactive visualization of the underlying Master Plan markdown file.")
