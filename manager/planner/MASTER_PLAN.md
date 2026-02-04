@@ -37,11 +37,11 @@ This document serves as the central strategic plan for the **Intelligent Control
 Historical log of meetings and coordination with colleagues.
 
 ### 2026-01-25 - Setting the Intelligent Control SaaS Roadmap
-- status: todo
+- status: done
 - type: log
 - participants: ["Ignacio", "Fran"]
 - id: planner.meeting.20260125.roadmap
-- last_checked: 2026-01-25T17:45:00+01:00
+- last_checked: 2026-02-04T11:06:00+01:00
 <!-- content -->
 
 **Agenda:**
@@ -69,65 +69,105 @@ Historical log of meetings and coordination with colleagues.
 - Hacer scipt que mapee las dependencias.
 
 
+### 2026-02-03 - Status Update & Planning
+- status: done
+- type: log
+- participants: ["Fran", "Nacho"]
+- id: planner.meeting.20260203.status_update
+- last_checked: 2026-02-03T20:26:00+01:00
+<!-- content -->
+
+**Agenda:**
+- Knowledge Base & Central Planner Migration
+- Infrastructure & Deployment
+- Local Nexus & Next Steps
+
+**Discussion:**
+
+**Fran:**
+- Mirar el knowledge base xq ya esta andando.
+- Despues migrar el central planner.
+- Streamlit de ambos al google cloud.
+- Tiene via libre para mejorar el mergeador de knowledge base (usar el generador de prompt).
+- Documentar todo en markdowns inclusive funcionamiento de infraestructura subyacente.
+
+**Nacho:**
+- Tener el central planner andando cuanto antes.
+- Actualizar el central planner con el nodo del snake.
+- Agregar la migracion de knowledge base et al como un nodo.
+- Seguir trabajando en el local nexus.
+
+**Action Items:**
+- [ ] Mirar el knowledge base (Fran).
+- [ ] Migrar el central planner (Fran).
+- [ ] Deploy Streamlit de ambos al google cloud (Fran).
+- [ ] Mejorar el mergeador de knowledge base usando prompt generator (Fran).
+- [ ] Documentar infraestructura subyacente en markdown (Fran).
+- [ ] Tener el central planner andando cuanto antes (Nacho).
+- [ ] Actualizar el central planner con el nodo del snake (Nacho).
+- [ ] Agregar la migracion de knowledge base como un nodo (Nacho).
+- [ ] Seguir trabajando en el local nexus (Nacho).
+
+
 ## Technical Architecture
-- status: active
+- status: done
 - type: plan
 - id: product.saas.arch
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 The system separates Analytical Queries (Code Execution) from Control Tasks (Model Inference).
 
 ### Core Components
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.components
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 
 #### Chatbot Assistant App
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.components.chatbot
-- last_checked: 2026-01-23T19:47:31+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 Serves as the primary interface for users, functioning simultaneously as a mechanism for interaction and a local data warehouse. It facilitates data collection and user intent capture.
 
 #### Internal Ecosystem of AI-Assistants
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.components.ecosystem
-- last_checked: 2026-01-23T19:47:31+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 A background orchestration layer where multiple specialized AI agents collaborate. These agents are internal-only and handle specific sub-tasks to ensure seamless system operation.
 
 #### Cloud Infrastructure (BigQuery & Compute)
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.components.cloud
-- last_checked: 2026-01-23T19:47:31+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 The scalable backbone of the platform. It includes **Google BigQuery** for massive data warehousing and **Google Cloud Compute** for performant processing, ensuring reliability and speed.
 
 #### Internal Algorithms Repository
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.components.algorithms
-- last_checked: 2026-01-23T19:47:31+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 The central library of data processing and control algorithms. This leverages **Vertex AI** for advanced data science modeling and optimization tasks, representing the core intellectual property of the analysis engine.
 
 ### Information Flow
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.flow
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 
 #### AI Assistant Orchestration
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.flow.orchestration
-- last_checked: 2026-01-23T15:28:59+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 User interaction begins with the Chatbot App, which forwards requests to the Orchestrator (Vertex AI).
 1.  **Intent Recognition**: The Orchestrator determines if the request is **Analysis** (informational) or **Control** (actionable).
@@ -137,10 +177,10 @@ User interaction begins with the Chatbot App, which forwards requests to the Orc
 3.  **Response**: Results are aggregated and returned to the Chatbot as natural language or UI components.
 
 #### Control Loop
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.flow.control
-- last_checked: 2026-01-23T15:28:59+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 This high-frequency loop handles the autonomous optimization system:
 1.  **Telemetry Ingest**: Raw data streams from the Client App/Warehouse are ingested into BigQuery.
@@ -149,50 +189,50 @@ This high-frequency loop handles the autonomous optimization system:
 4.  **Execution & Feedback**: The action is sent to the Controller for execution, and the outcome is recorded for offline re-training and refinement.
 
 #### Human-AI Interaction
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.flow.human_ai
-- last_checked: 2026-01-23T19:51:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 Defines the protocols for how humans interact with the AI agents.
 
 ##### Developer-AI Interaction
-- status: active
+- status: done
 - type: protocol
 - id: product.saas.arch.flow.human_ai.developer
-- last_checked: 2026-01-23T19:51:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 Protocol for developers to configure, train, and debug agents. Involves direct access to internal logs, model weights, and the 'Analysis Sandbox' for safe code testing.
 
 ##### Client-AI Interaction
-- status: active
+- status: done
 - type: protocol
 - id: product.saas.arch.flow.human_ai.client
-- last_checked: 2026-01-23T19:51:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 Protocol for end-users. Restricted to natural language via the Chatbot App. No direct code execution allowed. Intent is parsed by the Orchestrator.
 
 #### AI-Tools Protocols
-- status: active
+- status: done
 - type: protocol
 - id: product.saas.arch.flow.tools
-- last_checked: 2026-01-23T19:51:07+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 Protocols for how AI agents utilize external software and APIs. Adheres to the **Model Context Protocol (MCP)** to standardize tool definition, discovery, and execution.
 
 ### Knowledge Bases
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.knowledge
-- last_checked: 2026-01-23T20:00:00+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 Repository resources categorized by their function.
 
 #### Agentic
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.knowledge.agentic
-- last_checked: 2026-01-23T20:00:00+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 - [MANAGER_AGENT](MANAGER_AGENT.md)
 - [CLEANER_AGENT](../cleaner/CLEANER_AGENT.md)
@@ -205,10 +245,10 @@ Repository resources categorized by their function.
 - [CLOUD_SCHEDULER_AGENT](../../AI_AGENTS/specialists/CLOUD_SCHEDULER_AGENT.md)
 
 #### Knowledge
-- status: active
+- status: done
 - type: context
 - id: product.saas.arch.knowledge.general
-- last_checked: 2026-01-23T20:00:00+01:00
+- last_checked: 2026-02-04T11:15:00+01:00
 <!-- content -->
 - [README](../../README.md)
 - [MD_CONVENTIONS](../../MD_CONVENTIONS.md)
@@ -473,13 +513,40 @@ This document details the "Cloud Bridge" implementation. The goal is to establis
 *   **Auth**: Firebase Authentication.
 *   **Deployment**: Terraform / gcloud CLI (via Antigravity MCP).
 
-#### Module 0: Snake Game Trial
-- status: todo
+#### Module 0: Trials
+- status: active
+- type: plan
+- id: implementation.phase2.trials
+- last_checked: 2026-02-04T11:11:00+01:00
+<!-- content -->
+We are testing functionalities with small apps in the cloud before full infrastructure initialization.
+
+##### Snake Game Trial
+- status: done
 - type: task
-- id: implementation.phase2.snake
+- id: implementation.phase2.trials.snake
 - estimate: 3d
+- last_checked: 2026-02-04T11:08:00+01:00
 <!-- content -->
 The idea is that we are going to put a small app in the cloud to test functionalities. After that we are going to start with the infrastructure initialization
+
+##### Knowledge Base
+- status: in-progress
+- type: task
+- id: implementation.phase2.trials.kb
+- owner: Fran
+- last_checked: 2026-02-04T11:11:00+01:00
+<!-- content -->
+Migrating and deploying the Knowledge Base to the cloud.
+
+##### Central Planner
+- status: in-progress
+- type: task
+- id: implementation.phase2.trials.planner
+- owner: Fran
+- last_checked: 2026-02-04T11:11:00+01:00
+<!-- content -->
+Migrating and deploying the Central Planner to the cloud.
 
 #### Module 1: Infrastructure Initialization (GCP)
 - status: todo
@@ -491,10 +558,11 @@ The idea is that we are going to put a small app in the cloud to test functional
 Provision the necessary Google Cloud resources. We will favor "Infrastructure as Code" practices.
 
 ##### Project Setup & API Enablement
-- status: todo
+- status: done
 - type: task
 - id: implementation.phase2.infra.setup
 - priority: high
+- last_checked: 2026-02-04T11:09:00+01:00
 <!-- content -->
 *   **Action**: Create a new GCP Project (e.g., `intelligent-control-prod`).
 *   **Enable APIs**:
@@ -859,10 +927,10 @@ This section details the administrative and legal infrastructure, divided by jur
     *   **Perks**: USD Split-payment (part of salary paid abroad) is common for retention, but requires careful tax structuring (*consult local CPA*).
 
 ## Security & Safety Checks
-- status: active
+- status: todo
 - type: guideline
 - id: product.saas.security
-- last_checked: 2026-01-23T13:47:07+01:00
+- last_checked: 2026-02-04T11:13:00+01:00
 <!-- content -->
 -   **Indirect Execution**: Clients only submit natural language, never code.
 -   **Repository Scoping**: Generated code can only import whitelisted libraries (`pandas`, `numpy`, `lib_analysis`). No `os` or `sys`.
@@ -875,6 +943,14 @@ This section details the administrative and legal infrastructure, divided by jur
 - id: product.saas.research
 - last_checked: 2026-01-23T13:47:07+01:00
 <!-- content -->
+
+### Understand MCP
+- status: done
+- type: task
+- id: product.saas.research.mcp
+- last_checked: 2026-02-04T11:14:00+01:00
+<!-- content -->
+Research and understand the Model Context Protocol to implement tool use and agentic capabilities effectively.
 
 ### Brainstorming
 - status: active
