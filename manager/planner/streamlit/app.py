@@ -7,7 +7,7 @@ import streamlit.components.v1 as components
 st.set_page_config(layout="wide", page_title="Master Plan Visualization")
 
 # Title
-st.title("Recommender Systems: Master Plan")
+st.title("Eikasia Master Plan")
 
 # Path Handling to find planner/visualize_html.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
