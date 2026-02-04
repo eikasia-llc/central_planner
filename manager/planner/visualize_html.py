@@ -8,12 +8,16 @@ import base64
 current_file_path = os.path.abspath(__file__)
 planner_dir = os.path.dirname(current_file_path)
 
+# Ensure planner_dir is in sys.path so we can import 'lib'
+if planner_dir not in sys.path:
+    sys.path.append(planner_dir)
+
 try:
     from lib.md_parser import MarkdownParser
 except ImportError as e:
     # Do not exit here, just print error. Let main or caller handle failure.
     print(f"Error: Could not import md_parser from {planner_dir}/lib. {e}")
-    # We will raise error later if functions are called
+    MarkdownParser = None # Prevent NameError later
 
 # Ensure D3 is available locally
 D3_URL = "https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"
@@ -492,6 +496,9 @@ def generate_html(target_file, embed_d3=False):
         ensure_d3()
 
     print(f"Parsing {target_file}...")
+    if MarkdownParser is None:
+        raise ImportError("MarkdownParser library could not be loaded. Please check dependencies.")
+        
     parser = MarkdownParser()
     root_node = parser.parse_file(target_file)
 
