@@ -7,6 +7,10 @@ import base64
 # Setup path to find 'planner_lib' module
 current_file_path = os.path.abspath(__file__)
 src_dir = os.path.dirname(current_file_path)
+# All markdowns and json retrieved from repo_path. Use current project root as fallback if REPO_MOUNT_POINT is not set
+repo_path = os.environ.get("REPO_MOUNT_POINT", str(current_dir.parent))
+# planner_dir is in subdirectory of repo_path ./content/planner
+planner_dir = os.path.join(repo_path, "content", "planner")
 
 # Ensure src_dir is in sys.path
 if src_dir not in sys.path:
@@ -18,6 +22,9 @@ except ImportError as e:
     # Do not exit here, just print error. Let main or caller handle failure.
     print(f"Error: Could not import md_parser from {src_dir}/planner_lib. {e}")
     MarkdownParser = None # Prevent NameError later
+
+
+
 
 # Ensure D3 is available locally
 D3_URL = "https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"
