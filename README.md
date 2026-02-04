@@ -4,15 +4,16 @@
 - context_dependencies: {"conventions": "MD_CONVENTIONS.md", "agents": "AGENTS.md"}
 <!-- content -->
 
+## Production ready app
+- status: active
+<!-- content -->
+https://central-planner-216559257034.us-central1.run.app
+
 ## Project Overview
 - status: active
 <!-- content -->
 This repository serves as a **meta-project** to organize and coordinate multiple different repositories and workflows using AI agents. It implements a **Markdown-JSON Hybrid Schema** to define detailed implementation plans that are readable by both humans and AI agents, and losslessly convertible to JSON for programmatic manipulation.
 
-## Production ready app
-- status: active
-<!-- content -->
-https://central-planner-216559257034.us-central1.run.app
 
 ### Usage
 - status: active
@@ -144,10 +145,10 @@ Refer to [INFRASTRUCTURE.md](file:///home/zeta/src/eikasia/control_tower/reposit
 Quick Deploy:
 ```bash
 # Build
-gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest .
+gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest .
 
 # Deploy
-gcloud run deploy central-planner --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest --region us-central1
+gcloud run deploy central-planner-app --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest --region us-central1
 ```
 
 ## Key Files
