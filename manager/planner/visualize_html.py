@@ -13,10 +13,10 @@ if planner_dir not in sys.path:
     sys.path.append(planner_dir)
 
 try:
-    from lib.md_parser import MarkdownParser
+    from planner_lib.md_parser import MarkdownParser
 except ImportError as e:
     # Do not exit here, just print error. Let main or caller handle failure.
-    print(f"Error: Could not import md_parser from {planner_dir}/lib. {e}")
+    print(f"Error: Could not import md_parser from {planner_dir}/planner_lib. {e}")
     MarkdownParser = None # Prevent NameError later
 
 # Ensure D3 is available locally

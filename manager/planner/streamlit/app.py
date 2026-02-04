@@ -15,16 +15,6 @@ planner_dir = os.path.dirname(current_dir)
 if planner_dir not in sys.path:
     sys.path.append(planner_dir)
 
-# Debug import
-try:
-    from lib.md_parser import MarkdownParser
-    st.write("DEBUG: Successfully imported MarkdownParser explicitly.")
-except ImportError as e:
-    st.error(f"DEBUG: Failed to import MarkdownParser explicitly: {e}")
-    # Also print sys.path to see what's going on
-    st.write("sys.path:")
-    st.write(sys.path)
-
 try:
     import visualize_html
 except ImportError as e:
