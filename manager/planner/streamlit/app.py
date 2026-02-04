@@ -27,7 +27,7 @@ if not os.path.exists(target_file):
     st.stop()
 
 with st.spinner("Generating Visualization..."):
-    html_content = visualize_html.generate_html(target_file)
+    html_content = visualize_html.generate_html(target_file, embed_d3=True)
 
 # Render HTML
 # We set a large height to accommodate the d3 tree

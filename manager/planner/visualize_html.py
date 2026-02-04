@@ -491,7 +491,7 @@ def collect_dependencies(node, dependencies_list=None):
         
     return dependencies_list
 
-def generate_html(target_file):
+def generate_html(target_file, embed_d3=False):
     if not os.path.exists(target_file):
         raise FileNotFoundError(f"Target file not found: {target_file}")
 
@@ -523,6 +523,34 @@ def generate_html(target_file):
     b64_data = base64.b64encode(json_str.encode('utf-8')).decode('utf-8')
     
     html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)
+
+    if embed_d3 and os.path.exists(D3_PATH):
+        try:
+            with open(D3_PATH, 'r', encoding='utf-8') as f:
+                d3_script = f.read()
+            # Replace the CDN/Fallback block with the embedded script
+            script_block = f"""
+            <script>
+                {d3_script}
+            </script>
+            """
+            # We look for the marker, or just replace the head script tags?
+            # The template has specific lines. Let's do a replace on the first script tag 
+            # and remove the specific d3.min.js fallback logic.
+            
+            # Naive replacement for robustness:
+            # Remove the existing D3 tags
+            html_content = html_content.replace('<script src="https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"></script>', '')
+            html_content = html_content.replace("if (typeof d3 === 'undefined') {", "/* Embedded D3 */")
+            html_content = html_content.replace("document.write('<script src=\"d3.min.js\" onerror=\"handleScriptError()\"><\/script>');", "")
+            html_content = html_content.replace("}", "")
+            
+            # Inject embedded script before the closing head
+            html_content = html_content.replace('</head>', script_block + '</head>')
+                
+        except Exception as e:
+            print(f"Failed to embed D3: {e}")
+
     return html_content
 
 def main():
