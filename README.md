@@ -9,6 +9,55 @@
 <!-- content -->
 This repository serves as a **meta-project** to organize and coordinate multiple different repositories and workflows using AI agents. It implements a **Markdown-JSON Hybrid Schema** to define detailed implementation plans that are readable by both humans and AI agents, and losslessly convertible to JSON for programmatic manipulation.
 
+## Production ready app
+- status: active
+<!-- content -->
+https://central-planner-216559257034.us-central1.run.app
+
+### Usage
+- status: active
+<!-- content -->
+To run the Planner App locally:
+
+```bash
+pip install -r requirements.txt
+streamlit run src/app.py
+```
+
+### Streamlit app
+- status: active
+<!-- content -->
+The main command for running a Streamlit app is `streamlit run`. Streamlit also offers several other command-line interface (CLI) tools for configuration, documentation, and example apps. 
+
+`streamlit run your_app.py` starts a local web server and opens your app in a new tab in your default web browser, typically at http://localhost:8501. 
+You can also pass a URL to streamlit run if your script is hosted remotely, such as on GitHub: 
+streamlit run https://raw.githubusercontent.com 
+
+## Deploying
+
+### Streamlit app to GCloud Run
+
+The `deploy.sh` handles that. Read it completely to understand what it needs.
+
+#### Permissions
+
+To access the app: Grant access to your specific account (Recommended)
+Instead of making it public, we grant ourseles permission to view it. 
+This is the command:
+
+```
+gcloud run services add-iam-policy-binding central-planner \
+    --region=us-central1 \
+    --member="user:eikasia@eikasia.com" \
+    --role="roles/run.invoker" \
+    --project=eikasia-ops
+```
+
+### Cloud Resources
+
+refer to `INFRASTRUCTURE.md`
+
+
 ## The Markdown-JSON Protocol
 - status: active
 <!-- content -->
@@ -73,8 +122,11 @@ central_planner/
 │   └── planner_lib/              # Core logic & Markdown Parser
 ├── content/                      # Planning content (Git Persisted)
 │   └── planner/                  # Central Planning files (MASTER_PLAN.md, etc.)
-├── manager/                      # Repository Management Tooling
+├── manager/                      # Repository Management & Planning
+│   └── planner/                  # Central Planning and Master Plan management
 └── bin/                          # Binary/Executable wrappers for tools
+
+
 ```
 
 ## Running & Deployment
