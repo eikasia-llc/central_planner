@@ -12,7 +12,8 @@ st.title("Eikasia Master Plan")
 # Path Handling to find planner/visualize_html.py
 current_dir = os.path.dirname(os.path.abspath(__file__))
 planner_dir = os.path.dirname(current_dir)
-sys.path.append(planner_dir)
+if planner_dir not in sys.path:
+    sys.path.append(planner_dir)
 
 try:
     import visualize_html

@@ -2,25 +2,18 @@
 import sys
 import os
 import json
-import webbrowser
 import base64
-import urllib.request
 
 # Setup path to find 'language' module
 current_file_path = os.path.abspath(__file__)
 planner_dir = os.path.dirname(current_file_path)
-# manager_dir = os.path.dirname(planner_dir)
-# root_dir = os.path.dirname(manager_dir)
-# language_dir = os.path.join(root_dir, 'language')
-
-# if language_dir not in sys.path:
-#     sys.path.append(language_dir)
 
 try:
     from lib.md_parser import MarkdownParser
 except ImportError as e:
+    # Do not exit here, just print error. Let main or caller handle failure.
     print(f"Error: Could not import md_parser from {planner_dir}/lib. {e}")
-    sys.exit(1)
+    # We will raise error later if functions are called
 
 # Ensure D3 is available locally
 D3_URL = "https://cdn.jsdelivr.net/npm/d3@7.8.5/dist/d3.min.js"
@@ -30,6 +23,7 @@ def ensure_d3():
     if not os.path.exists(D3_PATH):
         print(f"Downloading D3.js from {D3_URL}...")
         try:
+            import urllib.request
             urllib.request.urlretrieve(D3_URL, D3_PATH)
             print("D3.js downloaded successfully.")
         except Exception as e:
@@ -491,8 +485,11 @@ def generate_html(target_file, embed_d3=False):
     if not os.path.exists(target_file):
         raise FileNotFoundError(f"Target file not found: {target_file}")
 
-    # Ensure D3 (though check if relevant for stream usage)
-    ensure_d3()
+    # Ensure D3 (optimize to avoid network check if embedding and file exists)
+    if embed_d3 and os.path.exists(D3_PATH):
+        pass # Will read local file later
+    else:
+        ensure_d3()
 
     print(f"Parsing {target_file}...")
     parser = MarkdownParser()
@@ -561,7 +558,10 @@ def main():
         
     print(f"Visualization saved to: {output_path}")
     
+    print(f"Visualization saved to: {output_path}")
+    
     try:
+        import webbrowser
         webbrowser.open('file://' + os.path.abspath(output_path))
     except Exception as e:
         print(f"Could not open browser: {e}")
