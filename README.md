@@ -144,10 +144,10 @@ Refer to [INFRASTRUCTURE.md](file:///home/zeta/src/eikasia/control_tower/reposit
 Quick Deploy:
 ```bash
 # Build
-gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner:latest .
+gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest .
 
 # Deploy
-gcloud run deploy central-planner --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner:latest --region us-central1
+gcloud run deploy central-planner --image us-central1-docker.pkg.dev/eikasia-ops/central-planner-app/central-planner:latest --region us-central1
 ```
 
 ## Key Files
