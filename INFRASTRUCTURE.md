@@ -28,6 +28,13 @@ graph TD
 
 ## Deployment Commands
 
+### Local Development
+To run the Streamlit dashboard locally:
+```bash
+pip install -r requirements.txt
+streamlit run src/app.py
+```
+
 ### Build Image
 ```bash
 gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest .
@@ -43,6 +50,13 @@ gcloud run deploy central-planner-app \
     --set-secrets="GITHUB_TOKEN=GITHUB_TOKEN:latest"
 ```
 
+## Key Files
+- status: active
+<!-- content -->
+- **`MD_CONVENTIONS.md`**: The definitive guide on how to write files in this repository.
+- **`AGENTS.md`**: The entry point for any AI agent joining the project.
+
+
 ### Initiating IAP Configuration
 
 Setting up Identity-Aware Proxy (IAP): The first step involves enabling IAP on the Cloud Run service. After that, the IAM permissions are next
@@ -51,6 +65,18 @@ Internet Access: to expose the service securely to the internet without the cost
 
 Managed Authentication: Users are now required to sign in with their Google accounts before reaching the application.
 Verification: I verified that the service URL correctly intercepts requests and identifies the user session.
+
+Use the gcloud beta run services update --iap command to enable Direct IAP for the Cloud Run service.
+
+```
+gcloud run services enable-iap central-planner-app --region us-central1 --project eikasia-ops 2>&1
+
+gcloud beta run deploy central-planner-app \
+       --region us-central1 \
+       --project eikasia-ops \
+       --iap \
+       --no-allow-unauthenticated 2>&1
+```
 
 ### On Ephemeral Storage
 
@@ -80,4 +106,6 @@ gcloud run services add-iam-policy-binding knowledge-base-app \
     --member="user:eikasia@eikasia.com" \
     --role="roles/run.invoker" \
     --project=eikasia-ops
+
 ```
+That grants IAM run.invoker role to eikasia user
