@@ -116,6 +116,7 @@ central_planner/
 ├── INFRASTRUCTURE.md             # Cloud Infrastructure & Deployment guide
 ├── MD_CONVENTIONS.md             # Specification of the Schema
 ├── Dockerfile                    # Containerization for Cloud Run
+├── cloudbuild.yaml               # config file for `gcloud builds submit --config cloudbuild.yaml
 ├── src/                          # Application source code
 │   ├── app.py                    # Streamlit Dashboard (Entry Point)
 │   ├── git_manager.py            # Git Sync logic
