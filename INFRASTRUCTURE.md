@@ -28,6 +28,16 @@ graph TD
 
 ## Build
 
+### Create repository in Google Artifact for image push
+
+```
+gcloud artifacts repositories create central-planner-app \
+    --repository-format=docker \
+    --location=us-central1 \
+    --project=eikasia-ops \
+    --description="Docker images for knowledge_base app" 2>&1
+```
+
 ### Cloud Build vs Docker Build
 
 Cloud Build runs on Google's shared infrastructure. When you run gcloud builds submit:
