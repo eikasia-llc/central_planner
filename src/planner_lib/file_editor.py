@@ -258,17 +258,19 @@ class FileEditor:
         Returns:
             Updated list of lines
         """
-        # Split new content into lines, preserving line endings
+        # Trim trailing whitespace and newlines from user's edit
+        new_content = new_content.rstrip()
+
+        # Split new content into lines
         new_lines = []
         if new_content:
-            # Split content but preserve structure
+            # Split content into lines
             content_lines = new_content.split('\n')
-            for i, line in enumerate(content_lines):
-                # Add newline to all lines except potentially the last
-                if i < len(content_lines) - 1 or new_content.endswith('\n'):
-                    new_lines.append(line + '\n')
-                else:
-                    new_lines.append(line)
+            for line in content_lines:
+                new_lines.append(line + '\n')
+
+            # Add 1 blank lines after the content
+            new_lines.append('\n')
 
         # Replace the range
         return lines[:start_line] + new_lines + lines[end_line:]
