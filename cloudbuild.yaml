@@ -4,8 +4,8 @@ substitutions:
   # IMAGE paths — $PROJECT_ID is a Cloud Build built-in, resolved at runtime.
   # Nested substitution refs (${_FOO} inside another sub) are NOT supported,
   # so the registry + project + name are written out explicitly here.
-  _BUILDER_IMAGE: central-planner-repo/$PROJECT_ID/central-planner-app-builder
-  _FINAL_IMAGE:   central-planner-repo/$PROJECT_ID/central-planner-app
+  _BUILDER_IMAGE: us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app-builder
+  _FINAL_IMAGE:   us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app
 
 steps:
   # ---------------------------------------------------------------------------
@@ -68,7 +68,7 @@ steps:
       - --image=${_FINAL_IMAGE}:latest
       - --platform=managed
       - --region=${_REGION}
-      - --set-env-vars=GITHUB_REPO_URL=https://github.com/eikasia-llc/knowledge_base.git
+      - --set-env-vars=GITHUB_REPO_URL=https://github.com/eikasia-llc/central_planner.git
       - --update-secrets=GITHUB_TOKEN=GITHUB_TOKEN:latest
       - --memory=1Gi
       - --cpu=1
