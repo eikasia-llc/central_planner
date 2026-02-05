@@ -28,8 +28,8 @@ RUN apt-get update && apt-get install -y \
 COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
 COPY --from=builder /usr/local/bin /usr/local/bin
 
-# Copy application source code
-COPY . .
+# Copy source code
+COPY src/ ./src/
 
 # Environment variables
 ENV PYTHONUNBUFFERED=1

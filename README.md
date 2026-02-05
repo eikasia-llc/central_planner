@@ -7,7 +7,7 @@
 ## Production ready app
 - status: active
 <!-- content -->
-https://central-planner-216559257034.us-central1.run.app
+https://central-planner-app-216559257034.us-central1.run.app
 
 ## Project Overview
 - status: active

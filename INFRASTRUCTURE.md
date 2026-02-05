@@ -102,7 +102,7 @@ Instead of making it public, we grant ourseles permission to view it.
 This is the command:
 
 ```
-gcloud run services add-iam-policy-binding knowledge-base-app \
+gcloud run services add-iam-policy-binding central-planner-app \
     --region=us-central1 \
     --member="user:eikasia@eikasia.com" \
     --role="roles/run.invoker" \

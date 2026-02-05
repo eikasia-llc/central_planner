@@ -8,7 +8,7 @@ import base64
 current_file_path = os.path.abspath(__file__)
 src_dir = os.path.dirname(current_file_path)
 # All markdowns and json retrieved from repo_path. Use current project root as fallback if REPO_MOUNT_POINT is not set
-repo_path = os.environ.get("REPO_MOUNT_POINT", str(current_dir.parent))
+repo_path = os.environ.get("REPO_MOUNT_POINT", str(current_file_path.parent.parent))
 # planner_dir is in subdirectory of repo_path ./content/planner
 planner_dir = os.path.join(repo_path, "content", "planner")
 
