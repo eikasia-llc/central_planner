@@ -531,13 +531,15 @@ We are testing functionalities with small apps in the cloud before full infrastr
 The idea is that we are going to put a small app in the cloud to test functionalities. After that we are going to start with the infrastructure initialization
 
 ##### Knowledge Base
-- status: in-progress
+- status: done
 - type: task
 - id: implementation.phase2.trials.kb
 - owner: Fran
 - last_checked: 2026-02-04T11:11:00+01:00
 <!-- content -->
-Migrating and deploying the Knowledge Base to the cloud.
+Migrated and deploying the Knowledge Base to the cloud.
+
+Control Tower was setup as downstream poject, in control tower, via git submodule and a supporting script that copy paste metadata less md to its root dir.
 
 ##### Central Planner
 - status: in-progress

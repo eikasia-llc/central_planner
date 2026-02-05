@@ -88,6 +88,31 @@ HTML_TEMPLATE = """
 
     #debug-log { position: absolute; bottom: 10px; left: 10px; font-family: monospace; font-size: 10px; color: #aaa; pointer-events: none; z-index: 100; max-height: 200px; overflow: hidden; }
     #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5em; color: #666; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+
+    /* Edit Controls */
+    .edit-controls { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
+    .edit-btn, .save-btn, .cancel-btn { background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 8px; margin-bottom: 8px; }
+    .edit-btn:hover { background: #2980b9; }
+    .save-btn { background: #27ae60; }
+    .save-btn:hover { background: #229954; }
+    .cancel-btn { background: #95a5a6; }
+    .cancel-btn:hover { background: #7f8c8d; }
+
+    .editable-field { width: 100%; padding: 6px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 0.9em; margin-bottom: 8px; }
+    .editable-textarea { width: 100%; min-height: 200px; padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; font-family: inherit; font-size: 0.9em; resize: vertical; }
+
+    .metadata-edit-row { margin-bottom: 12px; }
+    .metadata-edit-row label { display: block; font-weight: bold; margin-bottom: 4px; color: #2c3e50; font-size: 0.9em; }
+
+    /* Error Popup */
+    .error-popup { position: fixed; top: 20px; right: 20px; min-width: 300px; max-width: 500px; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000; animation: slideIn 0.3s; }
+    .error-popup.success .error-header { background: #27ae60; }
+    .error-popup.info .error-header { background: #3498db; }
+    .error-header { background: #e74c3c; color: white; padding: 12px 16px; border-radius: 8px 8px 0 0; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+    .error-body { padding: 16px; max-height: 300px; overflow-y: auto; color: #2c3e50; line-height: 1.6; }
+    .error-close { cursor: pointer; font-size: 20px; font-weight: bold; }
+    .error-close:hover { opacity: 0.8; }
+    @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
   </style>
 </head>
 <body>
@@ -437,43 +462,251 @@ function update(source) {
   }
 }
 
+// Edit Mode State
+let editMode = false;
+let currentNodeData = null;
+let originalValues = {};
+
 function showDetails(data) {
+    currentNodeData = data;
+    editMode = false;
+    renderNodeDetails();
+}
+
+function renderNodeDetails() {
     const sidebar = document.getElementById('sidebar');
     const container = document.getElementById('details');
     sidebar.style.display = 'block';
 
-    const status = (data.metadata.status || 'todo').replace(' ', '-');
-    
-    let metaHtml = '';
-    for (const [key, value] of Object.entries(data.metadata)) {
-        if (key === 'status') continue;
-        metaHtml += `<div><strong>${key}:</strong> ${JSON.stringify(value).replace(/"/g, '')}</div>`;
+    const status = (currentNodeData.metadata.status || 'todo').replace(' ', '-');
+
+    if (editMode) {
+        // Edit Mode Rendering
+        let metaEditHtml = '';
+        for (const [key, value] of Object.entries(currentNodeData.metadata)) {
+            const valueStr = Array.isArray(value) ? `[${value.join(', ')}]` :
+                            (typeof value === 'object' ? JSON.stringify(value) : value);
+            metaEditHtml += `
+                <div class="metadata-edit-row">
+                    <label>${key}:</label>
+                    <input type="text" class="editable-field" data-key="${key}" value="${valueStr}" />
+                </div>
+            `;
+        }
+
+        container.innerHTML = `
+            <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
+            <h2>${currentNodeData.title}</h2>
+            <div style="margin-bottom: 20px;">
+                ${metaEditHtml}
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee;"/>
+            <div class="content-block">
+                <label style="display: block; font-weight: bold; margin-bottom: 8px;">Content:</label>
+                <textarea class="editable-textarea" id="content-editor">${currentNodeData.content || ""}</textarea>
+            </div>
+            <div class="edit-controls">
+                <button class="save-btn" onclick="saveEdits()">💾 Save</button>
+                <button class="cancel-btn" onclick="cancelEdit()">✖ Cancel</button>
+            </div>
+        `;
+    } else {
+        // Read Mode Rendering
+        let metaHtml = '';
+        for (const [key, value] of Object.entries(currentNodeData.metadata)) {
+            if (key === 'status') continue;
+            const displayValue = Array.isArray(value) ? `[${value.join(', ')}]` :
+                                (typeof value === 'object' ? JSON.stringify(value) : value);
+            metaHtml += `<div><strong>${key}:</strong> ${displayValue}</div>`;
+        }
+
+        container.innerHTML = `
+            <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
+            <h2>${currentNodeData.title}</h2>
+            <div style="margin-bottom: 20px; font-size: 0.9em; color: #7f8c8d;">
+                ${metaHtml}
+            </div>
+            <hr style="border: 0; border-top: 1px solid #eee;"/>
+            <div class="content-block">
+                <pre style="background:none; padding:0; white-space: pre-wrap; font-family: inherit;">${currentNodeData.content || "No content."}</pre>
+            </div>
+            <div class="edit-controls">
+                <button class="edit-btn" onclick="enterEditMode()">✏️ Edit</button>
+            </div>
+        `;
+    }
+}
+
+function enterEditMode() {
+    editMode = true;
+    // Save original values for cancel
+    originalValues = {
+        metadata: JSON.parse(JSON.stringify(currentNodeData.metadata)),
+        content: currentNodeData.content
+    };
+    renderNodeDetails();
+}
+
+function cancelEdit() {
+    editMode = false;
+    // Restore original values
+    currentNodeData.metadata = originalValues.metadata;
+    currentNodeData.content = originalValues.content;
+    renderNodeDetails();
+}
+
+function collectEdits() {
+    const edits = {
+        file_path: parsedData.file_path,
+        node_identifier: {
+            id: currentNodeData.metadata.id || null,
+            title: currentNodeData.title
+        },
+        metadata_edits: {},
+        content_edit: null
+    };
+
+    // Collect metadata edits
+    const metadataFields = document.querySelectorAll('.editable-field');
+    metadataFields.forEach(field => {
+        const key = field.dataset.key;
+        const newValue = field.value;
+        const lineNumber = currentNodeData.metadata_location[key];
+
+        if (lineNumber !== undefined) {
+            edits.metadata_edits[key] = {
+                value: newValue,
+                line_number: lineNumber
+            };
+        }
+    });
+
+    // Collect content edit
+    const contentEditor = document.getElementById('content-editor');
+    if (contentEditor && currentNodeData.content_location_start !== undefined) {
+        edits.content_edit = {
+            value: contentEditor.value,
+            start_line: currentNodeData.content_location_start,
+            end_line: currentNodeData.content_location_end
+        };
     }
 
-    container.innerHTML = `
-        <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
-        <h2>${data.title}</h2>
-        <div style="margin-bottom: 20px; font-size: 0.9em; color: #7f8c8d;">
-            ${metaHtml}
+    return edits;
+}
+
+function validateEdits(edits) {
+    const errors = [];
+
+    // Check if file path exists
+    if (!edits.file_path) {
+        errors.push("Missing file path");
+    }
+
+    // Validate metadata edits
+    for (const [key, edit] of Object.entries(edits.metadata_edits)) {
+        if (edit.value === undefined || edit.value === null) {
+            errors.push(`Empty value for metadata field: ${key}`);
+        }
+        if (edit.line_number === undefined || edit.line_number < 0) {
+            errors.push(`Invalid line number for metadata field: ${key}`);
+        }
+    }
+
+    // Validate content edit
+    if (edits.content_edit) {
+        if (edits.content_edit.start_line === undefined || edits.content_edit.start_line < 0) {
+            errors.push("Invalid content start line");
+        }
+        if (edits.content_edit.end_line === undefined || edits.content_edit.end_line < 0) {
+            errors.push("Invalid content end line");
+        }
+    }
+
+    return {
+        valid: errors.length === 0,
+        errors: errors
+    };
+}
+
+async function saveEdits() {
+    const edits = collectEdits();
+    const validation = validateEdits(edits);
+
+    if (!validation.valid) {
+        showError('Validation Error', validation.errors.join('<br>'));
+        return;
+    }
+
+    await sendToStreamlit(edits);
+}
+
+async function sendToStreamlit(edits) {
+    try {
+        const response = await fetch('http://localhost:8502/api/save_edits', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(edits)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            // Apply edits to local data
+            applyEditsToLocalData(edits);
+            editMode = false;
+            renderNodeDetails();
+            showError('Success', result.message, 'success');
+            // Reload page after short delay to refresh data
+            setTimeout(() => window.location.reload(), 1500);
+        } else {
+            showError('Save Failed', result.error);
+        }
+    } catch (error) {
+        showError('Network Error', `Failed to save: ${error.message}`);
+    }
+}
+
+function applyEditsToLocalData(edits) {
+    // Update metadata
+    for (const [key, edit] of Object.entries(edits.metadata_edits)) {
+        currentNodeData.metadata[key] = edit.value;
+    }
+
+    // Update content
+    if (edits.content_edit) {
+        currentNodeData.content = edits.content_edit.value;
+    }
+}
+
+function showError(title, message, type='error') {
+    // Remove existing error popups
+    const existing = document.querySelectorAll('.error-popup');
+    existing.forEach(el => el.remove());
+
+    // Create new popup
+    const popup = document.createElement('div');
+    popup.className = `error-popup ${type}`;
+    popup.innerHTML = `
+        <div class="error-header">
+            <span>${title}</span>
+            <span class="error-close" onclick="this.parentElement.parentElement.remove()">×</span>
         </div>
-        <hr style="border: 0; border-top: 1px solid #eee;"/>
-        <div class="content-block">
-            <pre style="background:none; padding:0; white-space: pre-wrap; font-family: inherit;">${data.content || "No content."}</pre>
-        </div>
+        <div class="error-body">${message}</div>
     `;
+
+    document.body.appendChild(popup);
+
+    // Auto-remove after 10 seconds
+    setTimeout(() => {
+        if (popup.parentElement) {
+            popup.remove();
+        }
+    }, 10000);
 }
 </script>
 </body>
 </html>
 """
-
-def node_to_dict(node):
-    return {
-        "title": node.title,
-        "metadata": node.metadata,
-        "content": node.content,
-        "children": [node_to_dict(child) for child in node.children]
-    }
 
 def collect_dependencies(node, dependencies_list=None):
     if dependencies_list is None:
@@ -518,10 +751,11 @@ def generate_html(target_file, embed_d3=False):
     else:
         tree_root = root_node
         
-    tree_data = node_to_dict(tree_root)
+    tree_data = tree_root.to_dict()  # Use to_dict() to preserve line tracking
     dependencies = collect_dependencies(tree_root)
-    
+
     full_data = {
+        "file_path": str(target_file),
         "tree": tree_data,
         "dependencies": dependencies
     }

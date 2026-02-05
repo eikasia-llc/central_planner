@@ -60,6 +60,9 @@ steps:
   # ---------------------------------------------------------------------------
   # 6. Deploy to Cloud Run
   # ---------------------------------------------------------------------------
+  # Note: Cloud Run only exposes one port (8501 for Streamlit).
+  # The Flask API on port 8502 runs internally and is accessed via localhost
+  # from the Streamlit app's iframe visualization.
   - name: gcr.io/cloud-builders/gcloud
     args:
       - run
@@ -68,6 +71,7 @@ steps:
       - --image=${_FINAL_IMAGE}:latest
       - --platform=managed
       - --region=${_REGION}
+      - --port=8501
       - --set-env-vars=GITHUB_REPO_URL=https://github.com/eikasia-llc/central_planner.git
       - --update-secrets=GITHUB_TOKEN=GITHUB_TOKEN:latest
       - --memory=1Gi

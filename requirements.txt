@@ -1,2 +1,4 @@
 streamlit
+flask
+flask-cors
 # tiktokken (not needed for now)

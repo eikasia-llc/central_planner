@@ -31,15 +31,22 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 # Copy source code
 COPY src/ ./src/
 
+# Copy startup script
+COPY start.sh /app/start.sh
+RUN chmod +x /app/start.sh
+
 # Environment variables
 ENV PYTHONUNBUFFERED=1
 ENV PYTHONDONTWRITEBYTECODE=1
-ENV STREAMLIT_SERVER_PORT=8080
+ENV STREAMLIT_SERVER_PORT=8501
 ENV STREAMLIT_SERVER_ADDRESS=0.0.0.0
+ENV API_PORT=8502
+ENV API_HOST=0.0.0.0
 ENV REPO_MOUNT_POINT=/tmp/central_planner_repo
 
-# Expose port
-EXPOSE 8080
+# Expose ports (Streamlit and Flask API)
+EXPOSE 8501
+EXPOSE 8502
 
-# Run the application
-ENTRYPOINT ["streamlit", "run", "src/app.py"]
+# Run the startup script
+ENTRYPOINT ["/app/start.sh"]

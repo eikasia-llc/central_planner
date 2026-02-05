@@ -24,6 +24,11 @@ class Node:
         self.metadata = metadata if metadata else {}
         self.content = content
         self.children = []
+        # Line tracking for editing support
+        self.header_line = None
+        self.metadata_location = {}  # {key: line_number}
+        self.content_location_start = None
+        self.content_location_end = None
 
     def to_dict(self):
         """Convert Node tree to JSON-serializable dictionary."""
@@ -32,7 +37,11 @@ class Node:
             "title": self.title,
             "metadata": self.metadata,
             "content": self.content,
-            "children": [child.to_dict() for child in self.children]
+            "children": [child.to_dict() for child in self.children],
+            "header_line": self.header_line,
+            "metadata_location": self.metadata_location,
+            "content_location_start": self.content_location_start,
+            "content_location_end": self.content_location_end
         }
 
     @classmethod
@@ -44,6 +53,12 @@ class Node:
             metadata=data.get("metadata", {}),
             content=data.get("content", "")
         )
+        # Restore line tracking information
+        node.header_line = data.get("header_line")
+        node.metadata_location = data.get("metadata_location", {})
+        node.content_location_start = data.get("content_location_start")
+        node.content_location_end = data.get("content_location_end")
+
         for child_data in data.get("children", []):
             node.children.append(cls.from_dict(child_data))
         return node
@@ -110,6 +125,7 @@ class MarkdownParser:
                 level = len(header_match.group(1))
                 title = header_match.group(2).strip()
                 new_node = Node(level, title)
+                new_node.header_line = i  # Track header line number
 
                 # Look ahead for metadata (immediately following header)
                 i += 1
@@ -122,11 +138,11 @@ class MarkdownParser:
                     
                     # Check for metadata line
                     meta_match = self.metadata_pattern.match(meta_line)
-                    
+
                     if meta_match:
                         key = meta_match.group(1).strip()
                         value_str = meta_match.group(2).strip()
-                        
+
                         # Basic list parsing: [a, b, c]
                         if value_str.startswith('[') and value_str.endswith(']'):
                             inner = value_str[1:-1]
@@ -142,8 +158,9 @@ class MarkdownParser:
                                 value = value_str
                         else:
                             value = value_str
-                            
+
                         new_node.metadata[key] = value
+                        new_node.metadata_location[key] = i  # Track metadata line number
                         i += 1
                     elif meta_line.strip() == "":
                         # Blank line handling for backward compatibility:
@@ -158,15 +175,17 @@ class MarkdownParser:
                     else:
                         # Non-metadata line, stop looking for metadata
                         break
-                
+
                 # Capture content until next header
                 content_lines = []
+                new_node.content_location_start = i  # Track content start
                 while i < len(lines):
                     if self.header_pattern.match(lines[i]):
                         break # Next header found
                     content_lines.append(lines[i])
                     i += 1
-                
+
+                new_node.content_location_end = i  # Track content end
                 new_node.content = "".join(content_lines).strip()
 
                 # Place node in hierarchy
