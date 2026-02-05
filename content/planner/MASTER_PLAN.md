@@ -539,7 +539,9 @@ The idea is that we are going to put a small app in the cloud to test functional
 <!-- content -->
 Migrated and deploying the Knowledge Base to the cloud.
 
-Control Tower was setup as downstream poject, in control tower, via git submodule and a supporting script that copy paste metadata less md to its root dir.
+Control Tower was setup as downstream poject, in control tower, via git submodules.
+
+It has now a supporting script that copy paste metadata less md to its root dir.
 
 ##### Central Planner
 - status: in-progress
