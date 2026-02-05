@@ -550,7 +550,7 @@ It has now a supporting script that copy paste metadata less md to its root dir.
 - owner: Fran
 - last_checked: 2026-02-04T11:11:00+01:00
 <!-- content -->
-Migrating and deploying the Central Planner to the cloud.
+Migrate and deploying the Central Planner to the cloud.
 
 #### Module 1: Infrastructure Initialization (GCP)
 - status: todo
