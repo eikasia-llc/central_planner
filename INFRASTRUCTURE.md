@@ -80,8 +80,17 @@ streamlit run src/app.py
 ```
 
 ### Build Image
+
+without a cloudbuild.yaml (recommended):
+
 ```bash
-gcloud builds submit --config cloudbuild.yaml --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest .
+gcloud builds submit --config cloudbuild.yaml .
+```
+
+without a cloudbuild.yaml (not recommended):
+
+```bash
+gcloud builds submit --tag us-central1-docker.pkg.dev/eikasia-ops/central-planner-repo/central-planner-app:latest .
 ```
 
 ### Deploy to Cloud Run
