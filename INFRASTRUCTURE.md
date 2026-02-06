@@ -21,8 +21,8 @@ graph TD
     CR --> Nginx
     Streamlit -- Git Operations --> GitHub[GitHub Repository]
     Streamlit -- Renders --> Viz[D3 Visualization]
-    Viz -- POST /api/save_edits --> Nginx
-    Flask -- File Edits --> Temp[/tmp/central_planner_repo]
+    Viz -- POST save_edits --> Nginx
+    Flask -- File Edits --> Temp[Ephemeral Storage /tmp]
     Streamlit -- Runtime Files --> Temp
 
     CR -- Credentials --> SM[Secret Manager]
