@@ -19,11 +19,7 @@ Before working in this repository, read these files in order:
 
 ### Local Development
 
-Run the Streamlit app locally:
-```bash
-pip install -r requirements.txt
-streamlit run src/app.py
-```
+run with start.sh
 
 ### Markdown Parsing & Validation
 
@@ -55,6 +51,8 @@ gcloud run deploy central-planner-app \
     --set-env-vars="REPO_MOUNT_POINT=/tmp/central_planner_repo,GITHUB_REPO_URL=https://github.com/eikasia-llc/central_planner.git" \
     --set-secrets="GITHUB_TOKEN=GITHUB_TOKEN:latest"
 ```
+
+or use deploy.sh
 
 See INFRASTRUCTURE.md for detailed deployment instructions.
 
