@@ -544,13 +544,16 @@ Control Tower was setup as downstream poject, in control tower, via git submodul
 It has now a supporting script that copy paste metadata less md to its root dir.
 
 ##### Central Planner
-- status: in-progress
+- status: done
 - type: task
 - id: implementation.phase2.trials.planner
 - owner: Fran
 - last_checked: 2026-02-04T11:11:00+01:00
 <!-- content -->
-Migrate and deploying the Central Planner to the cloud.
+Migrated and deployed the Central Planner to the cloud.
+Secured by Oauth
+Git Sync
+In graph editing metadata and content
 
 #### Module 1: Infrastructure Initialization (GCP)
 - status: todo
