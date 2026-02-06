@@ -3,6 +3,8 @@ import sys
 import os
 from pathlib import Path
 import streamlit.components.v1 as components
+import requests
+import json
 
 # Add current dir to path for imports
 current_dir = Path(__file__).parent.resolve()

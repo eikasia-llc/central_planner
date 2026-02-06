@@ -1,5 +1,5 @@
 #!/bin/bash
-# Startup script for running both Flask API and Streamlit app
+# Startup script for running Flask API, Streamlit app, and nginx reverse proxy
 
 # Find python interpreter
 if command -v python3 >/dev/null 2>&1; then
@@ -19,9 +19,17 @@ FLASK_PID=$!
 # Give Flask a moment to start
 sleep 2
 
-# Start Streamlit in foreground
+# Start Streamlit in background
 echo "Starting Streamlit app on port 8501..."
-streamlit run ./src/app.py --server.port 8501 --server.address 0.0.0.0
+streamlit run ./src/app.py --server.port 8501 --server.address 127.0.0.1 &
+STREAMLIT_PID=$!
 
-# If Streamlit exits, kill Flask too
-kill $FLASK_PID 2>/dev/null
+# Give Streamlit a moment to start
+sleep 3
+
+# Start nginx in foreground
+echo "Starting nginx reverse proxy on port 8080..."
+nginx -g 'daemon off;'
+
+# If nginx exits, kill Flask and Streamlit
+kill $FLASK_PID $STREAMLIT_PID 2>/dev/null

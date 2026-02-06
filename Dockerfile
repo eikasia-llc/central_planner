@@ -22,6 +22,7 @@ WORKDIR /app
 # Install runtime dependencies
 RUN apt-get update && apt-get install -y \
     git \
+    nginx \
     && rm -rf /var/lib/apt/lists/*
 
 # Copy installed packages from builder
@@ -30,6 +31,9 @@ COPY --from=builder /usr/local/bin /usr/local/bin
 
 # Copy source code
 COPY src/ ./src/
+
+# Copy nginx configuration
+COPY nginx.conf /etc/nginx/nginx.conf
 
 # Copy startup script
 COPY start.sh /app/start.sh
@@ -44,9 +48,8 @@ ENV API_PORT=8502
 ENV API_HOST=0.0.0.0
 ENV REPO_MOUNT_POINT=/tmp/central_planner_repo
 
-# Expose ports (Streamlit and Flask API)
-EXPOSE 8501
-EXPOSE 8502
+# Expose port (nginx reverse proxy)
+EXPOSE 8080
 
 # Run the startup script
 ENTRYPOINT ["/app/start.sh"]

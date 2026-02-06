@@ -642,7 +642,8 @@ async function saveEdits() {
 
 async function sendToStreamlit(edits) {
     try {
-        const response = await fetch('http://localhost:8502/api/save_edits', {
+        // Use relative URL - nginx routes /api/ to Flask API
+        const response = await fetch('/api/save_edits', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(edits)
