@@ -49,6 +49,10 @@ class GitManager:
         if not success:
             logger.error(f"Startup Git Sync Failed: {output}")
             raise RuntimeError(f"Startup Git Sync Failed. Container will not start.\n{output}")
+
+        # Configure git identity for commits
+        self.set_identity("Central Planner App", "central-planner-app@eikasia.com")
+
         return success, output
 
     def pull(self):
