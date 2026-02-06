@@ -9,6 +9,35 @@ Most recent event comes first
 - status: active
 <!-- content -->
 
+### Feature: In-Place Editing with Nginx Reverse Proxy
+- status: done
+- last_checked: 2025-02-05
+<!-- content -->
+**Date:** 2025-02-05
+**AI Assistant:** Claude Sonnet 4.5
+**Summary:** Implemented in-place editing capabilities for the Streamlit visualization and resolved Cloud Run deployment issue using nginx reverse proxy.
+
+**Problem:** Save button worked locally but failed in Cloud Run with "Network Error: Failed to fetch". Root cause: Cloud Run only exposes one port; browser couldn't access Flask API on port 8502.
+
+**Solution:** Nginx reverse proxy on port 8080 routes requests to Streamlit (127.0.0.1:8501) and Flask API (127.0.0.1:8502) based on URL path.
+
+**Implementation:**
+- **Parser Enhancement:** Added line tracking to `md_parser.py` - Node class tracks `header_line`, `metadata_location`, `content_location_start/end`
+- **File Editor:** Created `src/planner_lib/file_editor.py` with bottom-to-top edit application, handles metadata/content edits with validation
+- **Flask API:** Created `src/api_server.py` with REST endpoint `/api/save_edits` for applying edits to markdown files
+- **Edit UI:** Enhanced `src/visualize_html.py` with JavaScript edit mode, save/cancel buttons, validation, error popups
+- **Nginx Proxy:** Added `nginx.conf` to route `/` to Streamlit and `/api/` to Flask API through single port 8080
+- **Docker Updates:** Modified `Dockerfile` to install nginx, updated `start.sh` to orchestrate all three services
+
+**Architecture:**
+```
+Browser → Cloud Run (8080) → nginx → / → Streamlit (127.0.0.1:8501)
+                                  └→ /api/ → Flask API (127.0.0.1:8502)
+```
+
+**Files Modified:** `src/planner_lib/md_parser.py`, `src/planner_lib/file_editor.py` (new), `src/api_server.py` (new), `src/visualize_html.py`, `nginx.conf` (new), `Dockerfile`, `start.sh`, `cloudbuild.yaml`, `requirements.txt`
+
+
 ### Feature: Dockerization & Cloud Run Deployment
 - status: active
 <!-- content -->
