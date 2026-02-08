@@ -514,7 +514,7 @@ This document details the "Cloud Bridge" implementation. The goal is to establis
 *   **Deployment**: Terraform / gcloud CLI (via Antigravity MCP).
 
 #### Module 0: Trials
-- status: active
+- status: done
 - type: plan
 - id: implementation.phase2.trials
 - last_checked: 2026-02-04T11:11:00+01:00
