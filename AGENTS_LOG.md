@@ -48,9 +48,9 @@ Browser → Cloud Run (8080) → nginx → / → Streamlit (127.0.0.1:8501)
 - **Implementation:**
     - **Structure Refactor:** Moved source code to `src/`, logic to `src/planner_lib/`, and planning files to `content/planner/`.
     - **Streamlit Enhancement:** Added "Git Pull/Push" buttons and integrated `GitManager` for ephemeral storage synchronization.
-    - **Cloud Preparation:** Created `Dockerfile`, `.dockerignore`, and `INFRASTRUCTURE.md`.
+    - **Cloud Preparation:** Created `Dockerfile`, `.dockerignore`, and `REPO_INFRASTRUCTURE.md`.
     - **Deployment:** Setup Artifact Registry and deployed to Cloud Run.
-- **Files Modified:** `src/*`, `content/planner/*`, `Dockerfile`, `INFRASTRUCTURE.md`, `README.md`.
+- **Files Modified:** `src/*`, `content/planner/*`, `Dockerfile`, `REPO_INFRASTRUCTURE.md`, `README.md`.
 
 ### Feature: Restructure Master Plan & Streamlit Fixes
 - status: active

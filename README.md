@@ -56,7 +56,7 @@ gcloud run services add-iam-policy-binding central-planner \
 
 ### Cloud Resources
 
-refer to `INFRASTRUCTURE.md`
+refer to `REPO_INFRASTRUCTURE.md`
 
 
 ## The Markdown-JSON Protocol
@@ -113,7 +113,7 @@ central_planner/
 ├── AGENTS.md                     # General Agent Guidelines & Workflow
 ├── AGENTS_LOG.md                 # Project-wide agent activity log
 ├── README.md                     # Project Documentation (This File)
-├── INFRASTRUCTURE.md             # Cloud Infrastructure & Deployment guide
+├── REPO_INFRASTRUCTURE.md             # Cloud Infrastructure & Deployment guide
 ├── MD_CONVENTIONS.md             # Specification of the Schema
 ├── Dockerfile                    # Containerization for Cloud Run
 ├── cloudbuild.yaml               # config file for `gcloud builds submit --config cloudbuild.yaml
@@ -141,7 +141,7 @@ streamlit run src/app.py
 ```
 
 ### Cloud Run Deployment
-Refer to [INFRASTRUCTURE.md](file:///home/zeta/src/eikasia/control_tower/repositories/central_planner/INFRASTRUCTURE.md) for detailed instructions.
+Refer to [REPO_INFRASTRUCTURE.md](file:///home/zeta/src/eikasia/control_tower/repositories/central_planner/REPO_INFRASTRUCTURE.md) for detailed instructions.
 
 Quick Deploy:
 ```bash
