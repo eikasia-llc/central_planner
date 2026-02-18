@@ -514,7 +514,7 @@ This document details the "Cloud Bridge" implementation. The goal is to establis
 *   **Deployment**: Terraform / gcloud CLI (via Antigravity MCP).
 
 #### Module 0: Trials
-- status: active
+- status: done
 - type: plan
 - id: implementation.phase2.trials
 - last_checked: 2026-02-04T11:11:00+01:00
@@ -555,7 +555,31 @@ Secured by Oauth
 Git Sync
 In graph editing metadata and content
 
-#### Module 1: Infrastructure Initialization (GCP)
+#### Module 1: Solving Snake with RL
+- status: todo
+- type: task
+- id: implementation.phase2.snake_rl
+- estimate: 2w
+<!-- content -->
+We are implementing a Reinforcement Learning solution for the Snake game to demonstrate the platform's control capabilities.
+
+##### Displaying Solution
+- status: todo
+- type: task
+- id: implementation.phase2.snake_rl.display
+- estimate: 1w
+<!-- content -->
+Displaying the trained solution in real time. This requires mastering the telemetry well.
+
+##### Training Model
+- status: todo
+- type: task
+- id: implementation.phase2.snake_rl.train
+- estimate: 1w
+<!-- content -->
+Training the RL models using Google Compute. GPU and CUDA functional.
+
+#### Module 2: Infrastructure Initialization (GCP)
 - status: todo
 - type: task
 - id: implementation.phase2.infra
@@ -590,7 +614,7 @@ Define the infrastructure using Terraform or scriptable `gcloud` commands.
     2.  Antigravity uses the terminal tool (or `gcloud` MCP) to execute the provisioning scripts.
     3.  Outputs (Service URLs, Bucket Names) are saved to `deployment_config.json`.
 
-#### Module 2: Authentication & Security
+#### Module 3: Authentication & Security
 - status: todo
 - type: task
 - id: implementation.phase2.auth
@@ -620,7 +644,7 @@ Secure the bridge. The Local App must authenticate before sending data.
 *   **Service Accounts**: Create a specific Service Account for the Cloud Run instance.
 *   **Permissions**: Grant strictly necessary roles (e.g., `roles/bigquery.dataEditor`, `roles/storage.objectCreator`). **Do not use Owner role.**
 
-#### Module 3: The API Gateway (Connector)
+#### Module 4: The API Gateway (Connector)
 - status: todo
 - type: task
 - id: implementation.phase2.api
@@ -650,7 +674,7 @@ Create `src/cloud/main.py`.
 *   **Docker**: Create `Dockerfile` optimized for Python (multi-stage build).
 *   **CI/CD**: Define a simple deployment script: `gcloud run deploy --source .`.
 
-#### Module 4: Data Synchronization Pipeline
+#### Module 5: Data Synchronization Pipeline
 - status: todo
 - type: task
 - id: implementation.phase2.pipeline
