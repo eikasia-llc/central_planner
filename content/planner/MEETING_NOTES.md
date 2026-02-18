@@ -91,7 +91,7 @@ This file contains the historical log of meetings with colleagues and collaborat
 - Actualizar el central planner con el nodo del snake.
 - Agregar la migracion de knowledge base et al como un nodo.
 - Seguir trabajando en el local nexus.
-
+INFRASTRUCTURE.md
 **Action Items:**
 - [ ] Mirar el knowledge base (Fran).
 - [ ] Migrar el central planner (Fran).
@@ -102,3 +102,18 @@ This file contains the historical log of meetings with colleagues and collaborat
 - [ ] Actualizar el central planner con el nodo del snake (Nacho).
 - [ ] Agregar la migracion de knowledge base como un nodo (Nacho).
 - [ ] Seguir trabajando en el local nexus (Nacho).
+
+---
+
+## 2026-02-18 - Status Update & Planning
+- status: doing
+- type: log
+- participants: ["Fran", "Nacho"]
+- id: planner.meeting.20260218.status_update
+- last_checked: 2026-02-18T20:57:00+01:00
+<!-- content -->
+
+**Agenda:**
+- Knowledge Base & Central Planner Cleanup
+- Local Nexus Design
+- Google ADK
