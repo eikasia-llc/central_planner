@@ -288,6 +288,66 @@ Look for startup errors from Flask, Streamlit, or nginx.
 2. Verify the fetch URL is relative: `/api/save_edits` (not `http://localhost:8502`)
 3. Ensure nginx is routing `/api/*` to Flask
 
+## Logging & Diagnostics
+
+Structured JSON logs are emitted to stdout and automatically ingested by **Google Cloud Logging** when running on Cloud Run. No GCP SDK is required in application code.
+
+### How It Works
+
+- **Library:** `python-json-logger` formats Python log records as JSON lines.
+- **Module:** `src/log_config.py` configures the root logger. Bootstrap files (`api_server.py`, `app.py`) call `setup_logging()` once at startup.
+- **Uncaught exceptions:** `sys.excepthook` is overridden to log any unhandled exception as `CRITICAL` with full stack trace before the process exits.
+- **Existing loggers** (e.g. `git_manager.py`) automatically inherit the JSON formatter — no changes needed in those modules.
+
+### Configuration
+
+| Env Var | Default | Description |
+|---------|---------|-------------|
+| `LOG_LEVEL` | `INFO` | Python log level (`DEBUG`, `INFO`, `WARNING`, `ERROR`, `CRITICAL`) |
+
+### Log Events
+
+| Event | Level | Extra Fields | Source |
+|-------|-------|--------------|--------|
+| `save_edits called` | INFO | `node_id`, `file_path` | `api_server.py` |
+| `save_edits succeeded` | INFO | `node_id`, `file_path` | `api_server.py` |
+| `save_edits failed` | WARNING | `node_id`, `file_path`, `error` | `api_server.py` |
+| `save_edits validation error` | WARNING | `error` | `api_server.py` |
+| `save_edits unexpected error` | ERROR | full stack trace | `api_server.py` |
+| Uncaught exception | CRITICAL | full stack trace | `log_config.py` (excepthook) |
+
+### Viewing Logs
+
+**Cloud Console:** Logs Explorer → filter by resource `cloud_run_revision` and service `central-planner-app`.
+
+**CLI:**
+```bash
+# Recent logs
+gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="central-planner-app"' \
+    --project=eikasia-ops --limit=50 --format=json
+
+# Errors only
+gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.service_name="central-planner-app" AND severity>=ERROR' \
+    --project=eikasia-ops --limit=20 --format=json
+```
+
+### Optional: Google Cloud Error Reporting
+
+Error Reporting automatically groups, deduplicates, and tracks Python exceptions that appear in Cloud Logging. It provides occurrence counts, first/last seen timestamps, and a stack trace viewer. A free tier is available.
+
+**How to enable (no code changes required):**
+
+1. Our structured logs already include `severity` and full stack traces in the right format — Error Reporting can parse them automatically.
+2. Enable the API:
+   ```bash
+   gcloud services enable clouderrorreporting.googleapis.com --project=eikasia-ops
+   ```
+3. Exceptions logged at `ERROR` or `CRITICAL` with stack traces will be automatically grouped in the Error Reporting dashboard.
+4. View at: **Cloud Console → Error Reporting**
+5. Optionally configure notification channels (email, Slack, PagerDuty) to alert on new error groups: **Error Reporting → Settings → Notifications**.
+
+**Note:** This is opt-in. Evaluate whether the team benefits from aggregated error views before enabling.
+
 ## Key Files
 - status: active
 <!-- content -->
@@ -298,6 +358,7 @@ Look for startup errors from Flask, Streamlit, or nginx.
 - **`src/api_server.py`**: Flask API for file editing operations
 - **`src/app.py`**: Streamlit dashboard application
 - **`src/git_manager.py`**: Git operations wrapper with identity configuration
+- **`src/log_config.py`**: Centralized structured logging setup (JSON to stdout → Cloud Logging)
 
 
 ### Initiating IAP Configuration

@@ -141,7 +141,7 @@ streamlit run src/app.py
 ```
 
 ### Cloud Run Deployment
-Refer to [REPO_INFRASTRUCTURE.md](file:///home/zeta/src/eikasia/control_tower/repositories/central_planner/REPO_INFRASTRUCTURE.md) for detailed instructions.
+Refer to [REPO_INFRASTRUCTURE.md](file://./REPO_INFRASTRUCTURE.md) for detailed instructions.
 
 Quick Deploy:
 ```bash

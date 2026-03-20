@@ -5,6 +5,7 @@ Provides REST API endpoints for applying edits to markdown files
 with line number tracking.
 """
 
+import logging
 import os
 import sys
 from flask import Flask, request, jsonify
@@ -14,7 +15,12 @@ from flask_cors import CORS
 current_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, current_dir)
 
+from log_config import setup_logging
+setup_logging()
+
 from planner_lib.file_editor import apply_edits_to_file, EditValidationError
+
+logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -55,29 +61,35 @@ def save_edits():
                 "error": "No JSON payload provided"
             }), 400
 
+        node_id = edits.get("node_identifier", {}).get("id", "unknown")
+        file_path = edits.get("file_path", "unknown")
+        logger.info("save_edits called", extra={"node_id": node_id, "file_path": file_path})
+
         # Apply edits
         success, message = apply_edits_to_file(edits)
 
         if success:
+            logger.info("save_edits succeeded", extra={"node_id": node_id, "file_path": file_path})
             return jsonify({
                 "success": True,
                 "message": message
             })
         else:
+            logger.warning("save_edits failed", extra={"node_id": node_id, "file_path": file_path, "error": message})
             return jsonify({
                 "success": False,
                 "error": message
             }), 400
 
     except EditValidationError as e:
+        logger.warning("save_edits validation error", extra={"error": str(e)})
         return jsonify({
             "success": False,
             "error": f"Validation error: {str(e)}"
         }), 400
 
     except Exception as e:
-        # Log the full error for debugging
-        app.logger.error(f"Error in save_edits: {str(e)}", exc_info=True)
+        logger.exception("save_edits unexpected error")
         return jsonify({
             "success": False,
             "error": f"Server error: {str(e)}"

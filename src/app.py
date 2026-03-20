@@ -11,6 +11,9 @@ current_dir = Path(__file__).parent.resolve()
 if str(current_dir) not in sys.path:
     sys.path.append(str(current_dir))
 
+from log_config import setup_logging
+setup_logging()
+
 from git_manager import GitManager
 import visualize_html
 

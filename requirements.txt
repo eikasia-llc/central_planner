@@ -1,4 +1,5 @@
 streamlit
 flask
 flask-cors
+python-json-logger
 # tiktokken (not needed for now)

@@ -629,15 +629,20 @@ function validateEdits(edits) {
 }
 
 async function saveEdits() {
-    const edits = collectEdits();
-    const validation = validateEdits(edits);
+    try {
+        const edits = collectEdits();
+        const validation = validateEdits(edits);
 
-    if (!validation.valid) {
-        showError('Validation Error', validation.errors.join('<br>'));
-        return;
+        if (!validation.valid) {
+            showError('Validation Error', validation.errors.join('<br>'));
+            return;
+        }
+
+        await sendToStreamlit(edits);
+    } catch (error) {
+        console.error('saveEdits error:', error);
+        showError('Unexpected Error', error.message);
     }
-
-    await sendToStreamlit(edits);
 }
 
 async function sendToStreamlit(edits) {
