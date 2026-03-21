@@ -101,6 +101,7 @@ with st.sidebar:
                     st.success("Pushed updates.")
                 else:
                     st.session_state["git_error"] = True
+                    st.session_state["has_unsaved_edits"] = True
                     logger.error("Git push failed", extra={"output": output})
                     st.error("Push failed.")
                 st.rerun()
@@ -121,6 +122,16 @@ if not target_file.exists():
     logger.error("MASTER_PLAN.md not found", extra={"path": str(target_file)})
     st.error(f"MASTER_PLAN.md not found at {target_file}")
     st.stop()
+
+# File download — always available, independent of visualization
+with st.sidebar:
+    with open(target_file, "r", encoding="utf-8") as f:
+        st.download_button(
+            "📥 File Download",
+            data=f.read(),
+            file_name=target_file.name,
+            mime="text/markdown",
+        )
 
 # Generate HTML
 with st.spinner("Generating Visualization..."):
