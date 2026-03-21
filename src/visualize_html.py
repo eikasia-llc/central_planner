@@ -97,6 +97,8 @@ HTML_TEMPLATE = """
     .save-btn:hover { background: #229954; }
     .cancel-btn { background: #95a5a6; }
     .cancel-btn:hover { background: #7f8c8d; }
+    .edit-btn:disabled { background: #bdc3c7; cursor: not-allowed; opacity: 0.6; }
+    .edit-btn:disabled:hover { background: #bdc3c7; }
 
     .editable-field { width: 100%; padding: 6px; border: 1px solid #bdc3c7; border-radius: 4px; font-size: 0.9em; margin-bottom: 8px; }
     .editable-textarea { width: 100%; min-height: 200px; padding: 10px; border: 1px solid #bdc3c7; border-radius: 4px; font-family: inherit; font-size: 0.9em; resize: vertical; }
@@ -127,6 +129,7 @@ HTML_TEMPLATE = """
         <button onclick="collapseAll()">Collapse All</button>
         <button onclick="resetZoom()">Reset Zoom</button>
         <button onclick="toggleDeps()">Toggle Dependencies</button>
+        <button onclick="downloadFile()">📥 File Download</button>
     </div>
   </div>
   <div id="sidebar">
@@ -143,6 +146,8 @@ let i = 0;
 let duration = 500;
 let parsedData = null;
 let showDependencies = true;
+const editDisabled = __EDIT_DISABLED__;
+const rawFileContent = atob("__RAW_FILE_PLACEHOLDER__");
 
 function log(msg) {
     console.log(msg);
@@ -531,7 +536,7 @@ function renderNodeDetails() {
                 <pre style="background:none; padding:0; white-space: pre-wrap; font-family: inherit;">${currentNodeData.content || "No content."}</pre>
             </div>
             <div class="edit-controls">
-                <button class="edit-btn" onclick="enterEditMode()">✏️ Edit</button>
+                <button class="edit-btn" onclick="enterEditMode()" ${editDisabled ? 'disabled title="Git sync error — pull first"' : ''}>✏️ Edit</button>
             </div>
         `;
     }
@@ -668,6 +673,7 @@ async function sendToStreamlit(edits) {
             showError('Save Failed', result.error);
         }
     } catch (error) {
+        console.error('sendToStreamlit error:', error);
         showError('Network Error', `Failed to save: ${error.message}`);
     }
 }
@@ -682,6 +688,19 @@ function applyEditsToLocalData(edits) {
     if (edits.content_edit) {
         currentNodeData.content = edits.content_edit.value;
     }
+}
+
+function downloadFile() {
+    const fileName = parsedData.file_path.split('/').pop() || 'download.md';
+    const blob = new Blob([rawFileContent], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = fileName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
 }
 
 function showError(title, message, type='error') {
@@ -731,7 +750,7 @@ def collect_dependencies(node, dependencies_list=None):
         
     return dependencies_list
 
-def generate_html(target_file, embed_d3=False):
+def generate_html(target_file, embed_d3=False, edit_disabled=False):
     if not os.path.exists(target_file):
         raise FileNotFoundError(f"Target file not found: {target_file}")
 
@@ -789,8 +808,14 @@ def generate_html(target_file, embed_d3=False):
             print(f"Failed to embed D3: {e}")
             # Fallback to default loader
             
+    # Embed raw file content for download button
+    with open(target_file, 'r', encoding='utf-8') as f:
+        raw_file_b64 = base64.b64encode(f.read().encode('utf-8')).decode('utf-8')
+
     html_content = HTML_TEMPLATE.replace("__DATA_PLACEHOLDER__", b64_data)
     html_content = html_content.replace("<!-- D3_LOADER_PLACEHOLDER -->", d3_loader)
+    html_content = html_content.replace("__EDIT_DISABLED__", "true" if edit_disabled else "false")
+    html_content = html_content.replace("__RAW_FILE_PLACEHOLDER__", raw_file_b64)
 
     return html_content
 

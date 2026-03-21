@@ -18,9 +18,15 @@ sys.path.insert(0, current_dir)
 from log_config import setup_logging
 setup_logging()
 
+from pathlib import Path
 from planner_lib.file_editor import apply_edits_to_file, EditValidationError
 
 logger = logging.getLogger(__name__)
+
+# Marker file: signals to Streamlit that edits have been made since last push.
+EDITS_PENDING_MARKER = Path(os.environ.get(
+    "REPO_MOUNT_POINT", os.path.join(current_dir, os.pardir)
+)) / ".edits_pending"
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -52,10 +58,19 @@ def save_edits():
         JSON response with success status and message
     """
     try:
-        # Get JSON payload
-        edits = request.json
+        # Get JSON payload — log raw body on parse errors
+        raw_body = request.get_data(as_text=True)
+        try:
+            edits = request.json
+        except Exception:
+            logger.exception("save_edits JSON parse error", extra={"raw_body": raw_body[:1_048_576]})
+            return jsonify({
+                "success": False,
+                "error": "Invalid JSON payload"
+            }), 400
 
         if not edits:
+            logger.warning("save_edits empty payload", extra={"raw_body": (raw_body or "")[:1_048_576]})
             return jsonify({
                 "success": False,
                 "error": "No JSON payload provided"
@@ -70,6 +85,7 @@ def save_edits():
 
         if success:
             logger.info("save_edits succeeded", extra={"node_id": node_id, "file_path": file_path})
+            EDITS_PENDING_MARKER.touch()
             return jsonify({
                 "success": True,
                 "message": message
