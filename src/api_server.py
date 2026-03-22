@@ -8,6 +8,7 @@ with line number tracking.
 import logging
 import os
 import sys
+import traceback
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 
@@ -106,9 +107,12 @@ def save_edits():
 
     except Exception as e:
         logger.exception("save_edits unexpected error")
+        tb_lines = traceback.format_exception(type(e), e, e.__traceback__)
+        tb_short = "".join(tb_lines[-4:])
         return jsonify({
             "success": False,
-            "error": f"Server error: {str(e)}"
+            "error": f"Server error: {str(e)}",
+            "trace": tb_short
         }), 500
 
 

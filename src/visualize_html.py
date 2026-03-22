@@ -646,7 +646,7 @@ async function saveEdits() {
         await sendToStreamlit(edits);
     } catch (error) {
         console.error('saveEdits error:', error);
-        showError('Unexpected Error', error.message);
+        showError('Unexpected Error', error.message + shortTrace(error));
     }
 }
 
@@ -670,11 +670,16 @@ async function sendToStreamlit(edits) {
             // Reload page after short delay to refresh data
             setTimeout(() => window.location.reload(), 1500);
         } else {
-            showError('Save Failed', result.error);
+            let detail = result.error || 'Unknown error';
+            if (result.trace) {
+                detail += '<pre style="font-size:0.8em;margin-top:8px;background:#2c2c2c;color:#ccc;padding:8px;border-radius:4px;overflow-x:auto;white-space:pre-wrap;">'
+                    + result.trace.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;').replace(/>/g, '&gt;') + '<\\/pre>';
+            }
+            showError('Save Failed', detail);
         }
     } catch (error) {
         console.error('sendToStreamlit error:', error);
-        showError('Network Error', `Failed to save: ${error.message}`);
+        showError('Network Error', `Failed to save: ${error.message}` + shortTrace(error));
     }
 }
 
@@ -703,6 +708,16 @@ function downloadFile() {
     URL.revokeObjectURL(url);
 }
 
+function shortTrace(error) {
+    if (!error || !error.stack) return '';
+    const lines = error.stack.split('\\n').slice(1, 5);
+    if (lines.length === 0) return '';
+    const escaped = lines.map(function(l) {
+        return l.replace(/&/g, '&amp;').replace(/[<]/g, '&lt;').replace(/>/g, '&gt;');
+    }).join('\\n');
+    return '<pre style="font-size:0.8em;margin-top:8px;background:#2c2c2c;color:#ccc;padding:8px;border-radius:4px;overflow-x:auto;white-space:pre-wrap;">' + escaped + '<\\/pre>';
+}
+
 function showError(title, message, type='error') {
     // Remove existing error popups
     const existing = document.querySelectorAll('.error-popup');
@@ -721,12 +736,12 @@ function showError(title, message, type='error') {
 
     document.body.appendChild(popup);
 
-    // Auto-remove after 10 seconds
-    setTimeout(() => {
-        if (popup.parentElement) {
-            popup.remove();
-        }
-    }, 10000);
+    // Success popups auto-dismiss after 3 seconds; errors stay until closed manually
+    if (type === 'success') {
+        setTimeout(() => {
+            if (popup.parentElement) popup.remove();
+        }, 3000);
+    }
 }
 </script>
 </body>
