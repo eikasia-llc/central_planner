@@ -31,7 +31,7 @@ def setup_logging():
 
     level = os.environ.get("LOG_LEVEL", "INFO").upper()
 
-    handler = logging.StreamHandler(sys.stdout)
+    handler = logging.StreamHandler(sys.stderr)
     formatter = JsonFormatter(
         fmt="%(asctime)s %(levelname)s %(name)s %(message)s %(pathname)s %(lineno)d %(funcName)s",
         rename_fields={"asctime": "timestamp", "levelname": "severity"},

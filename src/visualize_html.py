@@ -71,7 +71,7 @@ HTML_TEMPLATE = """
     .status-blocked { stroke: #e74c3c !important; fill: #fdedec; }
     
     h2 { margin-top: 0; font-size: 1.5em; color: #2c3e50; }
-    .meta-tag { display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 0.85em; margin-right: 5px; margin-bottom: 5px; color: white; font-weight: 500;}
+    .meta-tag { display: inline-block; padding: 6px 14px; border-radius: 14px; font-size: 0.95em; margin-right: 8px; color: white; font-weight: 500; vertical-align: middle; }
     
     .tag-todo { background: #95a5a6; }
     .tag-active, .tag-in-progress { background: #3498db; }
@@ -90,8 +90,9 @@ HTML_TEMPLATE = """
     #loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size: 1.5em; color: #666; background: rgba(255,255,255,0.8); padding: 20px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
 
     /* Edit Controls */
-    .edit-controls { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; }
-    .edit-btn, .save-btn, .cancel-btn { background: #3498db; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-size: 14px; margin-right: 8px; margin-bottom: 8px; }
+    .top-bar { display: flex; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 6px; }
+    .edit-controls { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; }
+    .edit-btn, .save-btn, .cancel-btn { background: #3498db; color: white; border: none; padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
     .edit-btn:hover { background: #2980b9; }
     .save-btn { background: #27ae60; }
     .save-btn:hover { background: #229954; }
@@ -472,6 +473,31 @@ let editMode = false;
 let currentNodeData = null;
 let originalValues = {};
 
+// Metadata serialization helpers
+function serializeMeta(value) {
+    if (Array.isArray(value)) return '[' + value.join(', ') + ']';
+    if (value !== null && typeof value === 'object') return JSON.stringify(value);
+    return String(value == null ? '' : value);
+}
+
+function escAttr(str) {
+    return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/[<]/g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function deserializeMeta(str) {
+    str = str.trim();
+    if (str.startsWith('[') && str.endsWith(']')) {
+        try { return JSON.parse(str); } catch(e) {}
+        var inner = str.slice(1, -1).trim();
+        if (inner === '') return [];
+        return inner.split(',').map(function(s) { return s.trim(); });
+    }
+    if (str.startsWith('{') && str.endsWith('}')) {
+        return JSON.parse(str);
+    }
+    return str;
+}
+
 function showDetails(data) {
     currentNodeData = data;
     editMode = false;
@@ -489,8 +515,7 @@ function renderNodeDetails() {
         // Edit Mode Rendering
         let metaEditHtml = '';
         for (const [key, value] of Object.entries(currentNodeData.metadata)) {
-            const valueStr = Array.isArray(value) ? `[${value.join(', ')}]` :
-                            (typeof value === 'object' ? JSON.stringify(value) : value);
+            const valueStr = escAttr(serializeMeta(value));
             metaEditHtml += `
                 <div class="metadata-edit-row">
                     <label>${key}:</label>
@@ -500,7 +525,13 @@ function renderNodeDetails() {
         }
 
         container.innerHTML = `
-            <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
+            <div class="top-bar">
+                <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
+                <div class="edit-controls">
+                    <button class="save-btn" onclick="saveEdits()">💾 Save</button>
+                    <button class="cancel-btn" onclick="cancelEdit()">✖ Cancel</button>
+                </div>
+            </div>
             <h2>${currentNodeData.title}</h2>
             <div style="margin-bottom: 20px;">
                 ${metaEditHtml}
@@ -509,10 +540,6 @@ function renderNodeDetails() {
             <div class="content-block">
                 <label style="display: block; font-weight: bold; margin-bottom: 8px;">Content:</label>
                 <textarea class="editable-textarea" id="content-editor">${currentNodeData.content || ""}</textarea>
-            </div>
-            <div class="edit-controls">
-                <button class="save-btn" onclick="saveEdits()">💾 Save</button>
-                <button class="cancel-btn" onclick="cancelEdit()">✖ Cancel</button>
             </div>
         `;
     } else {
@@ -526,7 +553,12 @@ function renderNodeDetails() {
         }
 
         container.innerHTML = `
-            <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
+            <div class="top-bar">
+                <span class="meta-tag tag-${status}">${status.toUpperCase().replace('-', ' ')}</span>
+                <div class="edit-controls">
+                    <button class="edit-btn" onclick="enterEditMode()" ${editDisabled ? 'disabled title="Git sync error — pull first"' : ''}>✏️ Edit</button>
+                </div>
+            </div>
             <h2>${currentNodeData.title}</h2>
             <div style="margin-bottom: 20px; font-size: 0.9em; color: #7f8c8d;">
                 ${metaHtml}
@@ -534,9 +566,6 @@ function renderNodeDetails() {
             <hr style="border: 0; border-top: 1px solid #eee;"/>
             <div class="content-block">
                 <pre style="background:none; padding:0; white-space: pre-wrap; font-family: inherit;">${currentNodeData.content || "No content."}</pre>
-            </div>
-            <div class="edit-controls">
-                <button class="edit-btn" onclick="enterEditMode()" ${editDisabled ? 'disabled title="Git sync error — pull first"' : ''}>✏️ Edit</button>
             </div>
         `;
     }
@@ -571,20 +600,32 @@ function collectEdits() {
         content_edit: null
     };
 
-    // Collect metadata edits
+    // Collect metadata edits (deserialize typed values)
     const metadataFields = document.querySelectorAll('.editable-field');
+    let deserializeError = null;
     metadataFields.forEach(field => {
+        if (deserializeError) return;
         const key = field.dataset.key;
-        const newValue = field.value;
+        const raw = field.value;
         const lineNumber = currentNodeData.metadata_location[key];
 
         if (lineNumber !== undefined) {
-            edits.metadata_edits[key] = {
-                value: newValue,
-                line_number: lineNumber
-            };
+            try {
+                const parsed = deserializeMeta(raw);
+                // Send serialized string to server — Python _parse_metadata_value handles the rest
+                edits.metadata_edits[key] = {
+                    value: serializeMeta(parsed),
+                    line_number: lineNumber
+                };
+            } catch (e) {
+                console.error('Metadata deserialize error for key "' + key + '":', e);
+                deserializeError = 'Invalid value for "' + key + '": ' + e.message + shortTrace(e);
+            }
         }
     });
+    if (deserializeError) {
+        edits._error = deserializeError;
+    }
 
     // Collect content edit
     const contentEditor = document.getElementById('content-editor');
@@ -636,6 +677,12 @@ function validateEdits(edits) {
 async function saveEdits() {
     try {
         const edits = collectEdits();
+
+        if (edits._error) {
+            showError('Metadata Error', edits._error);
+            return;
+        }
+
         const validation = validateEdits(edits);
 
         if (!validation.valid) {
@@ -658,6 +705,13 @@ async function sendToStreamlit(edits) {
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify(edits)
         });
+
+        const contentType = response.headers.get('content-type') || '';
+        if (!contentType.includes('application/json')) {
+            const text = await response.text();
+            showError('Server Error', `HTTP ${response.status}: expected JSON but got: ${text.slice(0, 200).replace(/[<]/g, '&lt;')}`);
+            return;
+        }
 
         const result = await response.json();
 
