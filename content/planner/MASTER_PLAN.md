@@ -39,11 +39,10 @@ Historical log of meetings and coordination with colleagues.
 ### 2026-01-25 - Setting the Intelligent Control SaaS Roadmap
 - status: done
 - type: log
-- participants: ["Ignacio", "Fran"]
+- participants: [Ignacio, Fran]
 - id: planner.meeting.20260125.roadmap
 - last_checked: 2026-02-04T11:06:00+01:00
 <!-- content -->
-
 **Agenda:**
 - Understand Planning Tools and Master Plan
 - Cloud Situation: is snake up?
@@ -67,7 +66,6 @@ Historical log of meetings and coordination with colleagues.
 - Que Ignacio avance con Phase 1: Local Nexus todo lo que pueda.
 - En los project setup guidelines, aclararle al agente que incluya un .gitignore tipico a los lenguajes que se manajen.
 - Hacer scipt que mapee las dependencias.
-
 
 ### 2026-02-03 - Status Update & Planning
 - status: done
