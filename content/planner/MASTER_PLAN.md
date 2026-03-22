@@ -39,7 +39,7 @@ Historical log of meetings and coordination with colleagues.
 ### 2026-01-25 - Setting the Intelligent Control SaaS Roadmap
 - status: done
 - type: log
-- participants: [Ignacio, Fran]
+- participants: ["Ignacio", "Fran"]
 - id: planner.meeting.20260125.roadmap
 - last_checked: 2026-02-04T11:06:00+01:00
 <!-- content -->
@@ -70,7 +70,7 @@ Historical log of meetings and coordination with colleagues.
 ### 2026-02-03 - Status Update & Planning
 - status: done
 - type: log
-- participants: [Francisco, Nacho]
+- participants: ["Francisco", "Nacho"]
 - id: planner.meeting.20260203.status_update
 - last_checked: 2026-02-03T20:26:00+01:00
 <!-- content -->
