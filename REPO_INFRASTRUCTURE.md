@@ -331,6 +331,77 @@ gcloud logging read 'resource.type="cloud_run_revision" AND resource.labels.serv
     --project=eikasia-ops --limit=20 --format=json
 ```
 
+### Github Token Rotation
+
+Two steps: create a new token on GitHub, then update it in Secret Manager.
+
+Step 1: Create a new GitHub Personal Access Token
+
+1. Go to: https://github.com/settings/tokens
+2. If using Fine-grained tokens (recommended): click "Generate new token" → Fine-grained
+    - Token name: something like central-planner-cloudrun-2026
+    - Expiration: pick your preference
+    - Repository access: "Only select repositories" → select eikasia-llc/central_planner
+    - Permissions → Repository permissions:
+        - Contents: Read and write (needed for clone/pull/push)
+        - Metadata: Read-only (auto-selected)
+    - Click "Generate token"
+3. If using Classic tokens: click "Generate new token (classic)"
+    - Scopes: repo (full control of private repositories)
+    - Click "Generate token"
+4. Copy the token immediately — you won't see it again.
+
+Step 2: Update the secret in Google Cloud Secret Manager
+
+Add a new version of the existing secret (the old version stays but Cloud Run will pick up latest):
+
+```
+echo -n "ghp_YOUR_NEW_TOKEN_HERE" | \
+    gcloud secrets versions add GITHUB_TOKEN \
+    --data-file=- \
+    --project=eikasia-ops
+```
+
+Step 3: Force Cloud Run to pick up the new secret
+
+Cloud Run resolves GITHUB_TOKEN:latest at instance startup. Kill the current instance so the next request cold-starts with the new token:
+
+```
+gcloud run services update central-planner-app \
+    --region=us-central1 \
+    --project=eikasia-ops \
+    --no-traffic
+``` 
+
+Then restore traffic:
+
+```
+gcloud run services update-traffic central-planner-app \
+    --region=us-central1 \
+    --project=eikasia-ops \
+    --to-latest
+```
+
+Or simpler — just redeploy (which you'd do anyway to ship the pending code changes):
+
+```
+./deploy.sh
+```
+
+Step 4 (optional): Disable the old token version
+
+```
+# List versions to find the old one
+gcloud secrets versions list GITHUB_TOKEN --project=eikasia-ops
+
+# Disable it (doesn't delete, can re-enable if needed)
+gcloud secrets versions disable OLD_VERSION_NUMBER \
+    --secret=GITHUB_TOKEN \
+    --project=eikasia-ops
+```
+
+And revoke the old token on GitHub: https://github.com/settings/tokens → find the old one → Delete.
+
 ### Optional: Google Cloud Error Reporting
 
 Error Reporting automatically groups, deduplicates, and tracks Python exceptions that appear in Cloud Logging. It provides occurrence counts, first/last seen timestamps, and a stack trace viewer. A free tier is available.
