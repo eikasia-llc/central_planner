@@ -475,7 +475,7 @@ let originalValues = {};
 
 // Metadata serialization helpers
 function serializeMeta(value) {
-    if (Array.isArray(value)) return '[' + value.join(', ') + ']';
+    if (Array.isArray(value)) return JSON.stringify(value);
     if (value !== null && typeof value === 'object') return JSON.stringify(value);
     return String(value == null ? '' : value);
 }
@@ -488,6 +488,7 @@ function deserializeMeta(str) {
     str = str.trim();
     if (str.startsWith('[') && str.endsWith(']')) {
         try { return JSON.parse(str); } catch(e) {}
+        // Fallback for unquoted legacy format like [a, b, c]
         var inner = str.slice(1, -1).trim();
         if (inner === '') return [];
         return inner.split(',').map(function(s) { return s.trim(); });
@@ -721,8 +722,8 @@ async function sendToStreamlit(edits) {
             editMode = false;
             renderNodeDetails();
             showError('Success', result.message, 'success');
-            // Reload page after short delay to refresh data
-            setTimeout(() => window.location.reload(), 1500);
+            // Reload parent Streamlit page to re-run app.py (re-read file, update markers)
+            setTimeout(() => window.parent.location.reload(), 1500);
         } else {
             let detail = result.error || 'Unknown error';
             if (result.trace) {
